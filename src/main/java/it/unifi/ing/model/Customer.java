@@ -32,6 +32,6 @@ public class Customer extends AbstractUser {
     public ShoppingList getShoppingList() { return this.shoppingList; }
 
     public void setUserLocale(Locale userLocale) { this.userLocale = userLocale; }
-    public void setShoppingCart(ShoppingCart prodCart) { this.shoppingCart = shoppingCart; }
+    public void setShoppingCart(ShoppingCart shoppingCart) { this.shoppingCart = shoppingCart; }
     public void setShoppingList(ShoppingList shoppingList) { this.shoppingList = shoppingList; }
 }

@@ -15,33 +15,33 @@ public class LocalizedProduct extends BaseEntity {
     private Product product;
 
     @Column(name = "name")
-    private String productName;
-    @Column(name = "description")
-    private String productDescription;
+    private String name;
+    @Column(name = "description", columnDefinition="varchar(4000)")
+    private String description;
     @Column(name = "category")
-    private String productCategory;
+    private String category;
     @Column(name = "currency")
-    private String productCurrency;
+    private String currency;
     @Column(name = "price")
-    private float productPrice;
+    private float price;
 
     public LocalizedProduct() {}
     public LocalizedProduct(String uuid) { super(uuid); }
 
     public Locale getLocale() { return this.locale ;}
     public Product getProduct() { return this.product; }
-    public String getProductName() { return this.productName; }
-    public String getProductDescription() { return this.productDescription; }
-    public String getProductCategory() { return this.productCategory; }
-    public String getProductCurrency() { return this.productCurrency; }
-    public float getProductPrice() { return this.productPrice; }
+    public String getName() { return this.name; }
+    public String getDescription() { return this.description; }
+    public String getCategory() { return this.category; }
+    public String getCurrency() { return this.currency; }
+    public float getPrice() { return this.price; }
 
     public void setLocale(Locale locale) { this.locale = locale; }
     public void setProduct(Product product) { this.product = product; }
-    public void setProductName(String productName) { this.productName = productName; }
-    public void setProductDescription(String description) { this.productDescription = productDescription; }
-    public void setProductCategory(String productCategory) { this.productCategory = productCategory; }
-    public void setProductCurrency(String currency) { this. productCurrency = productCurrency; }
-    public void setProductPrice(float price) { this.productPrice = productPrice; }
+    public void setName(String productName) { this.name = productName; }
+    public void setDescription(String productDescription) { this.description = productDescription; }
+    public void setCategory(String productCategory) { this.category = productCategory; }
+    public void setCurrency(String productCurrency) { this.currency = productCurrency; }
+    public void setPrice(float productPrice) { this.price = productPrice; }
 
 }

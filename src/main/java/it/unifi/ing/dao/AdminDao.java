@@ -10,6 +10,12 @@ public class AdminDao extends BaseDao<Admin> {
 
     public AdminDao() { super(Admin.class); }
 
+    public List<Admin> getAdminList()
+    {
+        return entityManager.createQuery("SELECT a FROM Admin a", Admin.class)
+                .getResultList();
+    }
+
     // @TODO: this method its duplicated with customer, how to abstract it?
     public Admin login(Admin user) {
         List<Admin> result = entityManager
@@ -25,12 +31,6 @@ public class AdminDao extends BaseDao<Admin> {
         }
 
         return result.get(0);
-    }
-
-    public List<Admin> getAdminList()
-    {
-        return entityManager.createQuery("SELECT a FROM Admin a", Admin.class)
-                .getResultList();
     }
 
 }

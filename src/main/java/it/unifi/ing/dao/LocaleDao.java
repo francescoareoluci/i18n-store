@@ -12,10 +12,8 @@ public class LocaleDao extends BaseDao<Locale> {
 
     public List<Locale> getLocaleList()
     {
-        List<Locale> retrievedEntities = entityManager.createQuery("SELECT l FROM Locale l", Locale.class)
+        return entityManager.createQuery("SELECT l FROM Locale l", Locale.class)
                 .getResultList();
-
-        return retrievedEntities;
     }
 
 }

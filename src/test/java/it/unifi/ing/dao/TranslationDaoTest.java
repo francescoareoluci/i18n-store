@@ -31,11 +31,11 @@ public class TranslationDaoTest extends JpaTest {
         product = ModelFactory.product();
 
         localizedProduct = ModelFactory.localizedProduct();
-        localizedProduct.setProductName("nome1");
-        localizedProduct.setProductDescription("desc1");
-        localizedProduct.setProductCategory("categoria1");
-        localizedProduct.setProductCurrency("euro");
-        localizedProduct.setProductPrice((float)12.34);
+        localizedProduct.setName("nome1");
+        localizedProduct.setDescription("desc1");
+        localizedProduct.setCategory("categoria1");
+        localizedProduct.setCurrency("euro");
+        localizedProduct.setPrice((float)12.34);
         localizedProduct.setProduct(product);
         localizedProduct.setLocale(locale);
 
@@ -72,15 +72,15 @@ public class TranslationDaoTest extends JpaTest {
     public void testUpdate()
     {
         localizedProduct = entityManager.find(LocalizedProduct.class, localizedProduct.getId());
-        localizedProduct.setProductName("nome2");
+        localizedProduct.setName("nome2");
 
         translationDao.updateEntity(localizedProduct);
 
-        assertEquals(localizedProduct.getProductName(),
+        assertEquals(localizedProduct.getName(),
                 entityManager.createQuery("SELECT p FROM LocalizedProduct p WHERE p.uuid =:uuid", LocalizedProduct.class)
                         .setParameter("uuid", localizedProduct.getUuid())
                         .getSingleResult()
-                        .getProductName());
+                        .getName());
 
     }
 
@@ -105,11 +105,11 @@ public class TranslationDaoTest extends JpaTest {
 
         assertEquals(localizedProduct.getId(), retrievedResult.getId());
         assertEquals(localizedProduct.getUuid(), retrievedResult.getUuid());
-        assertEquals(localizedProduct.getProductName(), retrievedResult.getProductName());
-        assertEquals(localizedProduct.getProductDescription(), retrievedResult.getProductDescription());
-        assertEquals(localizedProduct.getProductCategory(), retrievedResult.getProductCategory());
-        assertEquals(localizedProduct.getProductCurrency(), retrievedResult.getProductCurrency());
-        assertEquals(localizedProduct.getProductPrice(), retrievedResult.getProductPrice(), 0);
+        assertEquals(localizedProduct.getName(), retrievedResult.getName());
+        assertEquals(localizedProduct.getDescription(), retrievedResult.getDescription());
+        assertEquals(localizedProduct.getCategory(), retrievedResult.getCategory());
+        assertEquals(localizedProduct.getCurrency(), retrievedResult.getCurrency());
+        assertEquals(localizedProduct.getPrice(), retrievedResult.getPrice(), 0);
         assertEquals(localizedProduct.getProduct(), retrievedResult.getProduct());
         assertEquals(localizedProduct.getLocale(), retrievedResult.getLocale());
     }
@@ -147,7 +147,7 @@ public class TranslationDaoTest extends JpaTest {
     public void testGetTranslationsByName()
     {
         List<LocalizedProduct> localizedProductList;
-        localizedProductList = translationDao.getTranslationsByName(localizedProduct.getProductName());
+        localizedProductList = translationDao.getTranslationsByName(localizedProduct.getName());
 
         assertEquals(localizedProduct.getId(), localizedProductList.get(0).getId());
     }
@@ -156,7 +156,7 @@ public class TranslationDaoTest extends JpaTest {
     public void testGetTranslationsByCategory()
     {
         List<LocalizedProduct> localizedProductList;
-        localizedProductList = translationDao.getTranslationsByCategory(localizedProduct.getProductCategory());
+        localizedProductList = translationDao.getTranslationsByCategory(localizedProduct.getCategory());
 
         assertEquals(localizedProduct.getId(), localizedProductList.get(0).getId());
     }
