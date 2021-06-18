@@ -58,10 +58,6 @@ public class AuthEndpoint {
         final String username = tokenizer.nextToken();
         final String password = tokenizer.nextToken();
 
-        // Verifying Username and password
-        System.out.println(username);
-        System.out.println(password);
-
         // Search for user
         Customer customer = ModelFactory.customer();
         customer.setMail(username);
