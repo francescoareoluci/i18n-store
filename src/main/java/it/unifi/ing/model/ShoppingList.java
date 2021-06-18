@@ -11,7 +11,7 @@ public class ShoppingList extends BaseEntity {
     @JoinColumn(name = "customer_sid")
     private Customer customer;
 
-    @OneToMany(mappedBy = "shoppingList")
+    @OneToMany(mappedBy = "shoppingList", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<PurchasedProduct> purchasedProductList;
 
     public ShoppingList() {}

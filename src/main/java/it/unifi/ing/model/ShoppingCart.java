@@ -11,7 +11,7 @@ public class ShoppingCart extends BaseEntity {
     @JoinColumn(name = "customer_sid")
     private Customer customer;
 
-    @OneToMany(mappedBy = "shoppingCart")
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<ProductCart> productCartList;
 
     public ShoppingCart() {}

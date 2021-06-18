@@ -1,8 +1,6 @@
 package it.unifi.ing.controllers;
 
-import it.unifi.ing.dao.CustomerDao;
-import it.unifi.ing.dao.ProductDao;
-import it.unifi.ing.dao.TranslationDao;
+import it.unifi.ing.dao.*;
 import it.unifi.ing.dto.*;
 import it.unifi.ing.model.*;
 
@@ -10,10 +8,7 @@ import it.unifi.ing.security.*;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -31,6 +26,10 @@ public class CustomerEndpoint {
     private TranslationDao translationDao;
     @Inject
     private ProductDao productDao;
+    @Inject
+    private ShoppingCartDao shoppingCartDao;
+    @Inject
+    private ShoppingListDao shoppingListDao;
 
     public CustomerEndpoint() {}
 
@@ -186,6 +185,183 @@ public class CustomerEndpoint {
         ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(shoppingCart.getId(), cartProducts);
 
         return Response.status(200).entity(shoppingCartDto).build();
+    }
+
+    @POST
+    @Path("/shopping-cart/add/{prodId}")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
+    @Transactional
+    public Response addProductToCart(@Context HttpHeaders headers,
+                                @PathParam("prodId") Long productId)
+    {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token.isEmpty()) {
+            return Response.status(401).build();
+        }
+        String username = JWTUtil.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
+        List<ProductDto> cartProducts = new ArrayList<>();
+
+        Customer customer = customerDao.getUserByUsername(username);
+        if (customer == null) {
+            return Response.status(404).build();
+        }
+        // Get user locale
+        Locale locale = customer.getUserLocale();
+        if (locale == null) {
+            return Response.status(404).build();
+        }
+        // Get user shopping cart
+        ShoppingCart shoppingCart = customer.getShoppingCart();
+        if (shoppingCart == null) {
+            return Response.status(404).build();
+        }
+
+        // Get products
+        List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        Product newProduct = productDao.getEntityById(productId);
+        if (newProduct == null) {
+            return Response.status(404).build();
+        }
+        ProductCart newProductCart = ModelFactory.productCart();
+        newProductCart.setProduct(newProduct);
+        newProductCart.setShoppingCart(shoppingCart);
+        productCartList.add(newProductCart);
+        shoppingCart.setProductCartList(productCartList);
+
+        // Persist
+        shoppingCartDao.updateEntity(shoppingCart);
+
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Path("/shopping-cart/remove/{prodId}")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
+    @Transactional
+    public Response removeProductFromCart(@Context HttpHeaders headers,
+                                @PathParam("prodId") Long productId)
+    {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token.isEmpty()) {
+            return Response.status(401).build();
+        }
+        String username = JWTUtil.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
+        List<ProductDto> cartProducts = new ArrayList<>();
+
+        Customer customer = customerDao.getUserByUsername(username);
+        if (customer == null) {
+            return Response.status(404).build();
+        }
+        // Get user locale
+        Locale locale = customer.getUserLocale();
+        if (locale == null) {
+            return Response.status(404).build();
+        }
+        // Get user shopping cart
+        ShoppingCart shoppingCart = customer.getShoppingCart();
+        if (shoppingCart == null) {
+            return Response.status(404).build();
+        }
+
+        // Get products
+        List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        int removeIdx = 0;
+        boolean productFound = false;
+        for (ProductCart pc : productCartList) {
+            if (pc.getProduct().getId().equals(productId)) {
+                productFound = true;
+                break;
+            }
+            removeIdx++;
+        }
+
+        if (!productFound) {
+            return Response.status(404).build();
+        }
+
+        ProductCart removedProduct = productCartList.remove(removeIdx);
+        shoppingCart.setProductCartList(productCartList);
+
+        // Persist
+        shoppingCartDao.updateEntity(shoppingCart);
+
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Path("/shopping-cart/checkout")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
+    @Transactional
+    public Response purchaseCart(@Context HttpHeaders headers)
+    {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token.isEmpty()) {
+            return Response.status(401).build();
+        }
+        String username = JWTUtil.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
+        List<ProductDto> cartProducts = new ArrayList<>();
+
+        Customer customer = customerDao.getUserByUsername(username);
+        if (customer == null) {
+            return Response.status(404).build();
+        }
+        // Get user locale
+        Locale locale = customer.getUserLocale();
+        if (locale == null) {
+            return Response.status(404).build();
+        }
+        // Get user shopping cart
+        ShoppingCart shoppingCart = customer.getShoppingCart();
+        if (shoppingCart == null) {
+            return Response.status(404).build();
+        }
+        // Get user shopping list
+        ShoppingList shoppingList = customer.getShoppingList();
+        if (shoppingList == null) {
+            return Response.status(404).build();
+        }
+
+        // Get already purchased products
+        List<PurchasedProduct> purchasedProductList = shoppingList.getPurchasedProductList();
+
+        // Get products in cart
+        List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        if (productCartList.size() == 0) {
+            return Response.status(200).build();
+        }
+
+        for (ProductCart pc : productCartList) {
+            Product p = pc.getProduct();
+            PurchasedProduct pp = ModelFactory.purchasedProduct();
+            pp.setProduct(p);
+            pp.setShoppingList(shoppingList);
+            purchasedProductList.add(pp);
+        }
+
+        shoppingList.setPurchasedProductList(purchasedProductList);
+        productCartList.clear();
+        shoppingCart.setProductCartList(productCartList);
+
+        // Persist
+        shoppingListDao.updateEntity(shoppingList);
+        shoppingCartDao.updateEntity(shoppingCart);
+
+        return Response.status(200).build();
     }
 
     @GET
