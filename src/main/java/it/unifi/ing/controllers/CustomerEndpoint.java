@@ -6,6 +6,8 @@ import it.unifi.ing.dao.TranslationDao;
 import it.unifi.ing.dto.*;
 import it.unifi.ing.model.*;
 
+import it.unifi.ing.security.*;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
@@ -44,7 +46,7 @@ public class CustomerEndpoint {
         if (token == null) {
             return Response.status(401).build();
         }
-        String username = JWTFactory.getUsernameFromToken(token);
+        String username = JWTUtil.getUsernameFromToken(token);
         if (username == null) {
             return Response.status(401).build();
         }
@@ -92,7 +94,7 @@ public class CustomerEndpoint {
         if (token == null) {
             return Response.status(401).build();
         }
-        String username = JWTFactory.getUsernameFromToken(token);
+        String username = JWTUtil.getUsernameFromToken(token);
         if (username == null) {
             return Response.status(401).build();
         }
@@ -142,7 +144,7 @@ public class CustomerEndpoint {
         if (token == null) {
             return Response.status(401).build();
         }
-        String username = JWTFactory.getUsernameFromToken(token);
+        String username = JWTUtil.getUsernameFromToken(token);
         if (username == null) {
             return Response.status(401).build();
         }
@@ -198,7 +200,7 @@ public class CustomerEndpoint {
         if (token == null) {
             return Response.status(401).build();
         }
-        String username = JWTFactory.getUsernameFromToken(token);
+        String username = JWTUtil.getUsernameFromToken(token);
         if (username == null) {
             return Response.status(401).build();
         }

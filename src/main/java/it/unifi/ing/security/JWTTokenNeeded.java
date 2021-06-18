@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.security;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

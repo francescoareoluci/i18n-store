@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.security;
 
 public enum UserRole {
     CUSTOMER,

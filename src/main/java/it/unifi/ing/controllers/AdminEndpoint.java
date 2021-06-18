@@ -4,6 +4,8 @@ import it.unifi.ing.dao.*;
 import it.unifi.ing.dto.*;
 import it.unifi.ing.model.*;
 
+import it.unifi.ing.security.*;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;

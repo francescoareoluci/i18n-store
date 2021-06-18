@@ -6,6 +6,8 @@ import it.unifi.ing.model.Admin;
 import it.unifi.ing.model.Customer;
 import it.unifi.ing.model.ModelFactory;
 
+import it.unifi.ing.security.*;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -66,7 +68,7 @@ public class AuthEndpoint {
         customer.setPassword(password);
         Customer loggedCustomer = customerDao.login(customer);
         if (loggedCustomer != null) {
-            String token = JWTFactory.createJWT(UUID.randomUUID().toString(), "i18n-store", username,
+            String token = JWTUtil.createJWT(UUID.randomUUID().toString(), "i18n-store", username,
                     String.valueOf(UserRole.CUSTOMER), 100000);
             return Response.ok().entity(token).build();
         }
@@ -77,7 +79,7 @@ public class AuthEndpoint {
         admin.setPassword(password);
         Admin loggedAdmin = adminDao.login(admin);
         if (loggedAdmin != null) {
-            String token = JWTFactory.createJWT(UUID.randomUUID().toString(), "i18n-store", username,
+            String token = JWTUtil.createJWT(UUID.randomUUID().toString(), "i18n-store", username,
                     String.valueOf(UserRole.ADMIN), 100000);
             return Response.ok().entity(token).build();
         }

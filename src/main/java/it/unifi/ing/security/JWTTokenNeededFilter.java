@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.security;
 
 import io.jsonwebtoken.Claims;
 
@@ -31,7 +31,7 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             // Extract the token from the HTTP Authorization header
             String token = authorizationHeader.substring("Bearer".length()).trim();
             // Extract claims from token
-            Claims claims = JWTFactory.extractClaimsFromToken(token);
+            Claims claims = JWTUtil.extractClaimsFromToken(token);
 
             Method method = resourceInfo.getResourceMethod();
             if(method != null){
