@@ -43,7 +43,7 @@ public class CustomerEndpoint {
     {
         // Get username from token
         String token = extractBearerHeader(headers);
-        if (token == null) {
+        if (token.isEmpty()) {
             return Response.status(401).build();
         }
         String username = JWTUtil.getUsernameFromToken(token);
@@ -91,7 +91,7 @@ public class CustomerEndpoint {
     {
         // Get username from token
         String token = extractBearerHeader(headers);
-        if (token == null) {
+        if (token.isEmpty()) {
             return Response.status(401).build();
         }
         String username = JWTUtil.getUsernameFromToken(token);
@@ -117,7 +117,7 @@ public class CustomerEndpoint {
         }
 
         for (LocalizedProduct lp : product.getLocalizedProductList()) {
-            if (lp.getLocale().getId() == locale.getId()) {
+            if (lp.getLocale().getId().equals(locale.getId())) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                         lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
                         String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
@@ -141,7 +141,7 @@ public class CustomerEndpoint {
     {
         // Get username from token
         String token = extractBearerHeader(headers);
-        if (token == null) {
+        if (token.isEmpty()) {
             return Response.status(401).build();
         }
         String username = JWTUtil.getUsernameFromToken(token);
@@ -197,7 +197,7 @@ public class CustomerEndpoint {
     {
         // Get username from token
         String token = extractBearerHeader(headers);
-        if (token == null) {
+        if (token.isEmpty()) {
             return Response.status(401).build();
         }
         String username = JWTUtil.getUsernameFromToken(token);
@@ -250,9 +250,7 @@ public class CustomerEndpoint {
         String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
 
         // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader.substring("Bearer".length()).trim();
-
-        return token;
+        return authorizationHeader.substring("Bearer".length()).trim();
     }
 
 }
