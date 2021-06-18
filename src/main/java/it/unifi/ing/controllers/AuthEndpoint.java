@@ -69,7 +69,7 @@ public class AuthEndpoint {
         Customer loggedCustomer = customerDao.login(customer);
         if (loggedCustomer != null) {
             String token = JWTUtil.createJWT(UUID.randomUUID().toString(), "i18n-store", username,
-                    String.valueOf(UserRole.CUSTOMER), 100000);
+                    String.valueOf(UserRole.CUSTOMER));
             return Response.ok().entity(token).build();
         }
 
@@ -80,7 +80,7 @@ public class AuthEndpoint {
         Admin loggedAdmin = adminDao.login(admin);
         if (loggedAdmin != null) {
             String token = JWTUtil.createJWT(UUID.randomUUID().toString(), "i18n-store", username,
-                    String.valueOf(UserRole.ADMIN), 100000);
+                    String.valueOf(UserRole.ADMIN));
             return Response.ok().entity(token).build();
         }
 
