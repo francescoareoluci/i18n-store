@@ -12,6 +12,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -31,15 +33,26 @@ public class CustomerEndpoint {
     public CustomerEndpoint() {}
 
     @GET
-    @Path("/{id}/products")
+    @Path("/products")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getProducts(@PathParam("id") Long userId)
+    public Response getProducts(@Context HttpHeaders headers)
     {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token == null) {
+            return Response.status(401).build();
+        }
+        String username = JWTFactory.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
         List<ProductDto> productDtoList = new ArrayList<>();
 
-        // Get user locale
-        Customer customer = customerDao.getEntityById(userId);
+        // Get user
+        Customer customer = customerDao.getUserByUsername(username);
         if (customer == null) {
             return Response.status(404).build();
         }
@@ -67,14 +80,25 @@ public class CustomerEndpoint {
     }
 
     @GET
-    @Path("/{userId}/products/{productId}")
+    @Path("/products/{productId}")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getProducts(@PathParam("userId") Long userId,
+    public Response getProducts(@Context HttpHeaders headers,
                                 @PathParam("productId") Long productId)
     {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token == null) {
+            return Response.status(401).build();
+        }
+        String username = JWTFactory.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
         // Get user
-        Customer customer = customerDao.getEntityById(userId);
+        Customer customer = customerDao.getUserByUsername(username);
         if (customer == null) {
             return Response.status(404).build();
         }
@@ -107,14 +131,25 @@ public class CustomerEndpoint {
     }
 
     @GET
-    @Path("/{id}/shopping-cart")
+    @Path("/shopping-cart")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getUserCart(@PathParam("id") Long userId)
+    public Response getUserCart(@Context HttpHeaders headers)
     {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token == null) {
+            return Response.status(401).build();
+        }
+        String username = JWTFactory.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
         List<ProductDto> cartProducts = new ArrayList<>();
 
-        Customer customer = customerDao.getEntityById(userId);
+        Customer customer = customerDao.getUserByUsername(username);
         if (customer == null) {
             return Response.status(404).build();
         }
@@ -152,14 +187,25 @@ public class CustomerEndpoint {
     }
 
     @GET
-    @Path("/{id}/shopping-list")
+    @Path("/shopping-list")
+    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getUserShoppingList(@PathParam("id") Long userId)
+    public Response getUserShoppingList(@Context HttpHeaders headers)
     {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token == null) {
+            return Response.status(401).build();
+        }
+        String username = JWTFactory.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
         List<ProductDto> purchasedProducts = new ArrayList<>();
 
-        Customer customer = customerDao.getEntityById(userId);
+        Customer customer = customerDao.getUserByUsername(username);
         if (customer == null) {
             return Response.status(404).build();
         }
@@ -195,4 +241,16 @@ public class CustomerEndpoint {
 
         return Response.status(200).entity(shoppingListDto).build();
     }
+
+    private String extractBearerHeader(HttpHeaders headers)
+    {
+        // Get the HTTP Authorization header from the request
+        String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
+
+        // Extract the token from the HTTP Authorization header
+        String token = authorizationHeader.substring("Bearer".length()).trim();
+
+        return token;
+    }
+
 }

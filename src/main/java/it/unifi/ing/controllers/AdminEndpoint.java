@@ -6,10 +6,7 @@ import it.unifi.ing.model.*;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -31,6 +28,7 @@ public class AdminEndpoint {
 
     @GET
     @Path("/users")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers()
     {
@@ -57,6 +55,7 @@ public class AdminEndpoint {
 
     @GET
     @Path("/products")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getProducts()
@@ -89,6 +88,7 @@ public class AdminEndpoint {
 
     @GET
     @Path("/products/{id}")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getProductById(@PathParam("id") Long productId)
@@ -119,6 +119,7 @@ public class AdminEndpoint {
 
     @GET
     @Path("/locales")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocales()
     {
@@ -132,5 +133,23 @@ public class AdminEndpoint {
         }
 
         return Response.status(200).entity(localeDtoList).build();
+    }
+
+    @PUT
+    @Path("/locales/add")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addLocale(LocaleDto localeDto)
+    {
+        Locale locale = ModelFactory.locale();
+        locale.setCountryCode(localeDto.getCountryCode());
+        locale.setLanguageCode(localeDto.getLanguageCode());
+
+        // Persist given locale
+        localeDao.addEntity(locale);
+
+        return Response.status(200).build();
     }
 }
