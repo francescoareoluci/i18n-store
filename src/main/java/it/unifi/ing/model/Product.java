@@ -7,7 +7,7 @@ import java.util.List;
 @Table(name = "products")
 public class Product extends BaseEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Manufacturer prodManufacturer;
     @ManyToOne
     private Admin prodAdministrator;
