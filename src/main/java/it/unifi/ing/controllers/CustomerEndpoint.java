@@ -69,7 +69,8 @@ public class CustomerEndpoint {
             // Build dtos
             LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
+                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getLocale().getCountryCode());
 
             ProductDto productDto = DtoFactory.buildProductDto(lp.getProduct().getId(),
                     lp.getProduct().getProdManufacturer().getName(), Arrays.asList(localizedProductDto));
@@ -119,7 +120,8 @@ public class CustomerEndpoint {
             if (lp.getLocale().getId().equals(locale.getId())) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                         lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
-                        String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
+                        String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                        lp.getLocale().getCountryCode());
 
                 ProductDto productDto = DtoFactory.buildProductDto(lp.getProduct().getId(),
                         lp.getProduct().getProdManufacturer().getName(), Arrays.asList(localizedProductDto));
@@ -174,7 +176,8 @@ public class CustomerEndpoint {
 
             LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
+                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getLocale().getCountryCode());
 
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
                     product.getProdManufacturer().getName(), Arrays.asList(lpDto));
@@ -407,7 +410,8 @@ public class CustomerEndpoint {
 
             LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
+                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getLocale().getCountryCode());
 
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
                     product.getProdManufacturer().getName(), Arrays.asList(lpDto));

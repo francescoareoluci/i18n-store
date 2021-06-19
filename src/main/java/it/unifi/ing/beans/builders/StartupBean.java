@@ -48,7 +48,7 @@ public class StartupBean {
         Manufacturer manufacturer2 = buildManufacturer("Sony");
 
         Locale locale1 = buildLocale("it", "IT");
-        Locale locale2 = buildLocale("en", "EN");
+        Locale locale2 = buildLocale("en", "US");
 
         Customer customer1 = buildCustomer("John", "White", "john.white@example.com", "pass3", locale2);
         Customer customer2 = buildCustomer("Carla", "Verdi", "carla.verdi@example.com", "pass4", locale1);

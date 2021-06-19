@@ -47,7 +47,7 @@ public class DtoFactoryTest {
     public void testBuildLocalizedProductDto()
     {
         LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en");
+                "c", "$", "10.15", "en", "US");
 
         assertEquals(localizedProductDto.getId(), 4L, 0);
         assertEquals(localizedProductDto.getName(), "a");
@@ -56,6 +56,7 @@ public class DtoFactoryTest {
         assertEquals(localizedProductDto.getCurrency(), "$");
         assertEquals(localizedProductDto.getPrice(), "10.15");
         assertEquals(localizedProductDto.getLocale(), "en");
+        assertEquals(localizedProductDto.getCountry(), "US");
     }
 
     @Test
@@ -63,9 +64,9 @@ public class DtoFactoryTest {
     {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en"));
+                "c", "$", "10.15", "en", "US"));
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(5L, "d", "e",
-                "f", "$", "14.10", "en"));
+                "f", "$", "14.10", "en", "US"));
 
         ProductDto productDto = DtoFactory.buildProductDto(6L, "man", localizedProductDtoList);
 
@@ -81,9 +82,9 @@ public class DtoFactoryTest {
     {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en"));
+                "c", "$", "10.15", "en", "US"));
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(5L, "d", "e",
-                "f", "$", "14.10", "en"));
+                "f", "$", "14.10", "en", "US"));
 
         List<ProductDto> productDtoList = new ArrayList<>();
         ProductDto productDto = DtoFactory.buildProductDto(6L, "man", localizedProductDtoList);
@@ -102,9 +103,9 @@ public class DtoFactoryTest {
     {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en"));
+                "c", "$", "10.15", "en", "US"));
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(5L, "d", "e",
-                "f", "$", "14.10", "en"));
+                "f", "$", "14.10", "en", "US"));
 
         List<ProductDto> productDtoList = new ArrayList<>();
         ProductDto productDto = DtoFactory.buildProductDto(6L, "man", localizedProductDtoList);

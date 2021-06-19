@@ -7,12 +7,12 @@ import java.util.List;
 @Table(name = "products")
 public class Product extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Manufacturer prodManufacturer;
     @ManyToOne
     private Admin prodAdministrator;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<LocalizedProduct> localizedProductList;
 
     public Product() {}

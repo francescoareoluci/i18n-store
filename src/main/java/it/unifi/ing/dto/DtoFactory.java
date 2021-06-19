@@ -41,7 +41,7 @@ public class DtoFactory {
 
     public static LocalizedProductDto buildLocalizedProductDto(Long id, String name, String description,
                                                                String category, String currency, String price,
-                                                               String locale)
+                                                               String locale, String country)
     {
         LocalizedProductDto localizedProductDto = new LocalizedProductDto();
         localizedProductDto.setId(id);
@@ -51,6 +51,7 @@ public class DtoFactory {
         localizedProductDto.setCurrency(currency);
         localizedProductDto.setPrice(price);
         localizedProductDto.setLocale(locale);
+        localizedProductDto.setCountry(country);
 
         return localizedProductDto;
     }

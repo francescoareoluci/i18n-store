@@ -9,6 +9,8 @@ import it.unifi.ing.security.*;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class AdminEndpoint {
     private ProductDao productDao;
     @Inject
     private LocaleDao localeDao;
+    @Inject
+    private ManufacturerDao manufacturerDao;
 
     public AdminEndpoint() {}
 
@@ -75,7 +79,8 @@ public class AdminEndpoint {
             for (LocalizedProduct lp : localizedProductList) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                         lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
-                        String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
+                        String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                        lp.getLocale().getCountryCode());
 
                 localizedProductDtoList.add(localizedProductDto);
             }
@@ -109,7 +114,8 @@ public class AdminEndpoint {
         for (LocalizedProduct lp : localizedProductList) {
             LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode());
+                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getLocale().getCountryCode());
 
             localizedProductDtoList.add(localizedProductDto);
         }
@@ -117,6 +123,105 @@ public class AdminEndpoint {
                     product.getProdManufacturer().getName(), localizedProductDtoList);
 
         return Response.status(200).entity(productDto).build();
+    }
+
+    @PUT
+    @Path("/products/add")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addProduct(@Context HttpHeaders headers,
+                               ProductDto productDto)
+    {
+        // Get username from token
+        String token = extractBearerHeader(headers);
+        if (token.isEmpty()) {
+            return Response.status(401).build();
+        }
+        String username = JWTUtil.getUsernameFromToken(token);
+        if (username == null) {
+            return Response.status(401).build();
+        }
+
+        // Get admin entity
+        Admin admin = adminDao.getUserByUsername(username);
+        if (admin == null) {
+            return Response.status(404).build();
+        }
+
+        // Check for product localizations
+        List<LocalizedProductDto> localizedProductDtoList = productDto.getLocalizedInfo();
+        if (localizedProductDtoList.isEmpty()) {
+            return Response.status(404).build();
+        }
+
+        // Retrieve available locales
+        List<Locale> localeList = localeDao.getLocaleList();
+
+        // Check for valid product locales
+        boolean invalidLanguage = false;
+        boolean localeFound = false;
+        for (LocalizedProductDto lpDto : localizedProductDtoList) {
+            for (Locale l : localeList) {
+                if (l.getCountryCode().equals(lpDto.getCountry()) &&
+                    l.getLanguageCode().equals(lpDto.getLocale())) {
+                    localeFound = true;
+                    break;
+                }
+            }
+
+            if (!localeFound) {
+                invalidLanguage = true;
+                break;
+            }
+        }
+
+        if (invalidLanguage) {
+            System.out.println("Locale not found");
+            return Response.status(404).build();
+        }
+
+        List<Manufacturer> manufacturerList = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
+        Manufacturer manufacturer;
+        if (manufacturerList.isEmpty()) {
+            // Create new one
+            manufacturer = ModelFactory.manufacturer();
+            manufacturer.setName(productDto.getManufacturer());
+        }
+        else {
+            manufacturer = manufacturerList.get(0);
+        }
+
+        Product product = ModelFactory.product();
+        product.setProdManufacturer(manufacturer);
+        product.setProdAdministrator(admin);
+
+        List<LocalizedProduct> localizedProductList = new ArrayList<>();
+        for (LocalizedProductDto lpDto : localizedProductDtoList) {
+            LocalizedProduct lp = ModelFactory.localizedProduct();
+            lp.setProduct(product);
+
+            for (Locale l : localeList) {
+                if (lpDto.getLocale().equals(l.getLanguageCode()) &&
+                    lpDto.getCountry().equals(l.getCountryCode())) {
+                    lp.setLocale(l);
+                    break;
+                }
+            }
+            lp.setName(lpDto.getName());
+            lp.setDescription(lpDto.getDescription());
+            lp.setCategory(lpDto.getCategory());
+            lp.setCurrency(lpDto.getCurrency());
+            lp.setPrice(Float.parseFloat(lpDto.getPrice()));
+
+            localizedProductList.add(lp);
+        }
+
+        product.setLocalizedProductList(localizedProductList);
+
+        productDao.addEntity(product);
+
+        return Response.status(200).build();
     }
 
     @GET
@@ -140,7 +245,6 @@ public class AdminEndpoint {
     @PUT
     @Path("/locales/add")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response addLocale(LocaleDto localeDto)
@@ -154,4 +258,48 @@ public class AdminEndpoint {
 
         return Response.status(200).build();
     }
+
+    @GET
+    @Path("/manufacturers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getManufacturerList()
+    {
+        List<ManufacturerDto> manufacturerDtoList = new ArrayList<>();
+
+        // Get locales
+        List<Manufacturer> manufacturerList = manufacturerDao.getManufacturerList();
+        for (Manufacturer m : manufacturerList) {
+            ManufacturerDto manufacturerDto = DtoFactory.buildManufacturerDto(m.getId(), m.getName());
+            manufacturerDtoList.add(manufacturerDto);
+        }
+
+        return Response.status(200).entity(manufacturerDtoList).build();
+    }
+
+    @PUT
+    @Path("/manufacturers/add")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addManufacturer(ManufacturerDto manufacturerDtoDto)
+    {
+        Manufacturer manufacturer = ModelFactory.manufacturer();
+        manufacturer.setName(manufacturerDtoDto.getName());
+
+        // Persist given manufacturer
+        manufacturerDao.addEntity(manufacturer);
+
+        return Response.status(200).build();
+    }
+
+    private String extractBearerHeader(HttpHeaders headers)
+    {
+        // Get the HTTP Authorization header from the request
+        String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
+
+        // Extract the token from the HTTP Authorization header
+        return authorizationHeader.substring("Bearer".length()).trim();
+    }
+
 }

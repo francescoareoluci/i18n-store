@@ -15,4 +15,14 @@ public class ManufacturerDao extends BaseDao<Manufacturer> {
         return entityManager.createQuery("SELECT m FROM Manufacturer m", Manufacturer.class)
                 .getResultList();
     }
+
+    public List<Manufacturer> getManufacturerByName(String name)
+    {
+        return entityManager.createQuery("SELECT m FROM Manufacturer m WHERE m.name = :name",
+                Manufacturer.class)
+                .setParameter("name", name)
+                .setMaxResults(1)
+                .getResultList();
+    }
+
 }
