@@ -177,7 +177,6 @@ public class AdminEndpoint {
         }
 
         if (invalidLanguage) {
-            System.out.println("Locale not found");
             return Response.status(404).build();
         }
 

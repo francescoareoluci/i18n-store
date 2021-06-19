@@ -29,21 +29,14 @@ public class AuthEndpoint {
     public AuthEndpoint() {}
 
     @GET
-    @Path("/test")
-    public Response test()
-    {
-        return Response.ok().entity("Service online").build();
-    }
-
-    @GET
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@Context HttpHeaders headers)
     {
         // Fetch authorization header
         final List<String> authorization = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
-        if(authorization == null || authorization.isEmpty()) {
-            return Response.ok().entity("Service online").build();
+        if (authorization == null || authorization.isEmpty()) {
+            return Response.status(401).build();
         }
 
         // Get encoded username and password (Basic auth)
@@ -80,6 +73,6 @@ public class AuthEndpoint {
             return Response.ok().entity(token).build();
         }
 
-        return Response.ok().entity("Service Online").build();
+        return Response.status(401).build();
     }
 }
