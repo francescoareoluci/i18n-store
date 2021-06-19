@@ -3,7 +3,6 @@ package it.unifi.ing.dao;
 import java.util.List;
 
 import it.unifi.ing.model.Admin;
-import it.unifi.ing.model.Customer;
 
 public class AdminDao extends BaseDao<Admin> {
 
@@ -19,12 +18,17 @@ public class AdminDao extends BaseDao<Admin> {
 
     public Admin getUserByUsername(String username)
     {
-        Admin result = entityManager
+        List<Admin> result = entityManager
                 .createQuery("SELECT a FROM Admin a WHERE a.mail = :mail", Admin.class)
                 .setParameter("mail", username)
-                .getSingleResult();
+                .setMaxResults(1)
+                .getResultList();
 
-        return result;
+        if (result.isEmpty()) {
+            return null;
+        }
+
+        return result.get(0);
     }
 
     // @TODO: this method its duplicated with customer, how to abstract it?

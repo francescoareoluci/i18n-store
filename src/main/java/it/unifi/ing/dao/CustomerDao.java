@@ -18,12 +18,17 @@ public class CustomerDao extends BaseDao<Customer> {
 
     public Customer getUserByUsername(String username)
     {
-        Customer result = entityManager
+        List<Customer> result = entityManager
                 .createQuery("SELECT c FROM Customer c WHERE c.mail = :mail", Customer.class)
                 .setParameter("mail", username)
-                .getSingleResult();
+                .setMaxResults(1)
+                .getResultList();
 
-        return result;
+        if (result.isEmpty()) {
+            return null;
+        }
+
+        return result.get(0);
     }
 
     // @TODO: this method its duplicated with admin, how to abstract it?
