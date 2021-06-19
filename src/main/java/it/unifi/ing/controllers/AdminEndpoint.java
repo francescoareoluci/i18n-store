@@ -206,6 +206,9 @@ public class AdminEndpoint {
                     productDto.getManufacturer());
             manufacturer = ModelFactory.manufacturer();
             manufacturer.setName(productDto.getManufacturer());
+
+            manufacturerDao.addEntity(manufacturer);
+            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
         }
 
         // Create product

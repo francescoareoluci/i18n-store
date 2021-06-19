@@ -25,22 +25,16 @@ public class StartupBean {
     @Inject
     private ProductDao productDao;
     @Inject
-    private TranslationDao translationDao;
-    @Inject
     private ShoppingListDao shoppingListDao;
     @Inject
     private ShoppingCartDao shoppingCartDao;
-    @Inject
-    private ProductCartDao productCartDao;
-    @Inject
-    private PurchasedProductDao purchasedProductDao;
 
-    public StartupBean() {
-    }
+    public StartupBean() {}
 
     @PostConstruct
     @Transactional
-    public void init() {
+    public void init()
+    {
         Admin user1 = buildAdmin("Mario", "Rossi", "mario.rossi@example.com", "pass1");
         Admin user2 = buildAdmin("Carlo", "Bianchi", "carlo.bianchi@example.com", "pass2");
 
@@ -106,13 +100,6 @@ public class StartupBean {
         localeDao.addEntity(locale2);
         productDao.addEntity(prod1);
         productDao.addEntity(prod2);
-        translationDao.addEntity(lc1);
-        translationDao.addEntity(lc2);
-        translationDao.addEntity(lc3);
-        translationDao.addEntity(lc4);
-        purchasedProductDao.addEntity(pp1);
-        purchasedProductDao.addEntity(pp2);
-        productCartDao.addEntity(pc1);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
