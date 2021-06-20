@@ -50,6 +50,8 @@ public class StartupBean {
 
         Manufacturer manufacturer1 = buildManufacturer("Samsung");
         Manufacturer manufacturer2 = buildManufacturer("Sony");
+        Manufacturer manufacturer3 = buildManufacturer("Netgear");
+        Manufacturer manufacturer4 = buildManufacturer("Blue Microphone");
 
         Locale locale1 = buildLocale("it", "IT");
         Locale locale2 = buildLocale("en", "US");
@@ -68,6 +70,8 @@ public class StartupBean {
 
         Product prod1 = buildProduct(user1, manufacturer1);
         Product prod2 = buildProduct(user1, manufacturer2);
+        Product prod3 = buildProduct(user2, manufacturer3);
+        Product prod4 = buildProduct(user2, manufacturer4);
 
         LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha a7II Mirrorless " +
                 "Digital Camera is the world's first full-frame camera with 5-axis image " +
@@ -86,9 +90,41 @@ public class StartupBean {
                 "con teleobiettivo 64MP, Fotocamera frontale 12MP, Fotocamera grandangolare 12MP: " +
                 "tutta la tecnologia che ti occorre per i migliori scatti con il tuo smartphone ",
                 "elettronica", locale1, prod2, currency2, (float)879.99);
+        LocalizedProduct lc5 = buildLocalizedProduct("Netgear R7000 Router WiFi Nighthawk", "Fast " +
+                        "wifi performance: Get up to 2000 square feet wireless coverage" +
+                        " with AC2300 speed (Dual band up to 600 + 1625 Mbps). - Recommended for up to " +
+                        "35 devices: Reliably stream videos, play games, surf the " +
+                        "internet, and connect smart home devices. - Wired ethernet ports: plug in " +
+                        "computers, game consoles, streaming players, and other " +
+                        "nearby wired devices with 4 x 1 gigabit ethernet ports", "electronic", locale2,
+                        prod3, currency1, (float)149.99);
+        LocalizedProduct lc6 = buildLocalizedProduct("Netgear R7000 Router WiFi Nighthawk", "Copertura " +
+                        "Wireless fino a 110 metri quadri con velocità AC2300 " +
+                        "(Dual band fino a 600 + 1625 Mbps). - Raccomandato fino a 35 dispositivi:" +
+                        "Guarda video, gioca online e gestisci i dispositivi smart home. -" +
+                        "4 x 1 porte gigabit ethernet: connetti computer, console, lettori streaming e" +
+                        "ogni altro dispositivo wired.", "elettronica", locale1,
+                        prod3, currency2, (float)149.99);
+        LocalizedProduct lc7 = buildLocalizedProduct("Blue Yeti USB Mic", "Custom three-capsule" +
+                "array: produces clear, powerful, broadcast-quality sound for YouTube, " +
+                "game streaming, podcasting, Skype calls and music. - Four pickup patterns: cardioid, " +
+                "Omni, bidirectional, and stereo pickup patterns offer " +
+                "incredible flexibility, allowing you to record in ways " +
+                "that would normally require multiple microphones", "audio", locale2, prod4, currency1,
+                (float)129.99);
+        LocalizedProduct lc8 = buildLocalizedProduct("Blue Yeti USB Mic", "Matrice a tre " +
+                        "capsule personalizzata: produce audio nitido, potente e di " +
+                        "qualità professionale per YouTube, streaming di gioco, registrazione di podcast, " +
+                        "chiamate Skype e musica. - Quattro modalità di rilevamento: le modalità " +
+                        "cardioide, omnidirezionale, bidirezionale e stereo " +
+                        "offrono un'incredibile versatilità e ti consentono di effettuare registrazioni " +
+                        "che normalmente richiederebbero più microfoni", "audio", locale1, prod4, currency2,
+                (float)139.99);
 
         prod1.setLocalizedProductList(Arrays.asList(lc1, lc2));
         prod2.setLocalizedProductList(Arrays.asList(lc3, lc4));
+        prod3.setLocalizedProductList(Arrays.asList(lc5, lc6));
+        prod4.setLocalizedProductList(Arrays.asList(lc7, lc8));
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
         PurchasedProduct pp2 = buildPurchasedProduct(prod2, sl2);
@@ -109,12 +145,16 @@ public class StartupBean {
         adminDao.addEntity(user2);
         manufacturerDao.addEntity(manufacturer1);
         manufacturerDao.addEntity(manufacturer2);
+        manufacturerDao.addEntity(manufacturer3);
+        manufacturerDao.addEntity(manufacturer4);
         localeDao.addEntity(locale1);
         localeDao.addEntity(locale2);
         currencyDao.addEntity(currency1);
         currencyDao.addEntity(currency2);
         productDao.addEntity(prod1);
         productDao.addEntity(prod2);
+        productDao.addEntity(prod3);
+        productDao.addEntity(prod4);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
