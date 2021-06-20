@@ -1,19 +1,144 @@
 package it.unifi.ing.controllers;
 
+import it.unifi.ing.dao.AdminDao;
+import it.unifi.ing.dao.CustomerDao;
+import it.unifi.ing.dao.LocaleDao;
+import it.unifi.ing.dto.DtoFactory;
+import it.unifi.ing.dto.LocalizedProductDto;
+import it.unifi.ing.dto.ProductDto;
+import it.unifi.ing.model.Customer;
+import it.unifi.ing.model.Locale;
+import it.unifi.ing.model.LocalizedProduct;
+import it.unifi.ing.model.Product;
+import it.unifi.ing.security.JWTUtil;
+import it.unifi.ing.security.UserRole;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/search")
 public class SearchEndpoint {
-    
+
+    private static final Logger logger = LogManager.getLogger(CustomerEndpoint.class);
+
+    @Inject
+    private SearchEngine searchEngine;
+
+    @Inject
+    private LocaleDao localeDao;
+    @Inject
+    private CustomerDao customerDao;
+    @Inject
+    private AdminDao adminDao;
 
     @GET
     @Path("/products/{query}")
-    public Response queryProducts(@PathParam("query") String query)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response queryProducts(@Context HttpHeaders headers,
+                                  @PathParam("query") String query)
     {
-        return Response.status(200).build();
+        // Get username and role from token
+        List<String> tokenResult = getUsernameAndRoleFromToken(headers);
+        // Set a default locale
+        Locale userLocale = localeDao.getLocaleList().get(0);
+
+        boolean isAdmin = false;
+        if (tokenResult != null && tokenResult.size() == 2) {
+            // User logged. Get locale
+            String username = tokenResult.get(0);
+            String role = tokenResult.get(1);
+            switch (UserRole.valueOf(role)) {
+                case ADMIN:
+                    // Admin can receive multiple localized products
+                    isAdmin = true;
+                    break;
+                case CUSTOMER:
+                    // Customer receive products in his/her language
+                    Customer c = customerDao.getUserByUsername(username);
+                    userLocale = c.getUserLocale();
+                    break;
+                case NO_RIGHTS:
+                    // No role: use default locale
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Retrieve matching entities
+        List<Product> productList = searchEngine.searchProducts(query);
+
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        for (Product p : productList) {
+            List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
+            for (LocalizedProduct lp : p.getLocalizedProductList()) {
+
+                if (isAdmin || lp.getLocale().getId().equals(userLocale.getId())) {
+                    LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
+                            lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
+                            lp.getPrice(), lp.getLocale().getLanguageCode(), lp.getLocale().getCountryCode());
+
+                    localizedProductDtoList.add(localizedProductDto);
+                }
+            }
+
+            ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(), localizedProductDtoList);
+            productDtoList.add(productDto);
+        }
+
+        return Response.status(200).entity(productDtoList).build();
+    }
+
+    private List<String> getUsernameAndRoleFromToken(HttpHeaders headers)
+    {
+        String token = extractBearerHeader(headers);
+        if (token.isEmpty()) {
+            logger.debug("Non-logged user has requested search");
+            return null;
+        }
+        String username = JWTUtil.getUsernameFromToken(token);
+        if (username == null) {
+            logger.error("Cannot get username from token");
+            return null;
+        }
+
+        String userRole = JWTUtil.getUserRoleFromToken(token);
+        if (userRole == null) {
+            logger.error("Cannot get user role from token");
+            return null;
+        }
+
+        List<String> returnValues = new ArrayList<>();
+        returnValues.add(username);
+        returnValues.add(userRole);
+
+        return returnValues;
+    }
+
+    private String extractBearerHeader(HttpHeaders headers)
+    {
+        // Get the HTTP Authorization header from the request
+        String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
+        if (authorizationHeader == null) {
+            return "";
+        }
+
+        // Extract the token from the HTTP Authorization header
+        return authorizationHeader.substring("Bearer".length()).trim();
     }
 
 }
