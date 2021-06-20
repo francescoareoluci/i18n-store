@@ -2,6 +2,8 @@ package it.unifi.ing.beans.builders;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.model.*;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -119,6 +121,13 @@ public class StartupBean {
         shoppingListDao.addEntity(sl2);
         customerDao.addEntity(customer1);
         customerDao.addEntity(customer2);
+
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        try {
+            fullTextEntityManager.createIndexer().startAndWait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 

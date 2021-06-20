@@ -29,10 +29,15 @@
 
             <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB103Dialect"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hbm2ddl.auto" value="update"/>
+
+            <property name="hibernate.search.default.directory_provider"
+                      value="filesystem"/>
+            <property name="hibernate.search.default.indexBase"
+                      value="C:\HS\Data"/>
 
         </properties>
     </persistence-unit>
@@ -65,6 +70,9 @@
             <property name="hibernate.order_inserts" value="true" />
             <property name="hibernate.order_updates" value="true" />
             <property name="hibernate.id.new_generator_mappings" value="true" />
+
+            <property name="hibernate.search.default.directory_provider"
+                      value="local-heap"/>
 
         </properties>
     </persistence-unit>
