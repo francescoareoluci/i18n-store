@@ -15,6 +15,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -31,7 +32,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.31.Final</version>
+            <version>5.3.15.Final</version>
         </dependency>
 
         <dependency>
@@ -47,7 +48,14 @@
             <version>2.0</version>
         </dependency>
 
-        <!-- Hibernate Search
+        <!-- Hibernate Search -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-orm</artifactId>
+            <version>5.10.7.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-mapper-orm</artifactId>
