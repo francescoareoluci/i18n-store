@@ -1,8 +1,12 @@
 package it.unifi.ing.model;
 
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Indexed
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
@@ -12,6 +16,7 @@ public class Product extends BaseEntity {
     @ManyToOne
     private Admin prodAdministrator;
 
+    @IndexedEmbedded
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<LocalizedProduct> localizedProductList;
 

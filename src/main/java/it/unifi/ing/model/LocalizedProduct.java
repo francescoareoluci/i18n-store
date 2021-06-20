@@ -1,7 +1,11 @@
 package it.unifi.ing.model;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+
 import javax.persistence.*;
 
+@Indexed
 @Entity
 @Table(name = "translations")
 public class LocalizedProduct extends BaseEntity {
@@ -15,8 +19,10 @@ public class LocalizedProduct extends BaseEntity {
     private Product product;
 
     @Column(name = "name")
+    @Field
     private String name;
     @Column(name = "description", columnDefinition="varchar(4000)")
+    @Field
     private String description;
     @Column(name = "category")
     private String category;
