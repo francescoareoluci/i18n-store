@@ -34,6 +34,8 @@ public class AdminEndpoint {
     private LocaleDao localeDao;
     @Inject
     private ManufacturerDao manufacturerDao;
+    @Inject
+    private CurrencyDao currencyDao;
 
     public AdminEndpoint() {}
 
@@ -87,7 +89,7 @@ public class AdminEndpoint {
             List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
             for (LocalizedProduct lp : localizedProductList) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                        lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
+                        lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
                         String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
                         lp.getLocale().getCountryCode());
 
@@ -125,7 +127,7 @@ public class AdminEndpoint {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         for (LocalizedProduct lp : localizedProductList) {
             LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
+                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
                     String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
@@ -199,6 +201,31 @@ public class AdminEndpoint {
             return Response.status(404).build();
         }
 
+        // Retrieve available currencies
+        List<Currency> currencyList = currencyDao.getCurrencyList();
+
+        // Check for valid product currencies
+        boolean invalidCurrency = false;
+        boolean currencyFound = false;
+        for (LocalizedProductDto lpDto : localizedProductDtoList) {
+            for (Currency c : currencyList) {
+                if (c.getCurrency().equals(lpDto.getCurrency())) {
+                    currencyFound = true;
+                    break;
+                }
+            }
+
+            if (!currencyFound) {
+                invalidCurrency = true;
+                break;
+            }
+        }
+
+        if (invalidCurrency) {
+            logger.error("Sent product contains an invalid currency");
+            return Response.status(404).build();
+        }
+
         Manufacturer manufacturer = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
         if (manufacturer == null) {
             // Create new one
@@ -230,7 +257,11 @@ public class AdminEndpoint {
             lp.setName(lpDto.getName());
             lp.setDescription(lpDto.getDescription());
             lp.setCategory(lpDto.getCategory());
-            lp.setCurrency(lpDto.getCurrency());
+            for (Currency c : currencyList) {
+                if (lpDto.getCurrency().equals(c.getCurrency())) {
+                    lp.setCurrency(c);
+                }
+            }
             lp.setPrice(Float.parseFloat(lpDto.getPrice()));
 
             localizedProductList.add(lp);
@@ -322,6 +353,46 @@ public class AdminEndpoint {
         manufacturerDao.addEntity(manufacturer);
 
         logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
+
+        return Response.status(200).build();
+    }
+
+    @GET
+    @Path("/currencies")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCurrencies()
+    {
+        logger.debug("Requested /currencies endpoint");
+
+        List<CurrencyDto> currencyDtoList = new ArrayList<>();
+
+        // Get locales
+        List<Currency> currencyList = currencyDao.getCurrencyList();
+        for (Currency c : currencyList) {
+            CurrencyDto currencyDto = DtoFactory.buildCurrencyDto(c.getId(), c.getCurrency());
+            currencyDtoList.add(currencyDto);
+        }
+
+        return Response.status(200).entity(currencyDtoList).build();
+    }
+
+    @PUT
+    @Path("/currencies/add")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addCurrency(CurrencyDto currencyDto)
+    {
+        logger.debug("Requested /currencies/add endpoint");
+
+        Currency currency = ModelFactory.currency();
+        currency.setCurrency(currencyDto.getCurrency());
+
+        // Persist given currency
+        currencyDao.addEntity(currency);
+
+        logger.info("Persisted a new currency with id: " + currency.getId());
 
         return Response.status(200).build();
     }

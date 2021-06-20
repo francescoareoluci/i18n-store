@@ -7,8 +7,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 
 @Singleton
 @Startup
@@ -21,6 +24,8 @@ public class StartupBean {
     @Inject
     private LocaleDao localeDao;
     @Inject
+    private CurrencyDao currencyDao;
+    @Inject
     private CustomerDao customerDao;
     @Inject
     private ProductDao productDao;
@@ -28,6 +33,9 @@ public class StartupBean {
     private ShoppingListDao shoppingListDao;
     @Inject
     private ShoppingCartDao shoppingCartDao;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public StartupBean() {}
 
@@ -44,6 +52,9 @@ public class StartupBean {
         Locale locale1 = buildLocale("it", "IT");
         Locale locale2 = buildLocale("en", "US");
 
+        Currency currency1 = buildCurrency("$");
+        Currency currency2 = buildCurrency("€");
+
         Customer customer1 = buildCustomer("John", "White", "john.white@example.com", "pass3", locale2);
         Customer customer2 = buildCustomer("Carla", "Verdi", "carla.verdi@example.com", "pass4", locale1);
 
@@ -56,23 +67,23 @@ public class StartupBean {
         Product prod1 = buildProduct(user1, manufacturer1);
         Product prod2 = buildProduct(user1, manufacturer2);
 
-        LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha α7 II Mirrorless " +
+        LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha a7II Mirrorless " +
                 "Digital Camera is the world's first full-frame camera with 5-axis image " +
                 "stabilization and provides camera shake compensation for " +
-                "wide-ranging mountable lenses.", "electronic", locale2, prod1, "$", (float)1598.00);
+                "wide-ranging mountable lenses.", "electronic", locale2, prod1, currency1, (float)1598.00);
         LocalizedProduct lc2 = buildLocalizedProduct("Sony Alpha a7II", "Struttura completa, " +
                 "dimensioni del palmo. Perfezione per tutti. Stabilità per tutti.La qualità" +
                 " delle immagini mozzafiato incontra la libertà di ripresa senza pari nel 7 II, " +
                 "la prima fotocamera full-frame al mondo con stabilizzazione " +
-                "dell'immagine a 5 assi.", "elettronica", locale1, prod1, "€", (float)1.499);
+                "dell'immagine a 5 assi.", "elettronica", locale1, prod1, currency2, (float)1.499);
         LocalizedProduct lc3 = buildLocalizedProduct("Samsung Smartphone Galaxy S21", "Pro Grade " +
                 "Camera: Zoom in close, take photos and videos like a pro, " +
                 "and capture incredible share-ready moments " +
-                "with our easy-to-use, multi-lens camera", "electronic", locale2, prod2, "$", (float)799.99);
+                "with our easy-to-use, multi-lens camera", "electronic", locale2, prod2, currency1, (float)799.99);
         LocalizedProduct lc4 = buildLocalizedProduct("Samsung Smartphone Galaxy S21", "Fotocamera " +
                 "con teleobiettivo 64MP, Fotocamera frontale 12MP, Fotocamera grandangolare 12MP: " +
                 "tutta la tecnologia che ti occorre per i migliori scatti con il tuo smartphone ",
-                "elettronica", locale1, prod2, "€", (float)879.99);
+                "elettronica", locale1, prod2, currency2, (float)879.99);
 
         prod1.setLocalizedProductList(Arrays.asList(lc1, lc2));
         prod2.setLocalizedProductList(Arrays.asList(lc3, lc4));
@@ -98,6 +109,8 @@ public class StartupBean {
         manufacturerDao.addEntity(manufacturer2);
         localeDao.addEntity(locale1);
         localeDao.addEntity(locale2);
+        currencyDao.addEntity(currency1);
+        currencyDao.addEntity(currency2);
         productDao.addEntity(prod1);
         productDao.addEntity(prod2);
         shoppingCartDao.addEntity(sc1);
@@ -106,6 +119,25 @@ public class StartupBean {
         shoppingListDao.addEntity(sl2);
         customerDao.addEntity(customer1);
         customerDao.addEntity(customer2);
+
+    }
+
+    private void cleanDB()
+    {
+        List<Customer> customerList = customerDao.getCustomerList();
+        for (Customer c : customerList) { customerDao.deleteEntity(c); }
+
+        List<Product> productList = productDao.getProductList();
+        for (Product p : productList) { productDao.deleteEntity(p); }
+
+        List<Admin> adminList = adminDao.getAdminList();
+        for (Admin a : adminList) { adminDao.deleteEntity(a); }
+
+        List<Manufacturer> manufacturerList = manufacturerDao.getManufacturerList();
+        for (Manufacturer m : manufacturerList) { manufacturerDao.deleteEntity(m); }
+
+        List<Locale> localeList = localeDao.getLocaleList();
+        for (Locale l : localeList) { localeDao.deleteEntity(l); }
     }
 
     private Admin buildAdmin(String firstName, String lastName, String email, String password)
@@ -158,7 +190,7 @@ public class StartupBean {
     }
 
     private LocalizedProduct buildLocalizedProduct(String name, String description, String category,
-                                                   Locale locale, Product product, String currency, float price)
+                                                   Locale locale, Product product, Currency currency, float price)
     {
         LocalizedProduct localizedProduct = ModelFactory.localizedProduct();
         localizedProduct.setName(name);
@@ -204,6 +236,14 @@ public class StartupBean {
         pp.setProduct(p);
 
         return pp;
+    }
+
+    private Currency buildCurrency(String currency)
+    {
+        Currency c = ModelFactory.currency();
+        c.setCurrency(currency);
+
+        return c;
     }
 
 }

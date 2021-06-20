@@ -84,4 +84,13 @@ public class DtoFactory {
         return shoppingListDto;
     }
 
+    public static CurrencyDto buildCurrencyDto(Long id, String currency)
+    {
+        CurrencyDto currencyDto = new CurrencyDto();
+        currencyDto.setId(id);
+        currencyDto.setCurrency(currency);
+
+        return currencyDto;
+    }
+
 }

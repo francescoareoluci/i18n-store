@@ -20,10 +20,13 @@ public class LocalizedProduct extends BaseEntity {
     private String description;
     @Column(name = "category")
     private String category;
-    @Column(name = "currency")
-    private String currency;
     @Column(name = "price")
     private float price;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_sid")
+    private Currency currency;
+
 
     public LocalizedProduct() {}
     public LocalizedProduct(String uuid) { super(uuid); }
@@ -33,7 +36,7 @@ public class LocalizedProduct extends BaseEntity {
     public String getName() { return this.name; }
     public String getDescription() { return this.description; }
     public String getCategory() { return this.category; }
-    public String getCurrency() { return this.currency; }
+    public Currency getCurrency() { return this.currency; }
     public float getPrice() { return this.price; }
 
     public void setLocale(Locale locale) { this.locale = locale; }
@@ -41,7 +44,7 @@ public class LocalizedProduct extends BaseEntity {
     public void setName(String productName) { this.name = productName; }
     public void setDescription(String productDescription) { this.description = productDescription; }
     public void setCategory(String productCategory) { this.category = productCategory; }
-    public void setCurrency(String productCurrency) { this.currency = productCurrency; }
+    public void setCurrency(Currency productCurrency) { this.currency = productCurrency; }
     public void setPrice(float productPrice) { this.price = productPrice; }
 
 }

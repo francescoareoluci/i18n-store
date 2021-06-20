@@ -74,7 +74,7 @@ public class CustomerEndpoint {
         for (LocalizedProduct lp : localizedProducts) {
             // Build dto
             LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
+                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
                     String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
@@ -126,7 +126,7 @@ public class CustomerEndpoint {
         for (LocalizedProduct lp : product.getLocalizedProductList()) {
             if (lp.getLocale().getId().equals(locale.getId())) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                        lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
+                        lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
                         String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
                         lp.getLocale().getCountryCode());
 
@@ -184,7 +184,7 @@ public class CustomerEndpoint {
                     product.getId(), locale.getId());
 
             LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
+                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
                     String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
@@ -419,7 +419,7 @@ public class CustomerEndpoint {
                     product.getId(), locale.getId());
 
             LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency(),
+                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
                     String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 

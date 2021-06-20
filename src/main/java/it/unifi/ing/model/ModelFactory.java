@@ -15,6 +15,7 @@ public class ModelFactory {
     public static Locale locale() { return new Locale(UUID.randomUUID().toString()); }
     public static Manufacturer manufacturer() { return new Manufacturer(UUID.randomUUID().toString()); }
     public static LocalizedProduct localizedProduct() { return new LocalizedProduct(UUID.randomUUID().toString()); }
+    public static Currency currency() { return new Currency(UUID.randomUUID().toString()); }
     public static ProductCart productCart() { return new ProductCart(UUID.randomUUID().toString()); }
     public static PurchasedProduct purchasedProduct() { return new PurchasedProduct(UUID.randomUUID().toString()); }
     public static ShoppingList shoppingList() { return new ShoppingList(UUID.randomUUID().toString()); }
