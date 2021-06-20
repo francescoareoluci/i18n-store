@@ -1,9 +1,6 @@
 package it.unifi.ing.dao;
 
-import it.unifi.ing.model.Locale;
-import it.unifi.ing.model.LocalizedProduct;
-import it.unifi.ing.model.ModelFactory;
-import it.unifi.ing.model.Product;
+import it.unifi.ing.model.*;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
@@ -20,6 +17,7 @@ public class TranslationDaoTest extends JpaTest {
     private LocalizedProduct localizedProduct;
     private Product product;
     private Locale locale;
+    private Currency currency;
 
     @Override
     protected void init() throws InitializationError
@@ -28,13 +26,16 @@ public class TranslationDaoTest extends JpaTest {
         locale.setLanguageCode("it");
         locale.setCountryCode("IT");
 
+        currency = ModelFactory.currency();
+        currency.setCurrency("€");
+
         product = ModelFactory.product();
 
         localizedProduct = ModelFactory.localizedProduct();
         localizedProduct.setName("nome1");
         localizedProduct.setDescription("desc1");
         localizedProduct.setCategory("categoria1");
-        localizedProduct.setCurrency("euro");
+        localizedProduct.setCurrency(currency);
         localizedProduct.setPrice((float)12.34);
         localizedProduct.setProduct(product);
         localizedProduct.setLocale(locale);
@@ -45,6 +46,7 @@ public class TranslationDaoTest extends JpaTest {
         product.setLocalizedProductList(localizedProductList);
 
         entityManager.persist(locale);
+        entityManager.persist(currency);
         entityManager.persist(localizedProduct);
         entityManager.persist(product);
 

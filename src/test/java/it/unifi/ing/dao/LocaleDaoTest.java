@@ -2,6 +2,7 @@ package it.unifi.ing.dao;
 
 import it.unifi.ing.model.Locale;
 import it.unifi.ing.model.ModelFactory;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
@@ -37,8 +38,8 @@ public class LocaleDaoTest extends JpaTest {
     public void testAdd()
     {
         Locale newLocale = ModelFactory.locale();
-        locale.setCountryCode("IT");
-        locale.setLanguageCode("it");
+        newLocale.setCountryCode("IT");
+        newLocale.setLanguageCode("it");
 
         localeDao.addEntity(newLocale);
 

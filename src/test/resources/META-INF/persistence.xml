@@ -12,6 +12,7 @@
 		 <class>it.unifi.ing.model.Admin</class>
 		 <class>it.unifi.ing.model.Customer</class>
 		 <class>it.unifi.ing.model.Locale</class>
+		 <class>it.unifi.ing.model.Currency</class>
 		 <class>it.unifi.ing.model.ShoppingCart</class>
 		 <class>it.unifi.ing.model.ShoppingList</class>
 		 <class>it.unifi.ing.model.ProductCart</class>

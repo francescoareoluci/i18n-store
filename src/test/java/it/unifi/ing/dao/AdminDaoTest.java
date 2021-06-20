@@ -36,15 +36,15 @@ public class AdminDaoTest extends JpaTest {
     @Test
     public void testAdd()
     {
-        Admin admin = ModelFactory.admin();
-        admin.setMail("user2@example.com");
-        admin.setPassword("anothersecretpass");
+        Admin newAdmin = ModelFactory.admin();
+        newAdmin.setMail("user2@example.com");
+        newAdmin.setPassword("anothersecretpass");
 
-        adminDao.addEntity(admin);
+        adminDao.addEntity(newAdmin);
 
-        assertEquals(admin,
+        assertEquals(newAdmin,
                 entityManager.createQuery( "Select a FROM Admin a WHERE a.uuid =:uuid", Admin.class )
-                        .setParameter("uuid", admin.getUuid() )
+                        .setParameter("uuid", newAdmin.getUuid() )
                         .getSingleResult());
     }
 

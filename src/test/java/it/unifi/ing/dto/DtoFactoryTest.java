@@ -42,6 +42,15 @@ public class DtoFactoryTest {
     }
 
     @Test
+    public void testBuildCurrencyDto()
+    {
+        CurrencyDto currencyDto = DtoFactory.buildCurrencyDto(3L, "$");
+
+        assertEquals(currencyDto.getId(), 3L, 0);
+        assertEquals(currencyDto.getCurrency(), "$");
+    }
+
+    @Test
     public void testBuildLocalizedProductDto()
     {
         LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(4L, "a", "b",
