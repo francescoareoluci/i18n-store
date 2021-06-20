@@ -34,17 +34,6 @@ public class SearchEngine {
                 .buildQueryBuilder().forEntity(Product.class).get();
 
         String finalQuery = keywords;
-        // If a fuzzy match has been requested, replace each "keyword" with "keyword~2"
-        // Note: keywords is built of space separated words
-        if (fuzzyMatch) {
-            String[] splitKeywords = keywords.split(" ");
-            if (splitKeywords.length > 0) {
-                finalQuery = "";
-                for (int i = 0; i < splitKeywords.length; i++) {
-                    finalQuery += splitKeywords[i] + "~2 ";
-                }
-            }
-        }
 
         logger.info("Searching for [" + finalQuery + "] inside Product entities");
 
@@ -58,6 +47,8 @@ public class SearchEngine {
             query = qb
                     .keyword()
                         .fuzzy()
+                            .withEditDistanceUpTo(2)
+                            .withPrefixLength(2)
                     .onFields("localizedProductList.name", "localizedProductList.description")
                     .matching(finalQuery)
                     .createQuery();
