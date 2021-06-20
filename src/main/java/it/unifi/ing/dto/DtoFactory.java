@@ -40,7 +40,7 @@ public class DtoFactory {
     }
 
     public static LocalizedProductDto buildLocalizedProductDto(Long id, String name, String description,
-                                                               String category, String currency, String price,
+                                                               String category, String currency, float price,
                                                                String locale, String country)
     {
         LocalizedProductDto localizedProductDto = new LocalizedProductDto();
@@ -66,11 +66,12 @@ public class DtoFactory {
         return localeDto;
     }
 
-    public static ShoppingCartDto buildShoppingCartDto(Long id, List<ProductDto> productDtoList)
+    public static ShoppingCartDto buildShoppingCartDto(Long id, List<ProductDto> productDtoList, float totalCost)
     {
         ShoppingCartDto shoppingCartDto = new ShoppingCartDto();
         shoppingCartDto.setId(id);
         shoppingCartDto.setCartProducts(productDtoList);
+        shoppingCartDto.setTotalCost(totalCost);
 
         return shoppingCartDto;
     }

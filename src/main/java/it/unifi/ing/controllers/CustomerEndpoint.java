@@ -75,7 +75,7 @@ public class CustomerEndpoint {
             // Build dto
             LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getPrice(), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
             ProductDto productDto = DtoFactory.buildProductDto(lp.getProduct().getId(),
@@ -127,7 +127,7 @@ public class CustomerEndpoint {
             if (lp.getLocale().getId().equals(locale.getId())) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                         lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                        String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                        lp.getPrice(), lp.getLocale().getLanguageCode(),
                         lp.getLocale().getCountryCode());
 
                 ProductDto productDto = DtoFactory.buildProductDto(lp.getProduct().getId(),
@@ -178,14 +178,17 @@ public class CustomerEndpoint {
 
         // Get products
         List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        float totalCost = 0;
         for (ProductCart p : productCartList) {
             Product product = p.getProduct();
             LocalizedProduct lp = translationDao.getTranslationByProductAndLocaleId(
                     product.getId(), locale.getId());
 
+            totalCost += lp.getPrice();
+
             LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getPrice(), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
@@ -194,7 +197,8 @@ public class CustomerEndpoint {
             cartProducts.add(productDto);
         }
 
-        ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(shoppingCart.getId(), cartProducts);
+        ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(shoppingCart.getId(),
+                cartProducts, totalCost);
 
         return Response.status(200).entity(shoppingCartDto).build();
     }
@@ -420,7 +424,7 @@ public class CustomerEndpoint {
 
             LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getPrice(), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),

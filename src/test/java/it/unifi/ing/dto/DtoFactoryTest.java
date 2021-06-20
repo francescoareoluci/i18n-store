@@ -54,14 +54,14 @@ public class DtoFactoryTest {
     public void testBuildLocalizedProductDto()
     {
         LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en", "US");
+                "c", "$", 10.15f, "en", "US");
 
         assertEquals(localizedProductDto.getId(), 4L, 0);
         assertEquals(localizedProductDto.getName(), "a");
         assertEquals(localizedProductDto.getDescription(), "b");
         assertEquals(localizedProductDto.getCategory(), "c");
         assertEquals(localizedProductDto.getCurrency(), "$");
-        assertEquals(localizedProductDto.getPrice(), "10.15");
+        assertEquals(localizedProductDto.getPrice(), 10.15f, 0);
         assertEquals(localizedProductDto.getLocale(), "en");
         assertEquals(localizedProductDto.getCountry(), "US");
     }
@@ -71,9 +71,9 @@ public class DtoFactoryTest {
     {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en", "US"));
+                "c", "$", 10.15f, "en", "US"));
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(5L, "d", "e",
-                "f", "$", "14.10", "en", "US"));
+                "f", "$", 14.10f, "en", "US"));
 
         ProductDto productDto = DtoFactory.buildProductDto(6L, "man", localizedProductDtoList);
 
@@ -89,9 +89,9 @@ public class DtoFactoryTest {
     {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en", "US"));
+                "c", "$", 10.15f, "en", "US"));
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(5L, "d", "e",
-                "f", "$", "14.10", "en", "US"));
+                "f", "$", 14.10f, "en", "US"));
 
         List<ProductDto> productDtoList = new ArrayList<>();
         ProductDto productDto = DtoFactory.buildProductDto(6L, "man", localizedProductDtoList);
@@ -110,19 +110,25 @@ public class DtoFactoryTest {
     {
         List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(4L, "a", "b",
-                "c", "$", "10.15", "en", "US"));
+                "c", "$", 10.15f, "en", "US"));
         localizedProductDtoList.add(DtoFactory.buildLocalizedProductDto(5L, "d", "e",
-                "f", "$", "14.10", "en", "US"));
+                "f", "$", 14.10f, "en", "US"));
+
+        float totalCost = 0;
+        for (LocalizedProductDto l : localizedProductDtoList) {
+            totalCost += Float.valueOf(l.getPrice());
+        }
 
         List<ProductDto> productDtoList = new ArrayList<>();
         ProductDto productDto = DtoFactory.buildProductDto(6L, "man", localizedProductDtoList);
         productDtoList.add(productDto);
 
-        ShoppingCartDto shoppingListDto = DtoFactory.buildShoppingCartDto(10L, productDtoList);
+        ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(10L, productDtoList, totalCost);
 
-        assertEquals(shoppingListDto.getId(), 10L, 0);
+        assertEquals(shoppingCartDto.getId(), 10L, 0);
         for (int i = 0; i < productDtoList.size(); i++) {
-            assertEquals(shoppingListDto.getCartProducts().get(0).getId(), productDtoList.get(i).getId());
+            assertEquals(shoppingCartDto.getCartProducts().get(0).getId(), productDtoList.get(i).getId());
         }
+        assertEquals(shoppingCartDto.getTotalCost(), totalCost, 0);
     }
 }

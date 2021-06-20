@@ -22,4 +22,5 @@ public class ShoppingCart extends BaseEntity {
 
     public void setCustomer(Customer customer) { this.customer = customer; }
     public void setProductCartList(List<ProductCart> productCartList) { this.productCartList = productCartList; }
+
 }

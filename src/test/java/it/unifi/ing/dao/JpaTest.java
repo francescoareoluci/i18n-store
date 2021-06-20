@@ -18,7 +18,7 @@ public abstract class JpaTest {
     @BeforeClass
     public static void setUpClass()
     {
-        entityManagerFactory = Persistence.createEntityManagerFactory( "test" );
+        entityManagerFactory = Persistence.createEntityManagerFactory("test");
     }
 
     @Before
@@ -26,7 +26,7 @@ public abstract class JpaTest {
     {
         entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.createNativeQuery( "TRUNCATE SCHEMA public AND COMMIT" ).executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE SCHEMA public AND COMMIT").executeUpdate();
         entityManager.getTransaction().commit();
 
         entityManager.getTransaction().begin();

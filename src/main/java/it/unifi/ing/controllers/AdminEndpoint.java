@@ -90,7 +90,7 @@ public class AdminEndpoint {
             for (LocalizedProduct lp : localizedProductList) {
                 LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                         lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                        String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                        lp.getPrice(), lp.getLocale().getLanguageCode(),
                         lp.getLocale().getCountryCode());
 
                 localizedProductDtoList.add(localizedProductDto);
@@ -128,7 +128,7 @@ public class AdminEndpoint {
         for (LocalizedProduct lp : localizedProductList) {
             LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
                     lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    String.valueOf(lp.getPrice()), lp.getLocale().getLanguageCode(),
+                    lp.getPrice(), lp.getLocale().getLanguageCode(),
                     lp.getLocale().getCountryCode());
 
             localizedProductDtoList.add(localizedProductDto);
@@ -262,7 +262,7 @@ public class AdminEndpoint {
                     lp.setCurrency(c);
                 }
             }
-            lp.setPrice(Float.parseFloat(lpDto.getPrice()));
+            lp.setPrice(lpDto.getPrice());
 
             localizedProductList.add(lp);
         }
