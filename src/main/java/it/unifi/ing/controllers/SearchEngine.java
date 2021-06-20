@@ -1,8 +1,11 @@
 package it.unifi.ing.controllers;
 
 import it.unifi.ing.model.Product;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.apache.lucene.search.Query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,13 +13,19 @@ import java.util.List;
 
 public class SearchEngine {
 
+    private static final Logger logger = LogManager.getLogger(CustomerEndpoint.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
     public SearchEngine() {}
 
-    public List<Product> searchProducts(String keyword)
+    public List<Product> searchProducts(String keywords, boolean fuzzyMatch)
     {
+        if (keywords == null || keywords.isEmpty()) {
+            return null;
+        }
+
         FullTextEntityManager fullTextEntityManager =
                 org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
 
@@ -24,11 +33,35 @@ public class SearchEngine {
         QueryBuilder qb = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder().forEntity(Product.class).get();
 
-        org.apache.lucene.search.Query query = qb
+        String finalQuery = keywords;
+        // If a fuzzy match has been requested, replace each "keyword" with "keyword~2"
+        // Note: keywords is built of space separated words
+        if (fuzzyMatch) {
+            String[] splitKeywords = keywords.split(" ");
+            if (splitKeywords.length > 0) {
+                finalQuery = "";
+                for (int i = 0; i < splitKeywords.length; i++) {
+                    finalQuery += splitKeywords[i] + "~2 ";
+                }
+            }
+        }
+
+        logger.info("Searching for [" + finalQuery + "] inside Product entities");
+
+        Query query = qb
                 .keyword()
                 .onFields("localizedProductList.name", "localizedProductList.description")
-                .matching(keyword)
+                .matching(finalQuery)
                 .createQuery();
+
+        if (fuzzyMatch) {
+            query = qb
+                    .keyword()
+                        .fuzzy()
+                    .onFields("localizedProductList.name", "localizedProductList.description")
+                    .matching(finalQuery)
+                    .createQuery();
+        }
 
         // Wrap Lucene query in a javax.persistence.Query
         javax.persistence.Query persistenceQuery =
@@ -36,6 +69,5 @@ public class SearchEngine {
 
         // Search
         return persistenceQuery.getResultList();
-
     }
 }

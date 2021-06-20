@@ -33,6 +33,8 @@ public class SearchEndpoint {
 
     private static final Logger logger = LogManager.getLogger(CustomerEndpoint.class);
 
+    private static final String querySeparator = "\\+";
+
     @Inject
     private SearchEngine searchEngine;
 
@@ -48,8 +50,15 @@ public class SearchEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response queryProducts(@Context HttpHeaders headers,
-                                  @PathParam("query") String query)
+                                  @PathParam("query") String userQuery)
     {
+        logger.debug("Requested /products/" + userQuery + " endpoint");
+
+        if (userQuery == null || userQuery.isEmpty()) {
+            logger.debug("User has requested an empty query");
+            return Response.status(404).build();
+        }
+
         // Get username and role from token
         List<String> tokenResult = getUsernameAndRoleFromToken(headers);
         // Set a default locale
@@ -63,23 +72,39 @@ public class SearchEndpoint {
             switch (UserRole.valueOf(role)) {
                 case ADMIN:
                     // Admin can receive multiple localized products
+                    logger.debug("User " + username + " [administrator] has requested a search");
                     isAdmin = true;
                     break;
                 case CUSTOMER:
                     // Customer receive products in his/her language
+                    logger.debug("User " + username + " [customer] has requested a search");
                     Customer c = customerDao.getUserByUsername(username);
                     userLocale = c.getUserLocale();
                     break;
                 case NO_RIGHTS:
                     // No role: use default locale
+                    logger.debug("User " + username + " [no role] has requested a search");
                     break;
                 default:
                     break;
             }
         }
 
-        // Retrieve matching entities
-        List<Product> productList = searchEngine.searchProducts(query);
+        String[] queryArray = userQuery.split(querySeparator);
+        String query = "";
+        if (queryArray.length == 1) {
+            query = queryArray[0];
+        }
+        else {
+            for (int i = 0; i < queryArray.length; i++) {
+                query += queryArray[i] + " ";
+            }
+        }
+
+        logger.info("User has requested a search with query: " + query);
+
+        // Retrieve matching entities (fuzzy match by default)
+        List<Product> productList = searchEngine.searchProducts(query, true);
 
         List<ProductDto> productDtoList = new ArrayList<>();
 
