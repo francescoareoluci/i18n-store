@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
@@ -87,6 +88,15 @@ public class JWTUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String extractBearerHeader(HttpHeaders headers)
+    {
+        // Get the HTTP Authorization header from the request
+        String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
+
+        // Extract the token from the HTTP Authorization header
+        return authorizationHeader.substring("Bearer".length()).trim();
     }
 
 }

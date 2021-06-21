@@ -78,7 +78,7 @@ public class SearchEndpoint {
                 case CUSTOMER:
                     // Customer receive products in his/her language
                     logger.debug("User " + username + " [customer] has requested a search");
-                    Customer c = customerDao.getUserByUsername(username);
+                    Customer c = customerDao.getCustomerByUsername(username);
                     userLocale = c.getUserLocale();
                     break;
                 case NO_RIGHTS:

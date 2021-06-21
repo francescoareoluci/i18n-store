@@ -150,7 +150,7 @@ public class AdminEndpoint {
         logger.debug("Requested /products/add endpoint");
 
         // Get username from token
-        String token = extractBearerHeader(headers);
+        String token = JWTUtil.extractBearerHeader(headers);
         if (token.isEmpty()) {
             logger.error("Empty bearer header");
             return Response.status(401).build();
@@ -162,7 +162,7 @@ public class AdminEndpoint {
         }
 
         // Get admin entity
-        Admin admin = adminDao.getUserByUsername(username);
+        Admin admin = adminDao.getAdminByUsername(username);
         if (admin == null) {
             logger.error("Unable to retrieve user " + username);
             return Response.status(404).build();
@@ -395,15 +395,6 @@ public class AdminEndpoint {
         logger.info("Persisted a new currency with id: " + currency.getId());
 
         return Response.status(200).build();
-    }
-
-    private String extractBearerHeader(HttpHeaders headers)
-    {
-        // Get the HTTP Authorization header from the request
-        String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
-
-        // Extract the token from the HTTP Authorization header
-        return authorizationHeader.substring("Bearer".length()).trim();
     }
 
 }

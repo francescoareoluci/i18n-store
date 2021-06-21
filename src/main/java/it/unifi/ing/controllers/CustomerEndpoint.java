@@ -54,7 +54,7 @@ public class CustomerEndpoint {
         List<ProductDto> productDtoList = new ArrayList<>();
 
         // Get user
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -92,7 +92,7 @@ public class CustomerEndpoint {
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getProducts(@Context HttpHeaders headers,
+    public Response getProductById(@Context HttpHeaders headers,
                                 @PathParam("productId") Long productId)
     {
         logger.debug("Requested /products/" + productId + " endpoint");
@@ -102,7 +102,7 @@ public class CustomerEndpoint {
         if (username.isEmpty()) { return Response.status(401).build(); }
 
         // Get user
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -158,7 +158,7 @@ public class CustomerEndpoint {
 
         List<ProductDto> cartProducts = new ArrayList<>();
 
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -216,7 +216,7 @@ public class CustomerEndpoint {
         String username = getUsernameFromToken(headers);
         if (username.isEmpty()) { return Response.status(401).build(); }
 
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -268,7 +268,7 @@ public class CustomerEndpoint {
         String username = getUsernameFromToken(headers);
         if (username.isEmpty()) { return Response.status(401).build(); }
 
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -327,7 +327,7 @@ public class CustomerEndpoint {
         String username = getUsernameFromToken(headers);
         if (username.isEmpty()) { return Response.status(401).build(); }
 
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -397,7 +397,7 @@ public class CustomerEndpoint {
 
         List<ProductDto> purchasedProducts = new ArrayList<>();
 
-        Customer customer = customerDao.getUserByUsername(username);
+        Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
@@ -440,7 +440,7 @@ public class CustomerEndpoint {
 
     private String getUsernameFromToken(HttpHeaders headers)
     {
-        String token = extractBearerHeader(headers);
+        String token = JWTUtil.extractBearerHeader(headers);
         if (token.isEmpty()) {
             logger.error("Empty bearer header");
             return "";
@@ -451,15 +451,6 @@ public class CustomerEndpoint {
             return "";
         }
         return username;
-    }
-
-    private String extractBearerHeader(HttpHeaders headers)
-    {
-        // Get the HTTP Authorization header from the request
-        String authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
-
-        // Extract the token from the HTTP Authorization header
-        return authorizationHeader.substring("Bearer".length()).trim();
     }
 
 }
