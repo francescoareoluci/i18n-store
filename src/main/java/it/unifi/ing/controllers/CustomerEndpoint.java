@@ -332,12 +332,6 @@ public class CustomerEndpoint {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
         }
-        // Get user locale
-        Locale locale = customer.getUserLocale();
-        if (locale == null) {
-            logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
-        }
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
