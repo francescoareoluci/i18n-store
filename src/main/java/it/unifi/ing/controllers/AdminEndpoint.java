@@ -31,6 +31,10 @@ public class AdminEndpoint {
     @Inject
     private ProductDao productDao;
     @Inject
+    private ProductCartDao productCartDao;
+    @Inject
+    private PurchasedProductDao purchasedProductDao;
+    @Inject
     private LocaleDao localeDao;
     @Inject
     private ManufacturerDao manufacturerDao;
@@ -272,6 +276,43 @@ public class AdminEndpoint {
         productDao.addEntity(product);
 
         logger.info("Persisted a new product with id: " + product.getId());
+
+        return Response.status(200).build();
+    }
+
+    @DELETE
+    @Path("/products/remove/{id}")
+    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
+    @Transactional
+    public Response removeProduct(@PathParam("id") Long productId)
+    {
+        logger.debug("Requested /products/remove/" + productId + " endpoint");
+
+        Product product = productDao.getEntityById(productId);
+        if (product == null) {
+            logger.error("Invalid product identifier");
+            return Response.status(404).build();
+        }
+
+        // Remove cart products references
+        List<ProductCart> productCartList = productCartDao.getProductCartList();
+        for (ProductCart pc : productCartList) {
+            if (pc.getProduct().getId() == productId) {
+                productCartDao.deleteEntity(pc);
+            }
+        }
+
+        // Remove purchased products references
+        List<PurchasedProduct> purchasedProductList = purchasedProductDao.getPurchasedProductList();
+        for (PurchasedProduct pp : purchasedProductList) {
+            if (pp.getProduct().getId() == productId) {
+                purchasedProductDao.deleteEntity(pp);
+            }
+        }
+
+        productDao.deleteEntity(product);
+
+        logger.info("Removed product with id: " + product.getId());
 
         return Response.status(200).build();
     }
