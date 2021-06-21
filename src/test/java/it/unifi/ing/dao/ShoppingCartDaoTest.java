@@ -15,28 +15,28 @@ public class ShoppingCartDaoTest extends JpaTest {
 
     private ShoppingCartDao shoppingCartDao;
     private ShoppingCart shoppingCart;
-    private ProductCart productCart;
+    private CartProduct cartProduct;
     private Customer customer;
 
     @Override
     protected void init() throws InitializationError
     {
         shoppingCart = ModelFactory.shoppingCart();
-        productCart = ModelFactory.productCart();
+        cartProduct = ModelFactory.cartProduct();
         customer = ModelFactory.customer();
 
-        productCart.setShoppingCart(shoppingCart);
-        productCart.setShoppingCart(shoppingCart);
+        cartProduct.setShoppingCart(shoppingCart);
+        cartProduct.setShoppingCart(shoppingCart);
 
-        List<ProductCart> productCartList = new ArrayList<>();
-        productCartList.add(productCart);
+        List<CartProduct> cartProductList = new ArrayList<>();
+        cartProductList.add(cartProduct);
 
         shoppingCart.setCustomer(customer);
-        shoppingCart.setProductCartList(productCartList);
+        shoppingCart.setCartProductList(cartProductList);
 
         entityManager.persist(customer);
         entityManager.persist(shoppingCart);
-        entityManager.persist(productCart);
+        entityManager.persist(cartProduct);
 
         shoppingCartDao = new ShoppingCartDao();
         try {
@@ -95,6 +95,6 @@ public class ShoppingCartDaoTest extends JpaTest {
         assertEquals(shoppingCart.getId(), retrievedResult.getId());
         assertEquals(shoppingCart.getUuid(), retrievedResult.getUuid());
         assertEquals(shoppingCart.getCustomer(), retrievedResult.getCustomer());
-        assertEquals(shoppingCart.getProductCartList().get(0), retrievedResult.getProductCartList().get(0));
+        assertEquals(shoppingCart.getCartProductList().get(0), retrievedResult.getCartProductList().get(0));
     }
 }

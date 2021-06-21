@@ -129,12 +129,12 @@ public class StartupBean {
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
         PurchasedProduct pp2 = buildPurchasedProduct(prod2, sl2);
 
-        ProductCart pc1 = buildProductCart(prod2, sc1);
+        CartProduct pc1 = buildCartProduct(prod2, sc1);
 
         sl1.setPurchasedProductList(Arrays.asList(pp1));
         sl2.setPurchasedProductList(Arrays.asList(pp2));
 
-        sc1.setProductCartList(Arrays.asList(pc1));
+        sc1.setCartProductList(Arrays.asList(pc1));
 
         customer1.setShoppingList(sl1);
         customer1.setShoppingCart(sc1);
@@ -269,9 +269,9 @@ public class StartupBean {
         return sc;
     }
 
-    private ProductCart buildProductCart(Product p, ShoppingCart sc)
+    private CartProduct buildCartProduct(Product p, ShoppingCart sc)
     {
-        ProductCart pc = ModelFactory.productCart();
+        CartProduct pc = ModelFactory.cartProduct();
         pc.setShoppingCart(sc);
         pc.setProduct(p);
 

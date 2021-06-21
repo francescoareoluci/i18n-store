@@ -31,7 +31,7 @@ public class AdminEndpoint {
     @Inject
     private ProductDao productDao;
     @Inject
-    private ProductCartDao productCartDao;
+    private CartProductDao cartProductDao;
     @Inject
     private PurchasedProductDao purchasedProductDao;
     @Inject
@@ -295,10 +295,10 @@ public class AdminEndpoint {
         }
 
         // Remove cart products references
-        List<ProductCart> productCartList = productCartDao.getProductCartList();
-        for (ProductCart pc : productCartList) {
+        List<CartProduct> cartProductList = cartProductDao.getCartProductList();
+        for (CartProduct pc : cartProductList) {
             if (pc.getProduct().getId() == productId) {
-                productCartDao.deleteEntity(pc);
+                cartProductDao.deleteEntity(pc);
             }
         }
 

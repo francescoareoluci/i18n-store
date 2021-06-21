@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "cart_products")
-public class ProductCart extends BaseEntity {
+public class CartProduct extends BaseEntity {
 
     @ManyToOne()
     @JoinColumn(name = "product_sid")
@@ -14,8 +14,8 @@ public class ProductCart extends BaseEntity {
     @JoinColumn(name = "cart_sid")
     private ShoppingCart shoppingCart;
 
-    public ProductCart() {}
-    public ProductCart(String uuid) { super(uuid); }
+    public CartProduct() {}
+    public CartProduct(String uuid) { super(uuid); }
 
     public Product getProduct() { return this.product; }
     public ShoppingCart getShoppingCart() { return this.shoppingCart; }

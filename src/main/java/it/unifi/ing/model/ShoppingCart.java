@@ -12,15 +12,15 @@ public class ShoppingCart extends BaseEntity {
     private Customer customer;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<ProductCart> productCartList;
+    private List<CartProduct> cartProductList;
 
     public ShoppingCart() {}
     public ShoppingCart(String uuid) { super(uuid); }
 
     public Customer getCustomer() { return this.customer; }
-    public List<ProductCart> getProductCartList() { return this.productCartList; }
+    public List<CartProduct> getCartProductList() { return this.cartProductList; }
 
     public void setCustomer(Customer customer) { this.customer = customer; }
-    public void setProductCartList(List<ProductCart> productCartList) { this.productCartList = productCartList; }
+    public void setCartProductList(List<CartProduct> cartProductList) { this.cartProductList = cartProductList; }
 
 }

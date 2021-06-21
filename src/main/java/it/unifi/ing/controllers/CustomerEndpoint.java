@@ -177,9 +177,9 @@ public class CustomerEndpoint {
         }
 
         // Get products
-        List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        List<CartProduct> cartProductList = shoppingCart.getCartProductList();
         float totalCost = 0;
-        for (ProductCart p : productCartList) {
+        for (CartProduct p : cartProductList) {
             Product product = p.getProduct();
             LocalizedProduct lp = translationDao.getTranslationByProductAndLocaleId(
                     product.getId(), locale.getId());
@@ -235,17 +235,17 @@ public class CustomerEndpoint {
         }
 
         // Get products
-        List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        List<CartProduct> cartProductList = shoppingCart.getCartProductList();
         Product newProduct = productDao.getEntityById(productId);
         if (newProduct == null) {
             logger.error("Unable to retrieve product id: " + productId);
             return Response.status(404).build();
         }
-        ProductCart newProductCart = ModelFactory.productCart();
-        newProductCart.setProduct(newProduct);
-        newProductCart.setShoppingCart(shoppingCart);
-        productCartList.add(newProductCart);
-        shoppingCart.setProductCartList(productCartList);
+        CartProduct newCartProduct = ModelFactory.cartProduct();
+        newCartProduct.setProduct(newProduct);
+        newCartProduct.setShoppingCart(shoppingCart);
+        cartProductList.add(newCartProduct);
+        shoppingCart.setCartProductList(cartProductList);
 
         // Persist
         shoppingCartDao.updateEntity(shoppingCart);
@@ -287,10 +287,10 @@ public class CustomerEndpoint {
         }
 
         // Get products
-        List<ProductCart> productCartList = shoppingCart.getProductCartList();
+        List<CartProduct> cartProductList = shoppingCart.getCartProductList();
         int removeIdx = 0;
         boolean productFound = false;
-        for (ProductCart pc : productCartList) {
+        for (CartProduct pc : cartProductList) {
             if (pc.getProduct().getId().equals(productId)) {
                 productFound = true;
                 break;
@@ -304,8 +304,8 @@ public class CustomerEndpoint {
             return Response.status(404).build();
         }
 
-        productCartList.remove(removeIdx);
-        shoppingCart.setProductCartList(productCartList);
+        cartProductList.remove(removeIdx);
+        shoppingCart.setCartProductList(cartProductList);
 
         // Persist
         shoppingCartDao.updateEntity(shoppingCart);
@@ -349,13 +349,13 @@ public class CustomerEndpoint {
         List<PurchasedProduct> purchasedProductList = shoppingList.getPurchasedProductList();
 
         // Get products in cart
-        List<ProductCart> productCartList = shoppingCart.getProductCartList();
-        if (productCartList.size() == 0) {
+        List<CartProduct> cartProductList = shoppingCart.getCartProductList();
+        if (cartProductList.size() == 0) {
             logger.info("User " + username + " has requested checkout with empty shopping cart");
             return Response.status(200).build();
         }
 
-        for (ProductCart pc : productCartList) {
+        for (CartProduct pc : cartProductList) {
             Product p = pc.getProduct();
             PurchasedProduct pp = ModelFactory.purchasedProduct();
             pp.setProduct(p);
@@ -364,8 +364,8 @@ public class CustomerEndpoint {
         }
 
         shoppingList.setPurchasedProductList(purchasedProductList);
-        productCartList.clear();
-        shoppingCart.setProductCartList(productCartList);
+        cartProductList.clear();
+        shoppingCart.setCartProductList(cartProductList);
 
         // Persist
         shoppingListDao.updateEntity(shoppingList);
