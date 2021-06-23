@@ -2,6 +2,7 @@ package it.unifi.ing.controllers;
 
 import it.unifi.ing.dao.CustomerDao;
 import it.unifi.ing.dao.LocaleDao;
+import it.unifi.ing.dao.ProductDao;
 import it.unifi.ing.dto.DtoFactory;
 import it.unifi.ing.dto.LocalizedProductDto;
 import it.unifi.ing.dto.ProductDto;
@@ -37,6 +38,8 @@ public class SearchEndpoint {
     private LocaleDao localeDao;
     @Inject
     private CustomerDao customerDao;
+    @Inject
+    private ProductDao productDao;
 
     @GET
     @Path("/products/{query}")
@@ -175,6 +178,12 @@ public class SearchEndpoint {
                 default:
                     break;
             }
+        }
+
+        Product product = productDao.getEntityById(Long.valueOf(productId));
+        if (product == null) {
+            logger.info("Unable to find requested product: " + productId);
+            return Response.status(404).build();
         }
 
         logger.info("User has requested a search of products similar to: " + productId);

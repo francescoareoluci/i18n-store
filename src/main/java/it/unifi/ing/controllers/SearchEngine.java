@@ -14,7 +14,7 @@ import java.util.List;
 public class SearchEngine {
 
     private static final Logger logger = LogManager.getLogger(SearchEngine.class);
-    private static final int defaultEditDistance = 2;
+    private static final int defaultEditDistance = 1;
     private static final int defaultPrefixLength = 2;
     private static final int defaultSlopFactor = 1;
 
@@ -106,7 +106,9 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("localizedProductList.name", "localizedProductList.description")
+                .onFields("localizedProductList.name",
+                        "localizedProductList.description",
+                        "localizedProductList.category")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -122,7 +124,9 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("localizedProductList.name", "localizedProductList.description")
+                .onFields("localizedProductList.name",
+                        "localizedProductList.description",
+                        "localizedProductList.category")
                 .withAndAsDefaultOperator()
                 .matching(matchQuery)
                 .createQuery();
@@ -145,7 +149,9 @@ public class SearchEngine {
                 .fuzzy()
                 .withEditDistanceUpTo(editDistance)
                 .withPrefixLength(prefixLength)
-                .onFields("localizedProductList.name", "localizedProductList.description")
+                .onFields("localizedProductList.name",
+                        "localizedProductList.description",
+                        "localizedProductList.category")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -170,6 +176,7 @@ public class SearchEngine {
                     .withSlop(slop)
                 .onField("localizedProductList.name")
                 .andField("localizedProductList.description")
+                .andField("localizedProductList.category")
                 .sentence(matchQuery)
                 .createQuery();
     }
@@ -186,8 +193,9 @@ public class SearchEngine {
         return qb
                 .moreLikeThis()
                 .excludeEntityUsedForComparison()
-                .favorSignificantTermsWithFactor(1f)
+                .favorSignificantTermsWithFactor(2f)
                 .comparingField("localizedProductList.name").boostedTo(10f)
+                .andField("localizedProductList.category").boostedTo(5f)
                 .andField("localizedProductList.description")
                 .toEntityWithId(objectId)
                 .createQuery();

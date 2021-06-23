@@ -23,11 +23,15 @@ public class LocalizedProduct extends BaseEntity {
     @Column(name = "name")
     @Field(termVector = TermVector.NO, store = Store.YES)
     private String name;
+
     @Column(name = "description", columnDefinition="varchar(4000)")
     @Field(termVector = TermVector.YES)
     private String description;
+
     @Column(name = "category")
+    @Field(termVector = TermVector.NO, store = Store.YES)
     private String category;
+
     @Column(name = "price")
     private float price;
 
