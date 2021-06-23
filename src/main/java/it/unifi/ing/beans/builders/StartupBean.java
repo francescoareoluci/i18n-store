@@ -46,6 +46,9 @@ public class StartupBean {
         Manufacturer manufacturer3 = buildManufacturer("Netgear");
         Manufacturer manufacturer4 = buildManufacturer("Blue Microphone");
         Manufacturer manufacturer5 = buildManufacturer("Bose");
+        Manufacturer manufacturer6 = buildManufacturer("Sennheiser");
+        Manufacturer manufacturer7 = buildManufacturer("Tommy Hilfiger");
+        Manufacturer manufacturer8 = buildManufacturer("Lacoste");
 
         Locale locale1 = buildLocale("it", "IT");
         Locale locale2 = buildLocale("en", "US");
@@ -68,24 +71,27 @@ public class StartupBean {
         Product prod4 = buildProduct(user2, manufacturer4);
         Product prod5 = buildProduct(user1, manufacturer2);
         Product prod6 = buildProduct(user2, manufacturer5);
+        Product prod7 = buildProduct(user1, manufacturer6);
+        Product prod8 = buildProduct(user1, manufacturer7);
+        Product prod9 = buildProduct(user2, manufacturer8);
 
         LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha a7II Mirrorless " +
                 "Digital Camera is the world's first full-frame camera with 5-axis image " +
                 "stabilization and provides camera shake compensation for " +
-                "wide-ranging mountable lenses.", "electronic", locale2, prod1, currency1, (float)1598.00);
+                "wide-ranging mountable lenses.", "camera", locale2, prod1, currency1, (float)1598.00);
         LocalizedProduct lc2 = buildLocalizedProduct("Sony Alpha a7II", "Struttura completa, " +
                 "dimensioni del palmo. Perfezione per tutti. Stabilità per tutti.La qualità" +
                 " delle immagini mozzafiato incontra la libertà di ripresa senza pari nel 7 II, " +
                 "la prima fotocamera full-frame al mondo con stabilizzazione " +
-                "dell'immagine a 5 assi.", "elettronica", locale1, prod1, currency2, (float)1.499);
+                "dell'immagine a 5 assi.", "fotocamera", locale1, prod1, currency2, (float)1.499);
         LocalizedProduct lc3 = buildLocalizedProduct("Samsung Smartphone Galaxy S21", "Pro Grade " +
                 "Camera: Zoom in close, take photos and videos like a pro, " +
                 "and capture incredible share-ready moments " +
-                "with our easy-to-use, multi-lens camera", "electronic", locale2, prod2, currency1, (float)799.99);
+                "with our easy-to-use, multi-lens camera", "smartphone", locale2, prod2, currency1, (float)799.99);
         LocalizedProduct lc4 = buildLocalizedProduct("Samsung Smartphone Galaxy S21", "Fotocamera " +
                 "con teleobiettivo 64MP, Fotocamera frontale 12MP, Fotocamera grandangolare 12MP: " +
                 "tutta la tecnologia che ti occorre per i migliori scatti con il tuo smartphone ",
-                "elettronica", locale1, prod2, currency2, (float)879.99);
+                "smartphone", locale1, prod2, currency2, (float)879.99);
         LocalizedProduct lc5 = buildLocalizedProduct("Netgear R7000 Router WiFi Nighthawk", "Fast " +
                         "wifi performance: Get up to 2000 square feet wireless coverage" +
                         " with AC2300 speed (Dual band up to 600 + 1625 Mbps). - Recommended for up to " +
@@ -126,7 +132,7 @@ public class StartupBean {
                 "sensitivity and risk increased noise.", "camera", locale2, prod5, currency1, (float)651.94);
         LocalizedProduct lc10 = buildLocalizedProduct("Sony SEL-1670Z", "La qualità Zeiss in " +
                         "uno zoom compatto e versatile: Abbiamo inserito l'ottica Zeiss migliore della " +
-                        "categoria, con il rinomato rivestimento T, in uno zoom " +
+                        "categoria, in uno zoom " +
                         "medio compatto e pratico, adatto a un'ampia scelta di applicazioni. " +
                         "La gamma di zoom da 16 mm a 70 mm è ideale per la maggior parte " +
                         "delle situazioni di scatto, rendendo questo obiettivo " +
@@ -156,6 +162,52 @@ public class StartupBean {
                 "di un sensore di movimento multidirezionale che bose ar può utilizzare per fornire audio " +
                 "contestuale in base al luogo in cui ti trovi.", "audio", locale1, prod6,
                 currency2, (float)299.99);
+        LocalizedProduct lc13 = buildLocalizedProduct("Sennheiser HD 599 SE", "The Sennheiser " +
+                "HD 599 Special Edition pushes performance barriers. It’s a premium headphone" +
+                " for those seeking timeless design and build quality along with exceptional sound. " +
+                "Powered by Sennheiser proprietary transducer technology and featuring the 'Ergonomic " +
+                "Acoustic Refinement' (E.A.R) design, the HD 599 Special Edition represents a step into the " +
+                "world of audiophile sound reproduction. This open back, around ear headphone delivers a " +
+                "natural tonal balance featuring exceptional detail and definition with " +
+                "outstanding spatial performance.", "audio", locale2, prod7, currency1, (float)199.99);
+        LocalizedProduct lc14 = buildLocalizedProduct("Sennheiser HD 599 SE", "La best in class, " +
+                "rimasterizzata: Sennheiser HD 599 Special Edition infrange le barriere delle prestazioni. " +
+                "È una cuffia premium per coloro che ricercano un suono sofisticato, " +
+                "design e qualità costruttiva. Con la potenza dei trasduttori di tecnologia " +
+                "Sennheiser e con design “Ergonomic Acoustic Refinement” (E.A.R), la HD 599 Special " +
+                "Edition rappresenta il primo approccio nel mondo della riproduzione da audiofili. " +
+                "Questa cuffia aperta circumaurale garantisce un bilanciamento naturale dei toni, un " +
+                "dettaglio eccezionale ed una performance spaziale senza precedenti.", "audio", locale1, prod7,
+                currency2, (float)199.99);
+        LocalizedProduct lc15 = buildLocalizedProduct("Tommy Hilfiger Men's Core Logo T-Shirt",
+                "The Core Logo T-Shirt from Tommy Hilfiger comes in Jet Black colour, featuring a crew " +
+                        "neck and short sleeves. Being 100% Organic - excluding trims, this t-shirt for men sports " +
+                        "large embroidered logo on front and small logo on left sleeve. - " +
+                        "100% Cotton - Machine Wash",
+                "fashion", locale2, prod8, currency1, (float)34.99);
+        LocalizedProduct lc16 = buildLocalizedProduct("Tommy Hilfiger Core Tommy Logo Tee Maglietta Uomo",
+                "La t-shirt Core Logo di Tommy Hilfiger è disponibile in colore Jet Black, " +
+                        "con girocollo e maniche corte. Essendo 100% organica - escluse le finiture, " +
+                        "questa t-shirt da uomo sfoggia un grande logo ricamato sul davanti e un " +
+                        "piccolo logo sulla manica sinistra. - 100% Cotone - Lavabile " +
+                        "in lavatrice", "moda", locale1, prod8, currency2, (float)29.99);
+        LocalizedProduct lc17 = buildLocalizedProduct("Lacoste Men's Short Sleeve",
+                "Symbol of relaxed elegance since 1933, the Lacoste brand, backed by its " +
+                        "authentic roots in sports, offers a unique and original universe " +
+                        "through the medium of a large range of products for men, women and children. " +
+                        "In the 114 countries where the brand is present with a selective " +
+                        "distribution network, every second two Lacoste products are sold: " +
+                        "apparel including the famous l.12.12 polo, leather goods, " +
+                        "fragrances, footwear, eyewear, watches.", "fashion", locale2, prod9,
+                        currency1, (float)49.99);
+        LocalizedProduct lc18 = buildLocalizedProduct("Lacoste Polo T-Shirt Uomo", "Simbolo di " +
+                "eleganza dal 1933, il marchio Lacoste, forte delle sue autentiche radici nello sport, offre" +
+                "un universo unico e originale attraverso un'ampia gamma di prodotti per uomo, donna e bambino. " +
+                "Nei 114 paesi in cui il marchio è presente con una rete di distribuzione selettiva, " +
+                "ogni secondo vengono venduti due prodotti Lacoste: abbigliamento tra cui la famosa polo l.12.12, " +
+                "pelletteria, profumi, calzature, occhiali, orologi.","moda", locale1, prod9,
+                currency2, (float)49.99);
+
 
         prod1.setLocalizedProductList(Arrays.asList(lc1, lc2));
         prod2.setLocalizedProductList(Arrays.asList(lc3, lc4));
@@ -163,6 +215,9 @@ public class StartupBean {
         prod4.setLocalizedProductList(Arrays.asList(lc7, lc8));
         prod5.setLocalizedProductList(Arrays.asList(lc9, lc10));
         prod6.setLocalizedProductList(Arrays.asList(lc11, lc12));
+        prod7.setLocalizedProductList(Arrays.asList(lc13, lc14));
+        prod8.setLocalizedProductList(Arrays.asList(lc15, lc16));
+        prod9.setLocalizedProductList(Arrays.asList(lc17, lc18));
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
         PurchasedProduct pp2 = buildPurchasedProduct(prod2, sl2);
@@ -186,6 +241,9 @@ public class StartupBean {
         manufacturerDao.addEntity(manufacturer3);
         manufacturerDao.addEntity(manufacturer4);
         manufacturerDao.addEntity(manufacturer5);
+        manufacturerDao.addEntity(manufacturer6);
+        manufacturerDao.addEntity(manufacturer7);
+        manufacturerDao.addEntity(manufacturer8);
         localeDao.addEntity(locale1);
         localeDao.addEntity(locale2);
         currencyDao.addEntity(currency1);
@@ -196,6 +254,9 @@ public class StartupBean {
         productDao.addEntity(prod4);
         productDao.addEntity(prod5);
         productDao.addEntity(prod6);
+        productDao.addEntity(prod7);
+        productDao.addEntity(prod8);
+        productDao.addEntity(prod9);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
