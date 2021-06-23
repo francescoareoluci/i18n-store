@@ -2,15 +2,11 @@ package it.unifi.ing.beans.builders;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.model.*;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +31,6 @@ public class StartupBean {
     private ShoppingListDao shoppingListDao;
     @Inject
     private ShoppingCartDao shoppingCartDao;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     public StartupBean() {}
 
@@ -72,6 +65,7 @@ public class StartupBean {
         Product prod2 = buildProduct(user1, manufacturer2);
         Product prod3 = buildProduct(user2, manufacturer3);
         Product prod4 = buildProduct(user2, manufacturer4);
+        Product prod5 = buildProduct(user1, manufacturer2);
 
         LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha a7II Mirrorless " +
                 "Digital Camera is the world's first full-frame camera with 5-axis image " +
@@ -120,11 +114,33 @@ public class StartupBean {
                         "offrono un'incredibile versatilità e ti consentono di effettuare registrazioni " +
                         "che normalmente richiederebbero più microfoni", "audio", locale1, prod4, currency2,
                 (float)139.99);
+        LocalizedProduct lc9 = buildLocalizedProduct("Sony SEL1670Z", "A compact ZEISS zoom " +
+                "for all occasions: This lightweight mid-range zoom combines renowned ZEISS optical performance " +
+                "with a constant F4 maximum aperture for consistently fine " +
+                "performance throughout the zoom range. - Built-in Optical SteadyShot image " +
+                "stabilization compensates for camera shake that can blur images " +
+                "when shooting handheld. Sharp, clear night scenes or indoor shots " +
+                "in dim lighting can be captured without the need to boost ISO " +
+                "sensitivity and risk increased noise.", "camera", locale2, prod5, currency1, (float)651.94);
+        LocalizedProduct lc10 = buildLocalizedProduct("Sony SEL-1670Z", "La qualità Zeiss in " +
+                        "uno zoom compatto e versatile: Abbiamo inserito l'ottica Zeiss migliore della " +
+                        "categoria, con il rinomato rivestimento T, in uno zoom " +
+                        "medio compatto e pratico, adatto a un'ampia scelta di applicazioni. " +
+                        "La gamma di zoom da 16 mm a 70 mm è ideale per la maggior parte " +
+                        "delle situazioni di scatto, rendendo questo obiettivo " +
+                        "la scelta ideale per foto e riprese di tutti i giorni. - La stabilizzazione " +
+                        "dell'immagine con SteadyShot ottico integrato compensa le vibrazioni della fotocamera, " +
+                        "causa di sfocature quando scatti senza cavalletto. " +
+                        "Gli scatti nitidi e le scene in interni scarsamente " +
+                        "illuminati sono facili da ottenere, senza aumentare la " +
+                        "sensibilità ISO e rischiare così di generare disturbi.", "fotocamera", locale1,
+                        prod5, currency2, (float)758.00);
 
         prod1.setLocalizedProductList(Arrays.asList(lc1, lc2));
         prod2.setLocalizedProductList(Arrays.asList(lc3, lc4));
         prod3.setLocalizedProductList(Arrays.asList(lc5, lc6));
         prod4.setLocalizedProductList(Arrays.asList(lc7, lc8));
+        prod5.setLocalizedProductList(Arrays.asList(lc9, lc10));
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
         PurchasedProduct pp2 = buildPurchasedProduct(prod2, sl2);
@@ -155,20 +171,13 @@ public class StartupBean {
         productDao.addEntity(prod2);
         productDao.addEntity(prod3);
         productDao.addEntity(prod4);
+        productDao.addEntity(prod5);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
         shoppingListDao.addEntity(sl2);
         customerDao.addEntity(customer1);
         customerDao.addEntity(customer2);
-
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-        try {
-            fullTextEntityManager.createIndexer().startAndWait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void cleanDB()
