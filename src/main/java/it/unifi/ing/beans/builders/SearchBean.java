@@ -21,7 +21,8 @@ public class SearchBean {
     public SearchBean() {}
 
     @PostConstruct
-    public void init() {
+    public void init()
+    {
         // Initialize entities indexing
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         try {

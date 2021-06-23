@@ -45,6 +45,7 @@ public class StartupBean {
         Manufacturer manufacturer2 = buildManufacturer("Sony");
         Manufacturer manufacturer3 = buildManufacturer("Netgear");
         Manufacturer manufacturer4 = buildManufacturer("Blue Microphone");
+        Manufacturer manufacturer5 = buildManufacturer("Bose");
 
         Locale locale1 = buildLocale("it", "IT");
         Locale locale2 = buildLocale("en", "US");
@@ -61,11 +62,12 @@ public class StartupBean {
         ShoppingList sl1 = buildShoppingList(customer1);
         ShoppingList sl2 = buildShoppingList(customer2);
 
-        Product prod1 = buildProduct(user1, manufacturer1);
-        Product prod2 = buildProduct(user1, manufacturer2);
+        Product prod1 = buildProduct(user1, manufacturer2);
+        Product prod2 = buildProduct(user1, manufacturer1);
         Product prod3 = buildProduct(user2, manufacturer3);
         Product prod4 = buildProduct(user2, manufacturer4);
         Product prod5 = buildProduct(user1, manufacturer2);
+        Product prod6 = buildProduct(user2, manufacturer5);
 
         LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha a7II Mirrorless " +
                 "Digital Camera is the world's first full-frame camera with 5-axis image " +
@@ -135,12 +137,32 @@ public class StartupBean {
                         "illuminati sono facili da ottenere, senza aumentare la " +
                         "sensibilità ISO e rischiare così di generare disturbi.", "fotocamera", locale1,
                         prod5, currency2, (float)758.00);
+        LocalizedProduct lc11 = buildLocalizedProduct("Bose QuietComfort 35 II", "What happens " +
+                "when you clear away the noisy distractions of the world? Concentration " +
+                "goes to the next level. You get deeper into your music, your work, " +
+                "or whatever you want to focus on. That’s the power of Bose QuietComfort 35 " +
+                "wireless headphones II. Put them on and get closer to what you’re most passionate about. " +
+                "And that’s just the beginning. QuietComfort 35 wireless headphones II " +
+                "are now enabled with Bose AR — an innovative, audio-only take on augmented reality. " +
+                "Embedded in your headphones is a multi-directional motion sensor. " +
+                "One that Bose AR can utilize to provide contextual audio based on where you are. ",
+                "audio", locale2, prod6, currency1, (float)299.99);
+        LocalizedProduct lc12 = buildLocalizedProduct("Bose QuietComfort 35 II", "Cosa succede " +
+                "quando elimini le distrazioni intorno a te? la concentrazione aumenta. " +
+                "Puoi dedicarti alla musica, al lavoro, a ciò che vuoi. Tutto questo grazie alle " +
+                "cuffie bose quietcomfort 35 ii wireless. Indossale e vivi le tue passioni. E " +
+                "questo non è che l'inizio. Le cuffie quietcomfort 35 ii wireless sono ora compatibili " +
+                "con bose ar, un'innovativa versione di realtà aumentata solo audio. Le cuffie sono dotate " +
+                "di un sensore di movimento multidirezionale che bose ar può utilizzare per fornire audio " +
+                "contestuale in base al luogo in cui ti trovi.", "audio", locale1, prod6,
+                currency2, (float)299.99);
 
         prod1.setLocalizedProductList(Arrays.asList(lc1, lc2));
         prod2.setLocalizedProductList(Arrays.asList(lc3, lc4));
         prod3.setLocalizedProductList(Arrays.asList(lc5, lc6));
         prod4.setLocalizedProductList(Arrays.asList(lc7, lc8));
         prod5.setLocalizedProductList(Arrays.asList(lc9, lc10));
+        prod6.setLocalizedProductList(Arrays.asList(lc11, lc12));
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
         PurchasedProduct pp2 = buildPurchasedProduct(prod2, sl2);
@@ -163,6 +185,7 @@ public class StartupBean {
         manufacturerDao.addEntity(manufacturer2);
         manufacturerDao.addEntity(manufacturer3);
         manufacturerDao.addEntity(manufacturer4);
+        manufacturerDao.addEntity(manufacturer5);
         localeDao.addEntity(locale1);
         localeDao.addEntity(locale2);
         currencyDao.addEntity(currency1);
@@ -172,6 +195,7 @@ public class StartupBean {
         productDao.addEntity(prod3);
         productDao.addEntity(prod4);
         productDao.addEntity(prod5);
+        productDao.addEntity(prod6);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
