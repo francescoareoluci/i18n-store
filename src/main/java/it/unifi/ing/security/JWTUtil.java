@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.core.HttpHeaders;
@@ -14,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtil {
+
+    private static final Logger logger = LogManager.getLogger(JWTUtil.class);
 
     private static final String key = "i18n-store-private-key";
     private static final long ttlMs = 600 * 1000;
@@ -69,7 +73,7 @@ public class JWTUtil {
             return String.valueOf(claims.get("subject"));
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
             return null;
         }
     }
@@ -85,7 +89,7 @@ public class JWTUtil {
             return String.valueOf(claims.get("userRole"));
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
             return null;
         }
     }

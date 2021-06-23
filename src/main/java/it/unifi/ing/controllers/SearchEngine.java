@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SearchEngine {
 
-    private static final Logger logger = LogManager.getLogger(CustomerEndpoint.class);
+    private static final Logger logger = LogManager.getLogger(SearchEngine.class);
 
     @PersistenceContext
     private EntityManager entityManager;

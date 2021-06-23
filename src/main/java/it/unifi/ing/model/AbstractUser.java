@@ -15,15 +15,8 @@ public abstract class AbstractUser extends BaseEntity {
     @Column
     private String password;
 
-    /**
-     * @brief Default Ctor
-     */
     protected AbstractUser() {}
 
-    /**
-     * @brief Ctor: create AbstractUser by giving an uuid
-     * @param uuid
-     */
     public AbstractUser(String uuid) { super(uuid); }
 
     public String getFirstName() { return this.firstName; }

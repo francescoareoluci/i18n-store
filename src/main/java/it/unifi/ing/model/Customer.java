@@ -16,15 +16,8 @@ public class Customer extends AbstractUser {
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private ShoppingList shoppingList;
 
-    /**
-     * @brief Default Ctor
-     */
     public Customer() {};
 
-    /**
-     * @brief Ctor: create Customer user by giving an uuid
-     * @param uuid
-     */
     public Customer(String uuid) { super(uuid); }
 
     public Locale getUserLocale() { return this.userLocale; }

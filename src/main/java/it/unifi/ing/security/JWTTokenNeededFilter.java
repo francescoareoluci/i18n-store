@@ -1,6 +1,8 @@
 package it.unifi.ing.security;
 
 import io.jsonwebtoken.Claims;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -18,6 +20,9 @@ import java.lang.reflect.Method;
 @JWTTokenNeeded
 @Priority(Priorities.AUTHENTICATION)
 public class JWTTokenNeededFilter implements ContainerRequestFilter {
+
+    private static final Logger logger = LogManager.getLogger(JWTTokenNeededFilter.class);
+
     @Context
     private ResourceInfo resourceInfo;
 
@@ -51,10 +56,9 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
                 }
             }
-
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }

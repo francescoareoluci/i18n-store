@@ -31,7 +31,7 @@ import java.util.List;
 @Path("/search")
 public class SearchEndpoint {
 
-    private static final Logger logger = LogManager.getLogger(CustomerEndpoint.class);
+    private static final Logger logger = LogManager.getLogger(SearchEndpoint.class);
 
     private static final String querySeparator = "\\+";
 
