@@ -30,9 +30,9 @@ public class SearchEngine {
 
     public SearchEngine() {}
 
-    public List<Product> searchProducts(String keywords, SearchType searchType)
+    public List<Product> searchProducts(String userQuery, SearchType searchType)
     {
-        if (keywords == null || keywords.isEmpty()) {
+        if (userQuery == null || userQuery.isEmpty()) {
             return null;
         }
 
@@ -43,26 +43,24 @@ public class SearchEngine {
         QueryBuilder qb = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder().forEntity(Product.class).get();
 
-        String finalQuery = keywords;
-
-        logger.info("Searching for [" + finalQuery + "] inside Product entities");
+        logger.info("Searching for [" + userQuery + "] inside Product entities");
 
         Query query;
         switch (searchType) {
             case STANDARD:
-                query = createStandardQuery(qb, finalQuery);
+                query = createStandardQuery(qb, userQuery);
                 break;
             case STANDARD_AND:
-                query = createANDStandardQuery(qb, finalQuery);
+                query = createANDStandardQuery(qb, userQuery);
                 break;
             case FUZZY:
-                query = createFuzzyQuery(qb, finalQuery, defaultEditDistance, defaultPrefixLength);
+                query = createFuzzyQuery(qb, userQuery, defaultEditDistance, defaultPrefixLength);
                 break;
             case PHRASE:
-                query = createPhraseQuery(qb, finalQuery, defaultSlopFactor);
+                query = createPhraseQuery(qb, userQuery, defaultSlopFactor);
                 break;
             default:
-                query = createStandardQuery(qb, finalQuery);
+                query = createStandardQuery(qb, userQuery);
                 break;
         }
 
@@ -97,7 +95,7 @@ public class SearchEngine {
 
     /**
      * @implSpec Create a standard query. Search in each field for each keyword in mathQuery.
-     *          Will return entities wich contains at least a specified keyword
+     *          Will return entities which contains at least a specified keyword
      * @param qb: QueryBuilder
      * @param matchQuery: Set of words to be matched
      * @return Final query
@@ -115,7 +113,7 @@ public class SearchEngine {
 
     /**
      * @implSpec Create a standard query. Search in each field for each keyword in mathQuery.
-     *          Will return entities wich contains all the specified keywords
+     *          Will return entities which contains all the specified keywords
      * @param qb: QueryBuilder
      * @param matchQuery: Set of words to be matched
      * @return Final query

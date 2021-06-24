@@ -113,7 +113,7 @@ public class SearchEndpoint {
         }
 
         logger.info("User has requested a search with query: " + query + " with type: " +
-                String.valueOf(searchType));
+                searchType);
 
         // Retrieve matching entities (fuzzy match by default)
         List<Product> productList = searchEngine.searchProducts(query, searchType);
@@ -180,7 +180,7 @@ public class SearchEndpoint {
             }
         }
 
-        Product product = productDao.getEntityById(Long.valueOf(productId));
+        Product product = productDao.getEntityById((long) productId);
         if (product == null) {
             logger.info("Unable to find requested product: " + productId);
             return Response.status(404).build();
