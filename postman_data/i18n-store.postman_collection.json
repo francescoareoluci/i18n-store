@@ -1,0 +1,1160 @@
+{
+	"info": {
+		"_postman_id": "673ec2fe-9293-487b-b285-cbe0a673af50",
+		"name": "i18n-store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LoginAdmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"postman.setEnvironmentVariable(\"adminAuthToken\", responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "pass1",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "mario.rossi@example.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/auth/login",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginCustomerIT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"postman.setEnvironmentVariable(\"customerAuthToken\", responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "pass4",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "carla.verdi@example.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/auth/login",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginCustomerEN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"postman.setEnvironmentVariable(\"customerAuthToken\", responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "pass3",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "john.white@example.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/auth/login",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginUnauthorized",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "wrongpass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "no.user@example.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/auth/login",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminShowUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/users",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminShowProducts",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/products",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminShowProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/products/2",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"products",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminAddProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 1,\r\n        \"manufacturer\": \"LG\",\r\n        \"localizedInfo\": [\r\n            {\r\n                \"id\": 1,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"REAL 4K NANOCELL DISPLAY: Bring your favorite shows to life with vivid NanoCell. See natural, lifelike picture with Nano Color enhanced by a billion rich colors. - QUAD CORE PROCESSOR 4K: Our Quad Core Processor 4K gives you a smooth, crisp viewing experience with enhanced contrast, color and black\",\r\n                \"category\": \"electronic\",\r\n                \"currency\": \"$\",\r\n                \"price\": \"499.99\",\r\n                \"locale\": \"en\",\r\n                \"country\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"REAL 4K E PURE COLORS: Vivi un'esperienza di visione più brillante e definita grazie al Real 4K e ai colori puri NanoCell; con circa 8 milioni di pixel, le immagini sono visibilmente più nitide e particolareggiate rispetto a un TV HD qualsiasi. - PROCESSORE QUAD CORE 4K: Elimina il rumore delle immagini creando colori più vivaci e maggior contrasto; le immagini a bassa risoluzione vengono ottimizzate e riprodotte con una qualità simile al 4K\",\r\n                \"category\": \"elettronica\",\r\n                \"currency\": \"€\",\r\n                \"price\": \"499.99\",\r\n                \"locale\": \"it\",\r\n                \"country\": \"IT\"\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/products/add",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"products",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminEditProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 10,\r\n        \"manufacturer\": \"LG\",\r\n        \"localizedInfo\": [\r\n            {\r\n                \"id\": 19,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"Edited\",\r\n                \"category\": \"electronic\",\r\n                \"currency\": \"$\",\r\n                \"price\": 499.99,\r\n                \"locale\": \"en\",\r\n                \"country\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 20,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"Modificata\",\r\n                \"category\": \"elettronica\",\r\n                \"currency\": \"€\",\r\n                \"price\": 499.99,\r\n                \"locale\": \"it\",\r\n                \"country\": \"IT\"\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/products/edit",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"products",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminRemoveProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/products/remove/1",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"products",
+						"remove",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminShowLocales",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/locales",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"locales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminAddLocale",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":1,\"countryCode\":\"ES\",\"languageCode\":\"es\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/locales/add",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"locales",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminShowCurrencies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/currencies",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminAddCurrency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":1,\"currency\":\"£\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/currencies/add",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"currencies",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminShowManufacturers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/manufacturers",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"manufacturers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminAddManufacturer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":1,\"name\":\"Philips\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localBasedUrl}}/api/admin/manufacturers/add",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"manufacturers",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerShowProductList",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/products",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerShowProduct",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/products/1",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerShowShoppingCart",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"shopping-cart",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerAddProductToCart",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/add/1",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"shopping-cart",
+						"add",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerRemoveProductFromCart",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/remove/1",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"shopping-cart",
+						"remove",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerCartCheckout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/checkout/",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"shopping-cart",
+						"checkout",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerShowShoppingList",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/customer/shopping-list/",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"shopping-list",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminSearch",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/camera+12M",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"camera+12M"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerSearch",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/camera+12M",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"camera+12M"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerSearchStandard",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/camera+12M&type=STANDARD",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"camera+12M&type=STANDARD"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerSearchStandardAnd",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/camera+12M&type=STANDARD_AND",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"camera+12M&type=STANDARD_AND"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomerSearchPhrase",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/camera+12M&type=PHRASE",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"camera+12M&type=PHRASE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NonLoggedUserSearch",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/t-shirt?type=FUZZY",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"t-shirt"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "FUZZY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NonLoggedUserSearchSimilar",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localBasedUrl}}/api/search/products/similar-to/8",
+					"host": [
+						"{{localBasedUrl}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"products",
+						"similar-to",
+						"8"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
