@@ -143,7 +143,7 @@ public class AdminEndpoint {
         return Response.status(200).entity(productDto).build();
     }
 
-    @PUT
+    @POST
     @Path("/products/add")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -221,11 +221,11 @@ public class AdminEndpoint {
 
     /**
      * @implNote Edit a product and/or its localization info. Currently
-     *           does not support the adding of a localization, only
+     *           does not support the adding/removing of a localization, only
      *           editing of the existing ones.
-     * @param headers
-     * @param productDto
-     * @return
+     * @param headers: HTTP header of the request
+     * @param productDto: Sent JSON object
+     * @return response
      */
     @PUT
     @Path("/products/edit")
@@ -410,7 +410,7 @@ public class AdminEndpoint {
         return Response.status(200).entity(localeDtoList).build();
     }
 
-    @PUT
+    @POST
     @Path("/locales/add")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -450,7 +450,7 @@ public class AdminEndpoint {
         return Response.status(200).entity(manufacturerDtoList).build();
     }
 
-    @PUT
+    @POST
     @Path("/manufacturers/add")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
@@ -491,7 +491,7 @@ public class AdminEndpoint {
         return Response.status(200).entity(currencyDtoList).build();
     }
 
-    @PUT
+    @POST
     @Path("/currencies/add")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
