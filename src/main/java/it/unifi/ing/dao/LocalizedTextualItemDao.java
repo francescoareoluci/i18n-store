@@ -28,7 +28,7 @@ public class LocalizedTextualItemDao extends BaseDao<LocalizedTextualItem> {
     public List<LocalizedTextualItem> getLocalizedTextualItemByProductId(Long productId)
     {
         return entityManager
-                .createQuery("SELECT l FROM LocalizedTextualItem l WHERE l.product.id = :id",
+                .createQuery("SELECT l FROM LocalizedTextualItem l WHERE l.translatableItem.id = :id",
                         LocalizedTextualItem.class)
                 .setParameter("id", productId)
                 .getResultList();
@@ -47,7 +47,7 @@ public class LocalizedTextualItemDao extends BaseDao<LocalizedTextualItem> {
     {
         return entityManager
                 .createQuery("SELECT l FROM LocalizedTextualItem l WHERE l.locale.id = :localeId " +
-                        "AND l.product.id = :productId", LocalizedTextualItem.class)
+                        "AND l.translatableItem.id = :productId", LocalizedTextualItem.class)
                 .setParameter("localeId", localeId)
                 .setParameter("productId", productId)
                 .getResultList();
@@ -59,7 +59,7 @@ public class LocalizedTextualItemDao extends BaseDao<LocalizedTextualItem> {
     {
         return entityManager
                 .createQuery("SELECT l FROM LocalizedTextualItem l WHERE l.locale.id = :localeId " +
-                        "AND l.product.id = :productId AND l.localizedField.id = :typeId",
+                        "AND l.translatableItem.id = :productId AND l.localizedField.id = :typeId",
                         LocalizedTextualItem.class)
                 .setParameter("localeId", localeId)
                 .setParameter("productId", productId)
