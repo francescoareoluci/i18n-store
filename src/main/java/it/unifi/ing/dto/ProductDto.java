@@ -5,17 +5,30 @@ import java.util.List;
 public class ProductDto extends BaseDto {
 
     private String manufacturer;
-    private List<LocalizedProductDto> localizedInfo;
+    private List<LocalizedTextualItemDto> localizedTextualItemList;
+    private LocalizedCurrencyItemDto localizedCurrencyItem;
 
     public ProductDto() {}
 
     public String getManufacturer() { return this.manufacturer; }
-    public List<LocalizedProductDto> getLocalizedInfo() { return this.localizedInfo; }
+    public List<LocalizedTextualItemDto> getLocalizedTextualItemList()
+    {
+        return this.localizedTextualItemList;
+    }
+    public LocalizedCurrencyItemDto getLocalizedCurrencyItem()
+    {
+        return this.localizedCurrencyItem;
+    }
 
     public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }
-    public void setLocalizedInfo(List<LocalizedProductDto> localizedInfo)
+    public void setLocalizedTextualItemList(List<LocalizedTextualItemDto> localizedTextualItemList)
     {
-        this.localizedInfo = localizedInfo;
+        this.localizedTextualItemList = localizedTextualItemList;
+    }
+
+    public void setLocalizedCurrencyItem(LocalizedCurrencyItemDto localizedCurrencyItem)
+    {
+        this.localizedCurrencyItem = localizedCurrencyItem;
     }
 
 }

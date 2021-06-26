@@ -104,9 +104,7 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("localizedProductList.name",
-                        "localizedProductList.description",
-                        "localizedProductList.category")
+                .onFields("localizedTextualItemList.text")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -122,9 +120,7 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("localizedProductList.name",
-                        "localizedProductList.description",
-                        "localizedProductList.category")
+                .onFields("localizedTextualItemList.text")
                 .withAndAsDefaultOperator()
                 .matching(matchQuery)
                 .createQuery();
@@ -147,9 +143,7 @@ public class SearchEngine {
                 .fuzzy()
                 .withEditDistanceUpTo(editDistance)
                 .withPrefixLength(prefixLength)
-                .onFields("localizedProductList.name",
-                        "localizedProductList.description",
-                        "localizedProductList.category")
+                .onFields("localizedTextualItemList.text")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -172,9 +166,7 @@ public class SearchEngine {
         return qb
                 .phrase()
                     .withSlop(slop)
-                .onField("localizedProductList.name")
-                .andField("localizedProductList.description")
-                .andField("localizedProductList.category")
+                .onField("localizedTextualItemList.text")
                 .sentence(matchQuery)
                 .createQuery();
     }
@@ -192,9 +184,7 @@ public class SearchEngine {
                 .moreLikeThis()
                 .excludeEntityUsedForComparison()
                 .favorSignificantTermsWithFactor(2f)
-                .comparingField("localizedProductList.name").boostedTo(10f)
-                .andField("localizedProductList.category").boostedTo(5f)
-                .andField("localizedProductList.description")
+                .comparingField("localizedTextualItemList.text")
                 .toEntityWithId(objectId)
                 .createQuery();
     }

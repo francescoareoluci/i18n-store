@@ -120,6 +120,7 @@ public class SearchEndpoint {
 
         List<ProductDto> productDtoList = new ArrayList<>();
 
+        /*
         for (Product p : productList) {
             List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
             for (LocalizedProduct lp : p.getLocalizedProductList()) {
@@ -136,8 +137,8 @@ public class SearchEndpoint {
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(), localizedProductDtoList);
             productDtoList.add(productDto);
         }
-
-        return Response.status(200).entity(productDtoList).build();
+        */
+        return Response.status(200).build();//entity(productDtoList).build();
     }
 
     @GET
@@ -193,6 +194,7 @@ public class SearchEndpoint {
 
         List<ProductDto> productDtoList = new ArrayList<>();
 
+        /*
         for (Product p : productList) {
             List<LocalizedProductDto> localizedProductDtoList = new ArrayList<>();
             for (LocalizedProduct lp : p.getLocalizedProductList()) {
@@ -209,7 +211,7 @@ public class SearchEndpoint {
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(), localizedProductDtoList);
             productDtoList.add(productDto);
         }
-
+        */
         return Response.status(200).entity(productDtoList).build();
     }
 

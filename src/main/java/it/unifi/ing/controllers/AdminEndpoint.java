@@ -72,6 +72,7 @@ public class AdminEndpoint {
         return Response.status(200).entity(userDtoList).build();
     }
 
+    /*
     @GET
     @Path("/products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
@@ -218,6 +219,7 @@ public class AdminEndpoint {
 
         return Response.status(200).build();
     }
+    */
 
     /**
      * @implNote Edit a product and/or its localization info. Currently
@@ -227,6 +229,7 @@ public class AdminEndpoint {
      * @param productDto: Sent JSON object
      * @return response
      */
+    /*
     @PUT
     @Path("/products/edit")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
@@ -618,5 +621,5 @@ public class AdminEndpoint {
 
         return product;
     }
-
+    */
 }

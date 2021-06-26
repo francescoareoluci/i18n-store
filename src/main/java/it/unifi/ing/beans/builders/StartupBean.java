@@ -2,12 +2,17 @@ package it.unifi.ing.beans.builders;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.model.*;
+import it.unifi.ing.translationModel.LocalizedCurrencyItem;
+import it.unifi.ing.translationModel.LocalizedField;
+import it.unifi.ing.translationModel.LocalizedTextualItem;
+import it.unifi.ing.translationModel.TranslatableType;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +36,8 @@ public class StartupBean {
     private ShoppingListDao shoppingListDao;
     @Inject
     private ShoppingCartDao shoppingCartDao;
+    @Inject
+    private LocalizedFieldDao localizedFieldDao;
 
     public StartupBean() {}
 
@@ -53,8 +60,8 @@ public class StartupBean {
         Locale locale1 = buildLocale("it", "IT");
         Locale locale2 = buildLocale("en", "US");
 
-        Currency currency1 = buildCurrency("$");
-        Currency currency2 = buildCurrency("€");
+        Currency currency1 = buildCurrency("€");
+        Currency currency2 = buildCurrency("$");
 
         Customer customer1 = buildCustomer("John", "White", "john.white@example.com", "pass3", locale2);
         Customer customer2 = buildCustomer("Carla", "Verdi", "carla.verdi@example.com", "pass4", locale1);
@@ -66,168 +73,35 @@ public class StartupBean {
         ShoppingList sl2 = buildShoppingList(customer2);
 
         Product prod1 = buildProduct(user1, manufacturer2);
-        Product prod2 = buildProduct(user1, manufacturer1);
-        Product prod3 = buildProduct(user2, manufacturer3);
-        Product prod4 = buildProduct(user2, manufacturer4);
-        Product prod5 = buildProduct(user1, manufacturer2);
-        Product prod6 = buildProduct(user2, manufacturer5);
-        Product prod7 = buildProduct(user1, manufacturer6);
-        Product prod8 = buildProduct(user1, manufacturer7);
-        Product prod9 = buildProduct(user2, manufacturer8);
 
-        LocalizedProduct lc1 = buildLocalizedProduct("Sony Alpha a7II", "The Sony Alpha a7II Mirrorless " +
+        LocalizedField lf1 = buildLocalizedField(TranslatableType.productName);
+        LocalizedField lf2 = buildLocalizedField(TranslatableType.productDescription);
+        LocalizedField lf3 = buildLocalizedField(TranslatableType.productCategory);
+
+        List<LocalizedTextualItem> prod1TextualItems = new ArrayList<>();
+        prod1TextualItems.add(buildLocalizedTextualItem("Sony Alpha a7II", prod1, locale2, lf1));
+        prod1TextualItems.add(buildLocalizedTextualItem("The Sony Alpha a7II Mirrorless " +
                 "Digital Camera is the world's first full-frame camera with 5-axis image " +
-                "stabilization and provides camera shake compensation for " +
-                "wide-ranging mountable lenses.", "camera", locale2, prod1, currency1, (float)1598.00);
-        LocalizedProduct lc2 = buildLocalizedProduct("Sony Alpha a7II", "Struttura completa, " +
-                "dimensioni del palmo. Perfezione per tutti. Stabilità per tutti.La qualità" +
-                " delle immagini mozzafiato incontra la libertà di ripresa senza pari nel 7 II, " +
-                "la prima fotocamera full-frame al mondo con stabilizzazione " +
-                "dell'immagine a 5 assi.", "fotocamera", locale1, prod1, currency2, (float)1.499);
-        LocalizedProduct lc3 = buildLocalizedProduct("Samsung Smartphone Galaxy S21", "Pro Grade " +
-                "Camera: Zoom in close, take photos and videos like a pro, " +
-                "and capture incredible share-ready moments " +
-                "with our easy-to-use, multi-lens camera", "smartphone", locale2, prod2, currency1, (float)799.99);
-        LocalizedProduct lc4 = buildLocalizedProduct("Samsung Smartphone Galaxy S21", "Fotocamera " +
-                "con teleobiettivo 64MP, Fotocamera frontale 12MP, Fotocamera grandangolare 12MP: " +
-                "tutta la tecnologia che ti occorre per i migliori scatti con il tuo smartphone ",
-                "smartphone", locale1, prod2, currency2, (float)879.99);
-        LocalizedProduct lc5 = buildLocalizedProduct("Netgear R7000 Router WiFi Nighthawk", "Fast " +
-                        "wifi performance: Get up to 2000 square feet wireless coverage" +
-                        " with AC2300 speed (Dual band up to 600 + 1625 Mbps). - Recommended for up to " +
-                        "35 devices: Reliably stream videos, play games, surf the " +
-                        "internet, and connect smart home devices. - Wired ethernet ports: plug in " +
-                        "computers, game consoles, streaming players, and other " +
-                        "nearby wired devices with 4 x 1 gigabit ethernet ports", "electronic", locale2,
-                        prod3, currency1, (float)149.99);
-        LocalizedProduct lc6 = buildLocalizedProduct("Netgear R7000 Router WiFi Nighthawk", "Copertura " +
-                        "Wireless fino a 110 metri quadri con velocità AC2300 " +
-                        "(Dual band fino a 600 + 1625 Mbps). - Raccomandato fino a 35 dispositivi:" +
-                        "Guarda video, gioca online e gestisci i dispositivi smart home. -" +
-                        "4 x 1 porte gigabit ethernet: connetti computer, console, lettori streaming e" +
-                        "ogni altro dispositivo wired.", "elettronica", locale1,
-                        prod3, currency2, (float)149.99);
-        LocalizedProduct lc7 = buildLocalizedProduct("Blue Yeti USB Mic", "Custom three-capsule" +
-                "array: produces clear, powerful, broadcast-quality sound for YouTube, " +
-                "game streaming, podcasting, Skype calls and music. - Four pickup patterns: cardioid, " +
-                "Omni, bidirectional, and stereo pickup patterns offer " +
-                "incredible flexibility, allowing you to record in ways " +
-                "that would normally require multiple microphones", "audio", locale2, prod4, currency1,
-                (float)129.99);
-        LocalizedProduct lc8 = buildLocalizedProduct("Blue Yeti USB Mic", "Matrice a tre " +
-                        "capsule personalizzata: produce audio nitido, potente e di " +
-                        "qualità professionale per YouTube, streaming di gioco, registrazione di podcast, " +
-                        "chiamate Skype e musica. - Quattro modalità di rilevamento: le modalità " +
-                        "cardioide, omnidirezionale, bidirezionale e stereo " +
-                        "offrono un'incredibile versatilità e ti consentono di effettuare registrazioni " +
-                        "che normalmente richiederebbero più microfoni", "audio", locale1, prod4, currency2,
-                (float)139.99);
-        LocalizedProduct lc9 = buildLocalizedProduct("Sony SEL1670Z", "A compact ZEISS zoom " +
-                "for all occasions: This lightweight mid-range zoom combines renowned ZEISS optical performance " +
-                "with a constant F4 maximum aperture for consistently fine " +
-                "performance throughout the zoom range. - Built-in Optical SteadyShot image " +
-                "stabilization compensates for camera shake that can blur images " +
-                "when shooting handheld. Sharp, clear night scenes or indoor shots " +
-                "in dim lighting can be captured without the need to boost ISO " +
-                "sensitivity and risk increased noise.", "camera", locale2, prod5, currency1, (float)651.94);
-        LocalizedProduct lc10 = buildLocalizedProduct("Sony SEL-1670Z", "La qualità Zeiss in " +
-                        "uno zoom compatto e versatile: Abbiamo inserito l'ottica Zeiss migliore della " +
-                        "categoria, in uno zoom " +
-                        "medio compatto e pratico, adatto a un'ampia scelta di applicazioni. " +
-                        "La gamma di zoom da 16 mm a 70 mm è ideale per la maggior parte " +
-                        "delle situazioni di scatto, rendendo questo obiettivo " +
-                        "la scelta ideale per foto e riprese di tutti i giorni. - La stabilizzazione " +
-                        "dell'immagine con SteadyShot ottico integrato compensa le vibrazioni della fotocamera, " +
-                        "causa di sfocature quando scatti senza cavalletto. " +
-                        "Gli scatti nitidi e le scene in interni scarsamente " +
-                        "illuminati sono facili da ottenere, senza aumentare la " +
-                        "sensibilità ISO e rischiare così di generare disturbi.", "fotocamera", locale1,
-                        prod5, currency2, (float)758.00);
-        LocalizedProduct lc11 = buildLocalizedProduct("Bose QuietComfort 35 II", "What happens " +
-                "when you clear away the noisy distractions of the world? Concentration " +
-                "goes to the next level. You get deeper into your music, your work, " +
-                "or whatever you want to focus on. That’s the power of Bose QuietComfort 35 " +
-                "wireless headphones II. Put them on and get closer to what you’re most passionate about. " +
-                "And that’s just the beginning. QuietComfort 35 wireless headphones II " +
-                "are now enabled with Bose AR — an innovative, audio-only take on augmented reality. " +
-                "Embedded in your headphones is a multi-directional motion sensor. " +
-                "One that Bose AR can utilize to provide contextual audio based on where you are. ",
-                "audio", locale2, prod6, currency1, (float)299.99);
-        LocalizedProduct lc12 = buildLocalizedProduct("Bose QuietComfort 35 II", "Cosa succede " +
-                "quando elimini le distrazioni intorno a te? la concentrazione aumenta. " +
-                "Puoi dedicarti alla musica, al lavoro, a ciò che vuoi. Tutto questo grazie alle " +
-                "cuffie bose quietcomfort 35 ii wireless. Indossale e vivi le tue passioni. E " +
-                "questo non è che l'inizio. Le cuffie quietcomfort 35 ii wireless sono ora compatibili " +
-                "con bose ar, un'innovativa versione di realtà aumentata solo audio. Le cuffie sono dotate " +
-                "di un sensore di movimento multidirezionale che bose ar può utilizzare per fornire audio " +
-                "contestuale in base al luogo in cui ti trovi.", "audio", locale1, prod6,
-                currency2, (float)299.99);
-        LocalizedProduct lc13 = buildLocalizedProduct("Sennheiser HD 599 SE", "The Sennheiser " +
-                "HD 599 Special Edition pushes performance barriers. It’s a premium headphone" +
-                " for those seeking timeless design and build quality along with exceptional sound. " +
-                "Powered by Sennheiser proprietary transducer technology and featuring the 'Ergonomic " +
-                "Acoustic Refinement' (E.A.R) design, the HD 599 Special Edition represents a step into the " +
-                "world of audiophile sound reproduction. This open back, around ear headphone delivers a " +
-                "natural tonal balance featuring exceptional detail and definition with " +
-                "outstanding spatial performance.", "audio", locale2, prod7, currency1, (float)199.99);
-        LocalizedProduct lc14 = buildLocalizedProduct("Sennheiser HD 599 SE", "La best in class, " +
-                "rimasterizzata: Sennheiser HD 599 Special Edition infrange le barriere delle prestazioni. " +
-                "È una cuffia premium per coloro che ricercano un suono sofisticato, " +
-                "design e qualità costruttiva. Con la potenza dei trasduttori di tecnologia " +
-                "Sennheiser e con design “Ergonomic Acoustic Refinement” (E.A.R), la HD 599 Special " +
-                "Edition rappresenta il primo approccio nel mondo della riproduzione da audiofili. " +
-                "Questa cuffia aperta circumaurale garantisce un bilanciamento naturale dei toni, un " +
-                "dettaglio eccezionale ed una performance spaziale senza precedenti.", "audio", locale1, prod7,
-                currency2, (float)199.99);
-        LocalizedProduct lc15 = buildLocalizedProduct("Tommy Hilfiger Men's Core Logo T-Shirt",
-                "The Core Logo T-Shirt from Tommy Hilfiger comes in Jet Black colour, featuring a crew " +
-                        "neck and short sleeves. Being 100% Organic - excluding trims, this t-shirt for men sports " +
-                        "large embroidered logo on front and small logo on left sleeve. - " +
-                        "100% Cotton - Machine Wash",
-                "fashion", locale2, prod8, currency1, (float)34.99);
-        LocalizedProduct lc16 = buildLocalizedProduct("Tommy Hilfiger Core Tommy Logo Tee Maglietta Uomo",
-                "La t-shirt Core Logo di Tommy Hilfiger è disponibile in colore Jet Black, " +
-                        "con girocollo e maniche corte. Essendo 100% organica - escluse le finiture, " +
-                        "questa t-shirt da uomo sfoggia un grande logo ricamato sul davanti e un " +
-                        "piccolo logo sulla manica sinistra. - 100% Cotone - Lavabile " +
-                        "in lavatrice", "moda", locale1, prod8, currency2, (float)29.99);
-        LocalizedProduct lc17 = buildLocalizedProduct("Lacoste Men's Short Sleeve",
-                "Symbol of relaxed elegance since 1933, the Lacoste brand, backed by its " +
-                        "authentic roots in sports, offers a unique and original universe " +
-                        "through the medium of a large range of products for men, women and children. " +
-                        "In the 114 countries where the brand is present with a selective " +
-                        "distribution network, every second two Lacoste products are sold: " +
-                        "apparel including the famous l.12.12 polo, leather goods, " +
-                        "fragrances, footwear, eyewear, watches.", "fashion", locale2, prod9,
-                        currency1, (float)49.99);
-        LocalizedProduct lc18 = buildLocalizedProduct("Lacoste Polo T-Shirt Uomo", "Simbolo di " +
-                "eleganza dal 1933, il marchio Lacoste, forte delle sue autentiche radici nello sport, offre" +
-                "un universo unico e originale attraverso un'ampia gamma di prodotti per uomo, donna e bambino. " +
-                "Nei 114 paesi in cui il marchio è presente con una rete di distribuzione selettiva, " +
-                "ogni secondo vengono venduti due prodotti Lacoste: abbigliamento tra cui la famosa polo l.12.12, " +
-                "pelletteria, profumi, calzature, occhiali, orologi.","moda", locale1, prod9,
-                currency2, (float)49.99);
+                        "stabilization and provides camera shake compensation for " +
+                        "wide-ranging mountable lenses.", prod1, locale2, lf2));
+        prod1TextualItems.add(buildLocalizedTextualItem("camera", prod1, locale2, lf3));
+        prod1TextualItems.add(buildLocalizedTextualItem("Sony Alpha a7II", prod1, locale1, lf1));
+        prod1TextualItems.add(buildLocalizedTextualItem("ITA DESCR", prod1, locale1, lf2));
+        prod1TextualItems.add(buildLocalizedTextualItem("fotocamera", prod1, locale1, lf3));
 
+        List<LocalizedCurrencyItem> prod1CurrencyItems = new ArrayList<>();
+        prod1CurrencyItems.add(buildLocalizedCurrencyItem(currency1, (float)1499.00, prod1, locale1));
+        prod1CurrencyItems.add(buildLocalizedCurrencyItem(currency2, (float)1598.00, prod1, locale2));
 
-        prod1.setLocalizedProductList(Arrays.asList(lc1, lc2));
-        prod2.setLocalizedProductList(Arrays.asList(lc3, lc4));
-        prod3.setLocalizedProductList(Arrays.asList(lc5, lc6));
-        prod4.setLocalizedProductList(Arrays.asList(lc7, lc8));
-        prod5.setLocalizedProductList(Arrays.asList(lc9, lc10));
-        prod6.setLocalizedProductList(Arrays.asList(lc11, lc12));
-        prod7.setLocalizedProductList(Arrays.asList(lc13, lc14));
-        prod8.setLocalizedProductList(Arrays.asList(lc15, lc16));
-        prod9.setLocalizedProductList(Arrays.asList(lc17, lc18));
+        prod1.setLocalizedTextualItemList(prod1TextualItems);
+        prod1.setLocalizedCurrencyItemList(prod1CurrencyItems);
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
-        PurchasedProduct pp2 = buildPurchasedProduct(prod2, sl2);
-
-        CartProduct pc1 = buildCartProduct(prod2, sc1);
 
         sl1.setPurchasedProductList(Arrays.asList(pp1));
-        sl2.setPurchasedProductList(Arrays.asList(pp2));
+        sl2.setPurchasedProductList(Arrays.asList());
 
-        sc1.setCartProductList(Arrays.asList(pc1));
+        sc1.setCartProductList(Arrays.asList());
 
         customer1.setShoppingList(sl1);
         customer1.setShoppingCart(sc1);
@@ -248,15 +122,10 @@ public class StartupBean {
         localeDao.addEntity(locale2);
         currencyDao.addEntity(currency1);
         currencyDao.addEntity(currency2);
+        localizedFieldDao.addEntity(lf1);
+        localizedFieldDao.addEntity(lf2);
+        localizedFieldDao.addEntity(lf3);
         productDao.addEntity(prod1);
-        productDao.addEntity(prod2);
-        productDao.addEntity(prod3);
-        productDao.addEntity(prod4);
-        productDao.addEntity(prod5);
-        productDao.addEntity(prod6);
-        productDao.addEntity(prod7);
-        productDao.addEntity(prod8);
-        productDao.addEntity(prod9);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
@@ -387,6 +256,42 @@ public class StartupBean {
         c.setCurrency(currency);
 
         return c;
+    }
+
+    private LocalizedCurrencyItem buildLocalizedCurrencyItem(Currency c,
+                                                             float price,
+                                                             Product product,
+                                                             Locale locale)
+    {
+        LocalizedCurrencyItem localizedCurrencyItem = ModelFactory.localizedCurrencyItem();
+        localizedCurrencyItem.setCurrency(c);
+        localizedCurrencyItem.setPrice(price);
+        localizedCurrencyItem.setProduct(product);
+        localizedCurrencyItem.setLocale(locale);
+
+        return localizedCurrencyItem;
+    }
+
+    private LocalizedField buildLocalizedField(String type)
+    {
+        LocalizedField localizedField = ModelFactory.localizedField();
+        localizedField.setType(type);
+
+        return localizedField;
+    }
+
+    private LocalizedTextualItem buildLocalizedTextualItem(String text,
+                                                           TranslatableItem product,
+                                                           Locale locale,
+                                                           LocalizedField localizedField)
+    {
+        LocalizedTextualItem localizedTextualItem = ModelFactory.localizedTextualItem();
+        localizedTextualItem.setLocale(locale);
+        localizedTextualItem.setTranslatableItem(product);
+        localizedTextualItem.setLocalizedField(localizedField);
+        localizedTextualItem.setText(text);
+
+        return localizedTextualItem;
     }
 
 }

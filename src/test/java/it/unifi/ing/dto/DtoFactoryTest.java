@@ -66,6 +66,7 @@ public class DtoFactoryTest {
         assertEquals(localizedProductDto.getCountry(), "US");
     }
 
+    /*
     @Test
     public void testBuildProductDto()
     {
@@ -131,4 +132,6 @@ public class DtoFactoryTest {
         }
         assertEquals(shoppingCartDto.getTotalCost(), totalCost, 0);
     }
+
+     */
 }

@@ -43,7 +43,7 @@ public class TranslationDaoTest extends JpaTest {
         List<LocalizedProduct> localizedProductList  = new ArrayList<>();
         localizedProductList.add(localizedProduct);
 
-        product.setLocalizedProductList(localizedProductList);
+        //product.setLocalizedProductList(localizedProductList);
 
         entityManager.persist(locale);
         entityManager.persist(currency);

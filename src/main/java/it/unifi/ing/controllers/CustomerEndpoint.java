@@ -14,9 +14,12 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import it.unifi.ing.translationModel.LocalizedCurrencyItem;
+import it.unifi.ing.translationModel.LocalizedField;
+import it.unifi.ing.translationModel.LocalizedTextualItem;
+import it.unifi.ing.translationModel.TranslatableType;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -28,13 +31,17 @@ public class CustomerEndpoint {
     @Inject
     private CustomerDao customerDao;
     @Inject
-    private TranslationDao translationDao;
-    @Inject
     private ProductDao productDao;
     @Inject
     private ShoppingCartDao shoppingCartDao;
     @Inject
     private ShoppingListDao shoppingListDao;
+    @Inject
+    private LocalizedFieldDao localizedFieldDao;
+
+    private LocalizedField nameLocalizedField;
+    private LocalizedField descriptionLocalizedField;
+    private LocalizedField categoryLocalizedField;
 
     public CustomerEndpoint() {}
 
@@ -69,18 +76,26 @@ public class CustomerEndpoint {
         logger.info("Customer " + customer.getMail() + " has requested the product list. Language: " +
                 locale.getLanguageCode());
 
-        // Get all localized products
-        List<LocalizedProduct> localizedProducts = translationDao.getTranslationsByLocaleId(locale.getId());
-        for (LocalizedProduct lp : localizedProducts) {
-            // Build dto
-            LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    lp.getPrice(), lp.getLocale().getLanguageCode(),
-                    lp.getLocale().getCountryCode());
+        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
+        if (!getLocalizedFields(localizedFieldList)) {
+            logger.error("Requested translation for a non configured field");
+            return Response.status(404).build();
+        }
 
-            ProductDto productDto = DtoFactory.buildProductDto(lp.getProduct().getId(),
-                    lp.getProduct().getProdManufacturer().getName(), Arrays.asList(localizedProductDto));
+        // Get all products
+        List<Product> productList = productDao.getProductList();
+        for (Product p : productList) {
+            // Build localized textual item dto list
+            List<LocalizedTextualItemDto> localizedTextualItemDtos = convertLocalizedItemListToDto(
+                    p.getLocalizedTextualItemList(), locale);
 
+            // Build localized currency dto
+            LocalizedCurrencyItemDto localizedCurrencyItemDto = convertLocalizedCurrencyListToDto(locale,
+                    p.getLocalizedCurrencyItemList());
+
+            // Create product dto
+            ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
+                    localizedTextualItemDtos, localizedCurrencyItemDto);
             productDtoList.add(productDto);
         }
 
@@ -123,24 +138,27 @@ public class CustomerEndpoint {
         logger.info("Customer " + customer.getMail() + " has requested the product id: " +
                 productId + ". Language: " + locale.getLanguageCode());
 
-        for (LocalizedProduct lp : product.getLocalizedProductList()) {
-            if (lp.getLocale().getId().equals(locale.getId())) {
-                LocalizedProductDto localizedProductDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                        lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                        lp.getPrice(), lp.getLocale().getLanguageCode(),
-                        lp.getLocale().getCountryCode());
-
-                ProductDto productDto = DtoFactory.buildProductDto(lp.getProduct().getId(),
-                        lp.getProduct().getProdManufacturer().getName(), Arrays.asList(localizedProductDto));
-
-                return Response.status(200).entity(productDto).build();
-            }
+        // Get localized fields of interest for products (name, description, category)
+        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
+        if (!getLocalizedFields(localizedFieldList)) {
+            logger.error("Requested translation for a non configured field");
+            return Response.status(404).build();
         }
 
-        logger.warn("Unable to find product id " + productId + " localized attributes for" +
-                "locale " + locale.getLanguageCode());
+        // Build localized textual item dto list
+        List<LocalizedTextualItemDto> localizedTextualItemDtos = convertLocalizedItemListToDto(
+                product.getLocalizedTextualItemList(), locale);
 
-        return Response.status(404).build();
+        // Build localized currency dto
+        LocalizedCurrencyItemDto localizedCurrencyItemDto = convertLocalizedCurrencyListToDto(locale,
+                product.getLocalizedCurrencyItemList());
+
+        // Create product dto
+        ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
+                product.getProdManufacturer().getName(), localizedTextualItemDtos,
+                localizedCurrencyItemDto);
+
+        return Response.status(200).entity(productDto).build();
     }
 
     @GET
@@ -176,23 +194,32 @@ public class CustomerEndpoint {
             return Response.status(404).build();
         }
 
+        // Get localized fields of interest for products (name, description, category)
+        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
+        if (!getLocalizedFields(localizedFieldList)) {
+            logger.error("Requested translation for a non configured field");
+            return Response.status(404).build();
+        }
+
         // Get products
         List<CartProduct> cartProductList = shoppingCart.getCartProductList();
         float totalCost = 0;
         for (CartProduct p : cartProductList) {
             Product product = p.getProduct();
-            LocalizedProduct lp = translationDao.getTranslationByProductAndLocaleId(
-                    product.getId(), locale.getId());
 
-            totalCost += lp.getPrice();
+            // Build localized textual item dto list
+            List<LocalizedTextualItemDto> localizedTextualItemDtos = convertLocalizedItemListToDto(
+                    product.getLocalizedTextualItemList(), locale);
 
-            LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    lp.getPrice(), lp.getLocale().getLanguageCode(),
-                    lp.getLocale().getCountryCode());
+            // Build localized currency dto
+            LocalizedCurrencyItemDto localizedCurrencyItemDto = convertLocalizedCurrencyListToDto(locale,
+                    product.getLocalizedCurrencyItemList());
 
+            totalCost += localizedCurrencyItemDto.getPrice();
+
+            // Build product dto
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
-                    product.getProdManufacturer().getName(), Arrays.asList(lpDto));
+                    product.getProdManufacturer().getName(), localizedTextualItemDtos, localizedCurrencyItemDto);
 
             cartProducts.add(productDto);
         }
@@ -221,12 +248,7 @@ public class CustomerEndpoint {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
         }
-        // Get user locale
-        Locale locale = customer.getUserLocale();
-        if (locale == null) {
-            logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
-        }
+
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
@@ -273,12 +295,7 @@ public class CustomerEndpoint {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(404).build();
         }
-        // Get user locale
-        Locale locale = customer.getUserLocale();
-        if (locale == null) {
-            logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
-        }
+
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
@@ -409,20 +426,29 @@ public class CustomerEndpoint {
             return Response.status(404).build();
         }
 
+        // Get localized fields of interest for products (name, description, category)
+        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
+        if (!getLocalizedFields(localizedFieldList)) {
+            logger.error("Requested translation for a non configured field");
+            return Response.status(404).build();
+        }
+
         // Get products
         List<PurchasedProduct> purchasedProductList = shoppingList.getPurchasedProductList();
         for (PurchasedProduct p : purchasedProductList) {
             Product product = p.getProduct();
-            LocalizedProduct lp = translationDao.getTranslationByProductAndLocaleId(
-                    product.getId(), locale.getId());
 
-            LocalizedProductDto lpDto = DtoFactory.buildLocalizedProductDto(lp.getId(),
-                    lp.getName(), lp.getDescription(), lp.getCategory(), lp.getCurrency().getCurrency(),
-                    lp.getPrice(), lp.getLocale().getLanguageCode(),
-                    lp.getLocale().getCountryCode());
+            // Build localized textual item dto list
+            List<LocalizedTextualItemDto> localizedTextualItemDtos = convertLocalizedItemListToDto(
+                    product.getLocalizedTextualItemList(), locale);
 
+            // Build localized currency dto
+            LocalizedCurrencyItemDto localizedCurrencyItemDto = convertLocalizedCurrencyListToDto(locale,
+                    product.getLocalizedCurrencyItemList());
+
+            // Build product dto
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
-                    product.getProdManufacturer().getName(), Arrays.asList(lpDto));
+                    product.getProdManufacturer().getName(), localizedTextualItemDtos, localizedCurrencyItemDto);
 
             purchasedProducts.add(productDto);
         }
@@ -445,6 +471,86 @@ public class CustomerEndpoint {
             return "";
         }
         return username;
+    }
+
+    private boolean getLocalizedFields(List<LocalizedField> localizedFieldList)
+    {
+        boolean foundName = false;
+        boolean foundDescr = false;
+        boolean foundCat = false;
+        for (LocalizedField lf : localizedFieldList) {
+            switch (lf.getType()) {
+                case TranslatableType.productName:
+                    nameLocalizedField = lf;
+                    foundName = true;
+                    break;
+                case TranslatableType.productDescription:
+                    descriptionLocalizedField = lf;
+                    foundDescr = true;
+                    break;
+                case TranslatableType.productCategory:
+                    categoryLocalizedField = lf;
+                    foundCat = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (!foundName || !foundDescr || !foundCat) {
+            return false;
+        }
+        return true;
+    }
+
+    private  List<LocalizedTextualItemDto> convertLocalizedItemListToDto(
+                                                    List<LocalizedTextualItem> localizedTextualItemList,
+                                                    Locale locale)
+    {
+        List<LocalizedTextualItemDto> localizedTextualItemDtos = new ArrayList<>();
+
+        for (LocalizedTextualItem lti : localizedTextualItemList) {
+            boolean found = false;
+            if (lti.getLocale().getId().equals(locale.getId())) {
+                LocalizedTextualItemDto ltiDto = new LocalizedTextualItemDto();
+
+                Long fieldId = lti.getLocalizedField().getId();
+                if (nameLocalizedField.getId().equals(fieldId)) {
+                    ltiDto.setFieldType(TranslatableType.productName);
+                    found = true;
+                } else if (descriptionLocalizedField.getId().equals(fieldId)) {
+                    ltiDto.setFieldType(TranslatableType.productDescription);
+                    found = true;
+                } else if (categoryLocalizedField.getId().equals(fieldId)) {
+                    ltiDto.setFieldType(TranslatableType.productCategory);
+                    found = true;
+                }
+
+                if (found) {
+                    ltiDto.setId(lti.getId());
+                    ltiDto.setText(lti.getText());
+                    localizedTextualItemDtos.add(ltiDto);
+                }
+            }
+        }
+
+        return localizedTextualItemDtos;
+    }
+
+    private LocalizedCurrencyItemDto convertLocalizedCurrencyListToDto(
+                                                            Locale locale,
+                                                            List<LocalizedCurrencyItem> localizedCurrencyItemList)
+    {
+        LocalizedCurrencyItemDto localizedCurrencyItemDto = new LocalizedCurrencyItemDto();
+        for (LocalizedCurrencyItem lci : localizedCurrencyItemList) {
+            if (lci.getLocale().getId().equals(locale.getId())) {
+                localizedCurrencyItemDto.setId(lci.getId());
+                localizedCurrencyItemDto.setCurrency(lci.getCurrency().getCurrency());
+                localizedCurrencyItemDto.setPrice(lci.getPrice());
+                break;
+            }
+        }
+
+        return localizedCurrencyItemDto;
     }
 
 }

@@ -1,5 +1,9 @@
 package it.unifi.ing.model;
 
+import it.unifi.ing.translationModel.LocalizedCurrencyItem;
+import it.unifi.ing.translationModel.LocalizedField;
+import it.unifi.ing.translationModel.LocalizedTextualItem;
+
 import java.util.UUID;
 
 public class ModelFactory {
@@ -20,4 +24,13 @@ public class ModelFactory {
     public static PurchasedProduct purchasedProduct() { return new PurchasedProduct(UUID.randomUUID().toString()); }
     public static ShoppingList shoppingList() { return new ShoppingList(UUID.randomUUID().toString()); }
     public static ShoppingCart shoppingCart() { return new ShoppingCart(UUID.randomUUID().toString()); }
+    public static LocalizedField localizedField() { return new LocalizedField(UUID.randomUUID().toString()); }
+    public static LocalizedTextualItem localizedTextualItem()
+    {
+        return new LocalizedTextualItem(UUID.randomUUID().toString());
+    }
+    public static LocalizedCurrencyItem localizedCurrencyItem()
+    {
+        return new LocalizedCurrencyItem(UUID.randomUUID().toString());
+    }
 }
