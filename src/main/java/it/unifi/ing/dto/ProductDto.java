@@ -6,7 +6,7 @@ public class ProductDto extends BaseDto {
 
     private String manufacturer;
     private List<LocalizedTextualItemDto> localizedTextualItemList;
-    private LocalizedCurrencyItemDto localizedCurrencyItem;
+    private List<LocalizedCurrencyItemDto> localizedCurrencyItemList;
 
     public ProductDto() {}
 
@@ -15,9 +15,9 @@ public class ProductDto extends BaseDto {
     {
         return this.localizedTextualItemList;
     }
-    public LocalizedCurrencyItemDto getLocalizedCurrencyItem()
+    public List<LocalizedCurrencyItemDto> getLocalizedCurrencyItem()
     {
-        return this.localizedCurrencyItem;
+        return this.localizedCurrencyItemList;
     }
 
     public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }
@@ -26,9 +26,9 @@ public class ProductDto extends BaseDto {
         this.localizedTextualItemList = localizedTextualItemList;
     }
 
-    public void setLocalizedCurrencyItem(LocalizedCurrencyItemDto localizedCurrencyItem)
+    public void setLocalizedCurrencyItem(List<LocalizedCurrencyItemDto> localizedCurrencyItemList)
     {
-        this.localizedCurrencyItem = localizedCurrencyItem;
+        this.localizedCurrencyItemList = localizedCurrencyItemList;
     }
 
 }

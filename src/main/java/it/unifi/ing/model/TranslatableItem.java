@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "translatable_items")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class TranslatableItem extends BaseEntity
 {
     @IndexedEmbedded

@@ -30,13 +30,13 @@ public class DtoFactory {
 
     public static ProductDto buildProductDto(Long id, String manufacturer,
                                              List<LocalizedTextualItemDto> localizedTextualItemDtos,
-                                             LocalizedCurrencyItemDto localizedCurrencyItemDto)
+                                             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtos)
     {
         ProductDto productDto = new ProductDto();
         productDto.setId(id);
         productDto.setManufacturer(manufacturer);
         productDto.setLocalizedTextualItemList(localizedTextualItemDtos);
-        productDto.setLocalizedCurrencyItem(localizedCurrencyItemDto);
+        productDto.setLocalizedCurrencyItem(localizedCurrencyItemDtos);
 
         return productDto;
     }
