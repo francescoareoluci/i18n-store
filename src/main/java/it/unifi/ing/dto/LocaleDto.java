@@ -1,7 +1,5 @@
 package it.unifi.ing.dto;
 
-import it.unifi.ing.dao.LocaleDao;
-
 public class LocaleDto extends BaseDto {
 
     private String languageCode;

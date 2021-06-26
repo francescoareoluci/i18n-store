@@ -1,6 +1,6 @@
 package it.unifi.ing.model;
 
-import it.unifi.ing.translationModel.LocalizedTextualItem;
+import it.unifi.ing.translation.LocalizedTextualItem;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;

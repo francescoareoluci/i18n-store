@@ -1,4 +1,4 @@
-package it.unifi.ing.translationModel;
+package it.unifi.ing.translation;
 
 public class TranslatableType {
 

@@ -10,8 +10,8 @@ import it.unifi.ing.model.Locale;
 import it.unifi.ing.model.Product;
 import it.unifi.ing.security.JWTUtil;
 import it.unifi.ing.security.UserRole;
-import it.unifi.ing.translationModel.LocalizedField;
-import it.unifi.ing.translationModel.TranslatableType;
+import it.unifi.ing.translation.LocalizedField;
+import it.unifi.ing.translation.TranslatableType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,6 +1,6 @@
 package it.unifi.ing.model;
 
-import it.unifi.ing.translationModel.LocalizedCurrencyItem;
+import it.unifi.ing.translation.LocalizedCurrencyItem;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 

@@ -16,10 +16,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unifi.ing.translationModel.LocalizedCurrencyItem;
-import it.unifi.ing.translationModel.LocalizedField;
-import it.unifi.ing.translationModel.LocalizedTextualItem;
-import it.unifi.ing.translationModel.TranslatableType;
+import it.unifi.ing.translation.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -203,40 +200,26 @@ public class AdminEndpoint {
 
         // Retrieve available locales
         List<Locale> localeList = localeDao.getLocaleList();
-
-        // Check for valid product locales
-        if (checkForInvalidLocaleInDto(localeList, localizedTextualItemDtoList)) {
-            logger.error("Sent product contains an invalid locale");
-            return Response.status(404).build();
-        }
-
-        // @TODO: check for valid locale in currency list
-
         // Retrieve available currencies
         List<Currency> currencyList = currencyDao.getCurrencyList();
-
-        // Check for invalid currencies in dto
-        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
-        if (checkForInvalidCurrencyInDto(currencyList, localizedCurrencyItemDtoList)) {
-            logger.error("Sent product contains an invalid currency");
+        // Retrieve dto manufacturer
+        Manufacturer manufacturer = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
+        // Check dto fields
+        if (checkInvalidProductDtoFields(productDto, localeList, currencyList, manufacturer)) {
+            logger.error("Sent product contains invalid fields");
             return Response.status(404).build();
         }
 
-        // Check for manufacturers in dto
-        Manufacturer manufacturer = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
-        if (manufacturer == null) {
-            // Create new one
-            logger.info("The following non-existing manufacturer will be created: " +
-                    productDto.getManufacturer());
-            manufacturer = ModelFactory.manufacturer();
-            manufacturer.setName(productDto.getManufacturer());
-
-            manufacturerDao.addEntity(manufacturer);
-            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
+        // Get translation fields for product
+        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
+        if (!getLocalizedFields(localizedFieldList)) {
+            logger.error("Requested translation for a non configured field");
+            return Response.status(404).build();
         }
 
         // Create product
-        Product product = buildProduct(admin, manufacturer, localeList, currencyList, productDto);
+        Product product = DtoMapper.buildProduct(admin, manufacturer, localeList, currencyList, productDto,
+                nameLocalizedField, descriptionLocalizedField, categoryLocalizedField);
         if (product == null) {
             logger.error("Unable to build requested product");
             return Response.status(404).build();
@@ -307,70 +290,55 @@ public class AdminEndpoint {
             return Response.status(404).build();
         }
 
-        // Check for product localizations in dto
-        List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
-        if (localizedTextualItemDtoList.isEmpty()) {
-            logger.error("Sent product does not contain any localization info");
-            return Response.status(404).build();
-        }
-
-        // Check for product currencies in dto
-        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
-        if (localizedCurrencyItemDtoList.isEmpty()) {
-            logger.error("Sent product does not contain any currency info");
-            return Response.status(404).build();
-        }
-
         // Retrieve available locales
         List<Locale> localeList = localeDao.getLocaleList();
-
-        // Check for valid product locales
-        if (checkForInvalidLocaleInDto(localeList, localizedTextualItemDtoList)) {
-            logger.error("Sent product contains an invalid locale");
-            return Response.status(404).build();
-        }
-
-        // @TODO: add check for locale in currencies
-
         // Retrieve available currencies
         List<Currency> currencyList = currencyDao.getCurrencyList();
-
-        if (checkForInvalidCurrencyInDto(currencyList, localizedCurrencyItemDtoList)) {
-            logger.error("Sent product contains an invalid currency");
-            return Response.status(404).build();
-        }
-
-        // Check that the sent localizations have the same id of the persisted one
-        if (checkForInvalidLocalizationInDto(localizedTextualItemList, localizedTextualItemDtoList)) {
-            logger.error("Sent product contains an invalid localization identifier");
-            return Response.status(404).build();
-        }
-
-        // @TODO: add check for currencies id
-
-        // Check for manufacturer in dto
+        // Retrieve dto manufacturer
         Manufacturer manufacturer = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
-        if (manufacturer == null) {
-            // Create new one
-            logger.info("The following non-existing manufacturer will be created: " +
-                    productDto.getManufacturer());
-            manufacturer = ModelFactory.manufacturer();
-            manufacturer.setName(productDto.getManufacturer());
+        // Check dto fields
+        if (checkInvalidProductDtoFields(productDto, localeList, currencyList, manufacturer)) {
+            logger.error("Sent product contains invalid fields");
+            return Response.status(404).build();
+        }
 
-            manufacturerDao.addEntity(manufacturer);
-            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
+        List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
+        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
+
+        // Check that the sent textual localizations have the same id of the persisted one
+        if (UtilsDto.checkForInvalidDtoTextualLocalization(localizedTextualItemList, localizedTextualItemDtoList)) {
+            logger.error("Sent product contains an invalid textual localization identifier");
+            return Response.status(404).build();
+        }
+
+        // Check that the sent currency localizations have the same id of the persisted one
+        if (UtilsDto.checkForInvalidDtoCurrencyLocalization(localizedCurrencyItemList, localizedCurrencyItemDtoList)) {
+            logger.error("Sent product contains an invalid currency localization identifier");
+            return Response.status(404).build();
+        }
+
+        // Get translation fields for product
+        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
+        if (!getLocalizedFields(localizedFieldList)) {
+            logger.error("Requested translation for a non configured field");
+            return Response.status(404).build();
         }
 
         // Edit product
-        product = updateProduct(product, localizedCurrencyItemDtoList, localizedTextualItemDtoList,
-                localeList, currencyList, manufacturer, admin);
+        product = DtoMapper.updateProduct(product, localizedCurrencyItemDtoList, localizedTextualItemDtoList,
+                localeList, currencyList, manufacturer, admin, nameLocalizedField,
+                descriptionLocalizedField, categoryLocalizedField);
+
+        if (product == null) {
+            logger.error("Error editing product");
+            return Response.status(404).build();
+        }
 
         productDao.updateEntity(product);
 
         logger.info("Edited product with id: " + product.getId());
 
         return Response.status(200).build();
-
     }
 
     @DELETE
@@ -531,260 +499,58 @@ public class AdminEndpoint {
         return Response.status(200).build();
     }
 
-    /**
-     * @implNote Check if passed dto contains a supported locale
-     * @param localeList: list of supported locales
-     * @param localizedTextualItemDtoList: list of textual items in dto
-     * @return true if an invalid locale is detected
-     */
-    private boolean checkForInvalidLocaleInDto(List<Locale> localeList,
-                                             List<LocalizedTextualItemDto> localizedTextualItemDtoList)
+    private boolean checkInvalidProductDtoFields(ProductDto productDto, List<Locale> localeList,
+                                          List<Currency> currencyList, Manufacturer manufacturer)
     {
-        boolean invalidLanguage = false;
-        boolean localeFound = false;
-        for (LocalizedTextualItemDto ltiDto : localizedTextualItemDtoList) {
-            for (Locale l : localeList) {
-                if (l.getCountryCode().equals(ltiDto.getCountry()) &&
-                        l.getLanguageCode().equals(ltiDto.getLocale())) {
-                    localeFound = true;
-                    break;
-                }
-            }
-
-            if (!localeFound) {
-                invalidLanguage = true;
-                break;
-            }
-        }
-
-        return invalidLanguage;
-    }
-
-    /**
-     * @implNote Check if the passed dto contains an invalid currency
-     * @param currencyList: list of supported currencies
-     * @param localizedCurrencyItemDtoList: list of currencies items in dto
-     * @return true if an invalid currency is detected
-     */
-    private boolean checkForInvalidCurrencyInDto(List<Currency> currencyList,
-                                               List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList)
-    {
-        boolean invalidCurrency = false;
-        boolean currencyFound = false;
-        for (LocalizedCurrencyItemDto lciDto : localizedCurrencyItemDtoList) {
-            for (Currency c : currencyList) {
-                if (c.getCurrency().equals(lciDto.getCurrency())) {
-                    currencyFound = true;
-                    break;
-                }
-            }
-
-            if (!currencyFound) {
-                invalidCurrency = true;
-                break;
-            }
-        }
-
-        return invalidCurrency;
-    }
-
-    /**
-     * @implNote Check if passed dto contains the same locales of the persisted
-     *              product
-     * @param localizedTextualItemList: list of product localized textual items
-     * @param localizedTextualItemDtoList: list of dto localized textual items
-     * @return true if an invalid localization is detected
-     */
-    private boolean checkForInvalidLocalizationInDto(List<LocalizedTextualItem> localizedTextualItemList,
-                                                    List<LocalizedTextualItemDto> localizedTextualItemDtoList)
-    {
-        boolean invalidLocalization = false;
-        boolean localizationFound = false;
-        for (LocalizedTextualItemDto ltiDto : localizedTextualItemDtoList) {
-            for (LocalizedTextualItem lti : localizedTextualItemList) {
-                if (lti.getId().equals(ltiDto.getId())) {
-                    localizationFound = true;
-                    break;
-                }
-            }
-
-            if (!localizationFound) {
-                invalidLocalization = true;
-                break;
-            }
-        }
-
-        return invalidLocalization;
-    }
-
-    /**
-     * @implNote Build a product by using passed dto
-     * @param admin: administrator instance
-     * @param manufacturer: manufacturer instance
-     * @param localeList: supported locale list
-     * @param currencyList: supported currency list
-     * @param productDto: passed product dto
-     * @return product instance
-     */
-    private Product buildProduct(Admin admin,
-                              Manufacturer manufacturer,
-                              List<Locale> localeList,
-                              List<Currency> currencyList,
-                              ProductDto productDto)
-    {
-        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
-            return null;
-        }
-
+        // Check for product localizations
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
+        if (localizedTextualItemDtoList.isEmpty()) {
+            logger.error("Sent product does not contain any textual localization info");
+            return true;
+        }
+
+        // Check for valid product locales in textual localization
+        if (UtilsDto.checkForDtoInvalidTextualLocale(localeList, localizedTextualItemDtoList)) {
+            logger.error("Sent product contains an invalid locale");
+            return true;
+        }
+
+        // Check for product localizations
         List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
-
-        Product product = ModelFactory.product();
-        product.setProdManufacturer(manufacturer);
-        product.setProdAdministrator(admin);
-
-        List<LocalizedTextualItem> localizedTextualItemList = new ArrayList<>();
-        for (LocalizedTextualItemDto ltiDto : localizedTextualItemDtoList) {
-            LocalizedTextualItem lti = ModelFactory.localizedTextualItem();
-            lti.setTranslatableItem(product);
-
-            for (Locale l : localeList) {
-                if (ltiDto.getLocale().equals(l.getLanguageCode()) &&
-                        ltiDto.getCountry().equals(l.getCountryCode())) {
-                    lti.setLocale(l);
-                    break;
-                }
-            }
-            boolean fieldFound = false;
-            if (ltiDto.getFieldType().equals(nameLocalizedField.getType())) {
-                lti.setLocalizedField(nameLocalizedField);
-                fieldFound = true;
-            }
-            else if (ltiDto.getFieldType().equals(descriptionLocalizedField.getType())) {
-                lti.setLocalizedField(descriptionLocalizedField);
-                fieldFound = true;
-            }
-            else if (ltiDto.getFieldType().equals(categoryLocalizedField.getType())) {
-                lti.setLocalizedField(categoryLocalizedField);
-                fieldFound = true;
-            }
-            if (fieldFound) {
-                lti.setText(ltiDto.getText());
-            }
-            else {
-                logger.error("Invalid field type found in requested product: " +
-                        ltiDto.getFieldType());
-                return null;
-            }
-
-            localizedTextualItemList.add(lti);
+        if (localizedCurrencyItemDtoList.isEmpty()) {
+            logger.error("Sent product does not contain any currency localization info");
+            return true;
         }
 
-        List<LocalizedCurrencyItem> localizedCurrencyItemList = new ArrayList<>();
-        for (LocalizedCurrencyItemDto lciDto : localizedCurrencyItemDtoList) {
-            LocalizedCurrencyItem lci = ModelFactory.localizedCurrencyItem();
-            for (Currency c : currencyList) {
-                if (lciDto.getCurrency().equals(c.getCurrency())) {
-                    lci.setCurrency(c);
-                    break;
-                }
-            }
-            lci.setPrice(lciDto.getPrice());
-            lci.setProduct(product);
-            for (Locale l : localeList) {
-                if (lciDto.getLocale().equals(l.getLanguageCode()) &&
-                        lciDto.getCountry().equals(l.getCountryCode())) {
-                    lci.setLocale(l);
-                    break;
-                }
-            }
-
-            localizedCurrencyItemList.add(lci);
+        // Check for invalid currencies in dto
+        if (UtilsDto.checkForDtoInvalidCurrency(currencyList, localizedCurrencyItemDtoList)) {
+            logger.error("Sent product contains an invalid currency");
+            return true;
         }
 
-        product.setLocalizedCurrencyItemList(localizedCurrencyItemList);
-        product.setLocalizedTextualItemList(localizedTextualItemList);
-
-        return product;
-    }
-
-    private Product updateProduct(Product product, List<LocalizedCurrencyItemDto> localizedCurrencyItemDtos,
-                                  List<LocalizedTextualItemDto> localizedTextualItemDtos,
-                                  List<Locale> localeList, List<Currency> currencyList,
-                                  Manufacturer manufacturer, Admin admin)
-    {
-        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
-            return null;
+        // Check for invalid product locales in currency localization
+        if (UtilsDto.checkForDtoInvalidCurrencyLocale(localeList, localizedCurrencyItemDtoList)) {
+            logger.error("Sent product contains an invalid locale");
+            return true;
         }
 
-        List<LocalizedCurrencyItem> localizedCurrencyItemList = product.getLocalizedCurrencyItemList();
-        List<LocalizedTextualItem> localizedTextualItemList = product.getLocalizedTextualItemList();
+        // Check for manufacturers in dto
+        if (manufacturer == null) {
+            // Create new one
+            logger.info("The following non-existing manufacturer will be created: " +
+                    productDto.getManufacturer());
+            manufacturer = ModelFactory.manufacturer();
+            manufacturer.setName(productDto.getManufacturer());
 
-        // Edit product
-        product.setProdManufacturer(manufacturer);
-        product.setProdAdministrator(admin);
-
-        for (LocalizedTextualItemDto ltiDto : localizedTextualItemDtos) {
-            for (LocalizedTextualItem lti : localizedTextualItemList) {
-                if (lti.getId().equals(ltiDto.getId())) {
-                    lti.setTranslatableItem(product);
-                    for (Locale l : localeList) {
-                        if (ltiDto.getLocale().equals(l.getLanguageCode()) &&
-                                ltiDto.getCountry().equals(l.getCountryCode())) {
-                            lti.setLocale(l);
-                            break;
-                        }
-                    }
-                    lti.setText(ltiDto.getText());
-                    boolean fieldFound = false;
-                    if (ltiDto.getFieldType().equals(nameLocalizedField.getType())) {
-                        lti.setLocalizedField(nameLocalizedField);
-                        fieldFound = true;
-                    }
-                    else if (ltiDto.getFieldType().equals(descriptionLocalizedField.getType())) {
-                        lti.setLocalizedField(descriptionLocalizedField);
-                        fieldFound = true;
-                    }
-                    else if (ltiDto.getFieldType().equals(categoryLocalizedField.getType())) {
-                        lti.setLocalizedField(categoryLocalizedField);
-                        fieldFound = true;
-                    }
-                    if (fieldFound) {
-                        lti.setText(ltiDto.getText());
-                    }
-                    else {
-                        return null;
-                    }
-                }
-            }
+            manufacturerDao.addEntity(manufacturer);
+            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
         }
-        product.setLocalizedTextualItemList(localizedTextualItemList);
-
-        for (LocalizedCurrencyItemDto lciDto : localizedCurrencyItemDtos) {
-            for (LocalizedCurrencyItem lci : localizedCurrencyItemList) {
-                if (lci.getId().equals(lciDto.getId())) {
-                    lci.setProduct(product);
-                    for (Locale l : localeList) {
-                        if (lciDto.getLocale().equals(l.getLanguageCode()) &&
-                                lciDto.getCountry().equals(l.getCountryCode())) {
-                            lci.setLocale(l);
-                            break;
-                        }
-                    }
-                    lci.setPrice(lciDto.getPrice());
-                    for (Currency c : currencyList) {
-                        if (lciDto.getCurrency().equals(c.getCurrency())) {
-                            lci.setCurrency(c);
-                        }
-                    }
-                }
-            }
+        else if (manufacturer.getName().isEmpty()) {
+            logger.error("Sent product manufacturer is empty");
+            return true;
         }
-        product.setLocalizedCurrencyItemList(localizedCurrencyItemList);
 
-        return product;
+        return false;
     }
 
     private boolean getLocalizedFields(List<LocalizedField> localizedFieldList)

@@ -1,6 +1,6 @@
 package it.unifi.ing.dao;
 
-import it.unifi.ing.translationModel.LocalizedTextualItem;
+import it.unifi.ing.translation.LocalizedTextualItem;
 
 import java.util.List;
 

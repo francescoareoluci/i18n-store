@@ -1,6 +1,6 @@
 package it.unifi.ing.dao;
 
-import it.unifi.ing.translationModel.LocalizedCurrencyItem;
+import it.unifi.ing.translation.LocalizedCurrencyItem;
 
 import java.util.List;
 

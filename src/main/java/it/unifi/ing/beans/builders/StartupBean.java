@@ -2,10 +2,10 @@ package it.unifi.ing.beans.builders;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.model.*;
-import it.unifi.ing.translationModel.LocalizedCurrencyItem;
-import it.unifi.ing.translationModel.LocalizedField;
-import it.unifi.ing.translationModel.LocalizedTextualItem;
-import it.unifi.ing.translationModel.TranslatableType;
+import it.unifi.ing.translation.LocalizedCurrencyItem;
+import it.unifi.ing.translation.LocalizedField;
+import it.unifi.ing.translation.LocalizedTextualItem;
+import it.unifi.ing.translation.TranslatableType;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -199,21 +199,6 @@ public class StartupBean {
         product.setProdManufacturer(manufacturer);
 
         return product;
-    }
-
-    private LocalizedProduct buildLocalizedProduct(String name, String description, String category,
-                                                   Locale locale, Product product, Currency currency, float price)
-    {
-        LocalizedProduct localizedProduct = ModelFactory.localizedProduct();
-        localizedProduct.setName(name);
-        localizedProduct.setDescription(description);
-        localizedProduct.setCategory(category);
-        localizedProduct.setCurrency(currency);
-        localizedProduct.setPrice(price);
-        localizedProduct.setLocale(locale);
-        localizedProduct.setProduct(product);
-
-        return localizedProduct;
     }
 
     private ShoppingList buildShoppingList(Customer c)

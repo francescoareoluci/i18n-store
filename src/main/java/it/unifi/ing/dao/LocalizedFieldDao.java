@@ -1,6 +1,6 @@
 package it.unifi.ing.dao;
 
-import it.unifi.ing.translationModel.LocalizedField;
+import it.unifi.ing.translation.LocalizedField;
 
 import java.util.List;
 
