@@ -1,5 +1,7 @@
 package it.unifi.ing.dto;
 
+import it.unifi.ing.translation.LocalizedTextualItem;
+import it.unifi.ing.translation.TranslatableType;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -48,6 +50,32 @@ public class DtoFactoryTest {
 
         assertEquals(currencyDto.getId(), 3L, 0);
         assertEquals(currencyDto.getCurrency(), "$");
+    }
+
+    @Test
+    public void testBuildLocalizedCurrencyItemDto()
+    {
+        LocalizedCurrencyItemDto localizedCurrencyItemDto = DtoFactory.buildLocalizedCurrencyItemDto(
+                1L, "$", 12f, "it", "IT");
+
+        assertEquals(1L, localizedCurrencyItemDto.getId(), 0);
+        assertEquals("$", localizedCurrencyItemDto.getCurrency());
+        assertEquals(12f, localizedCurrencyItemDto.getPrice(), 0);
+        assertEquals("it", localizedCurrencyItemDto.getLocale());
+        assertEquals("IT", localizedCurrencyItemDto.getCountry());
+    }
+
+    @Test
+    public void testBuildLocalizedTextualItemDto()
+    {
+        LocalizedTextualItemDto localizedTextualItemDto = DtoFactory.buildLocalizedTextualItemDto(
+                1L, "test", TranslatableType.productName, "it", "IT");
+
+        assertEquals(1L, localizedTextualItemDto.getId(), 0);
+        assertEquals("test", localizedTextualItemDto.getText());
+        assertEquals(TranslatableType.productName, localizedTextualItemDto.getFieldType());
+        assertEquals("it", localizedTextualItemDto.getLocale());
+        assertEquals("IT", localizedTextualItemDto.getCountry());
     }
 
     @Test
