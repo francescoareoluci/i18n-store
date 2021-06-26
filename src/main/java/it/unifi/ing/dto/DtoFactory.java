@@ -41,23 +41,6 @@ public class DtoFactory {
         return productDto;
     }
 
-    public static LocalizedProductDto buildLocalizedProductDto(Long id, String name, String description,
-                                                               String category, String currency, float price,
-                                                               String locale, String country)
-    {
-        LocalizedProductDto localizedProductDto = new LocalizedProductDto();
-        localizedProductDto.setId(id);
-        localizedProductDto.setName(name);
-        localizedProductDto.setDescription(description);
-        localizedProductDto.setCategory(category);
-        localizedProductDto.setCurrency(currency);
-        localizedProductDto.setPrice(price);
-        localizedProductDto.setLocale(locale);
-        localizedProductDto.setCountry(country);
-
-        return localizedProductDto;
-    }
-
     public static LocaleDto buildLocaleDto(Long id, String languageCode, String countryCode)
     {
         LocaleDto localeDto = new LocaleDto();
@@ -94,6 +77,34 @@ public class DtoFactory {
         currencyDto.setCurrency(currency);
 
         return currencyDto;
+    }
+
+    public static LocalizedCurrencyItemDto buildLocalizedCurrencyItemDto(Long id, String currency,
+                                                                         float price, String locale,
+                                                                         String country)
+    {
+        LocalizedCurrencyItemDto localizedCurrencyItemDto = new LocalizedCurrencyItemDto();
+        localizedCurrencyItemDto.setId(id);
+        localizedCurrencyItemDto.setCurrency(currency);
+        localizedCurrencyItemDto.setPrice(price);
+        localizedCurrencyItemDto.setCountry(country);
+        localizedCurrencyItemDto.setLocale(locale);
+
+        return localizedCurrencyItemDto;
+    }
+
+    public static LocalizedTextualItemDto buildLocalizedTextualItemDto(Long id, String text,
+                                                                       String type, String locale,
+                                                                       String country)
+    {
+        LocalizedTextualItemDto localizedTextualItemDto = new LocalizedTextualItemDto();
+        localizedTextualItemDto.setId(id);
+        localizedTextualItemDto.setFieldType(type);
+        localizedTextualItemDto.setText(text);
+        localizedTextualItemDto.setLocale(locale);
+        localizedTextualItemDto.setCountry(country);
+
+        return localizedTextualItemDto;
     }
 
 }

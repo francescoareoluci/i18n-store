@@ -18,7 +18,6 @@
         <class>it.unifi.ing.model.CartProduct</class>
         <class>it.unifi.ing.model.PurchasedProduct</class>
         <class>it.unifi.ing.model.Product</class>
-        <class>it.unifi.ing.model.LocalizedProduct</class>
         <class>it.unifi.ing.model.Manufacturer</class>
         <class>it.unifi.ing.translation.LocalizedCurrencyItem</class>
         <class>it.unifi.ing.translation.LocalizedField</class>
@@ -59,11 +58,10 @@
         <class>it.unifi.ing.model.CartProduct</class>
         <class>it.unifi.ing.model.PurchasedProduct</class>
         <class>it.unifi.ing.model.Product</class>
-        <class>it.unifi.ing.model.LocalizedProduct</class>
         <class>it.unifi.ing.model.Manufacturer</class>
         <class>it.unifi.ing.translation.LocalizedCurrencyItem</class>
         <class>it.unifi.ing.translation.LocalizedField</class>
-        <class>it.unifi.ing.translation.LocalizedCurrencyItem</class>
+        <class>it.unifi.ing.translation.LocalizedTextualItem</class>
         <class>it.unifi.ing.model.TranslatableItem</class>
 
         <properties>

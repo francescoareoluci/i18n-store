@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class LocalizedTextualItem extends AbstractLocalizedItem {
 
     @ManyToOne
-    @JoinColumn(name = "product_sid")
+    @JoinColumn(name = "translatable_item_sid")
     private TranslatableItem translatableItem;
 
     @ManyToOne
