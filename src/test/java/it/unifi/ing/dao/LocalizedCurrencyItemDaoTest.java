@@ -38,7 +38,7 @@ public class LocalizedCurrencyItemDaoTest extends JpaTest {
         localizedCurrencyItem.setLocale(locale);
         localizedCurrencyItem.setTranslatableItem(product);
 
-        product.setAbstractLocalizedItemList(Arrays.asList(localizedCurrencyItem));
+        product.setLocalizedItemList(Arrays.asList(localizedCurrencyItem));
 
         entityManager.persist(locale);
         entityManager.persist(currency);

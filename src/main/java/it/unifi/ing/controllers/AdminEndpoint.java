@@ -103,12 +103,12 @@ public class AdminEndpoint {
                     .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
-                            p.getAbstractLocalizedItemList(), null, true);
+                            p.getLocalizedItemList(), null, true);
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(null, localizedFieldHandler.getProductPriceField(),
-                            p.getAbstractLocalizedItemList(), true);
+                            p.getLocalizedItemList(), true);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -147,12 +147,12 @@ public class AdminEndpoint {
                 .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                         localizedFieldHandler.getProductDescriptionField(),
                         localizedFieldHandler.getProductCategoryField(),
-                        product.getAbstractLocalizedItemList(), null, true);
+                        product.getLocalizedItemList(), null, true);
 
         // Build localized currency dto
         List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                 .convertLocalizedCurrencyListToDto(null, localizedFieldHandler.getProductPriceField(),
-                        product.getAbstractLocalizedItemList(), true);
+                        product.getLocalizedItemList(), true);
 
         // Create product dto
         ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
@@ -276,10 +276,10 @@ public class AdminEndpoint {
             return Response.status(404).build();
         }
 
-        List<AbstractLocalizedItem> abstractLocalizedItemList = product.getAbstractLocalizedItemList();
+        List<LocalizedItem> localizedItemList = product.getLocalizedItemList();
         List<LocalizedTextualItem> localizedTextualItemList = new ArrayList<>();
         List<LocalizedCurrencyItem> localizedCurrencyItemList = new ArrayList<>();
-        for (AbstractLocalizedItem ali : abstractLocalizedItemList) {
+        for (LocalizedItem ali : localizedItemList) {
             if (ali instanceof LocalizedTextualItem) {
                 localizedTextualItemList.add((LocalizedTextualItem) ali);
             }

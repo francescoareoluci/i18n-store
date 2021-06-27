@@ -2,7 +2,7 @@ package it.unifi.ing.dto;
 
 import it.unifi.ing.model.Currency;
 import it.unifi.ing.model.Locale;
-import it.unifi.ing.translation.AbstractLocalizedItem;
+import it.unifi.ing.translation.LocalizedItem;
 import it.unifi.ing.translation.LocalizedCurrencyItem;
 import it.unifi.ing.translation.LocalizedTextualItem;
 
@@ -20,8 +20,8 @@ public class UtilsDto {
     public static boolean checkForDtoInvalidTextualLocale(List<Locale> localeList,
                                                     List<LocalizedTextualItemDto> localizedTextualItemDtoList)
     {
-        List<AbstractLocalizedItemDto> abstractLocalizedItemDtos = new ArrayList<>(localizedTextualItemDtoList);
-        return checkForDtoInvalidLocale(localeList, abstractLocalizedItemDtos);
+        List<LocalizedItemDto> localizedItemDtos = new ArrayList<>(localizedTextualItemDtoList);
+        return checkForDtoInvalidLocale(localeList, localizedItemDtos);
     }
 
     /**
@@ -33,22 +33,22 @@ public class UtilsDto {
     public static boolean checkForDtoInvalidCurrencyLocale(List<Locale> localeList,
                                                      List<LocalizedCurrencyItemDto> localizedCurrencyItemDtos)
     {
-        List<AbstractLocalizedItemDto> abstractLocalizedItemDtos = new ArrayList<>(localizedCurrencyItemDtos);
-        return checkForDtoInvalidLocale(localeList, abstractLocalizedItemDtos);
+        List<LocalizedItemDto> localizedItemDtos = new ArrayList<>(localizedCurrencyItemDtos);
+        return checkForDtoInvalidLocale(localeList, localizedItemDtos);
     }
 
     /**
      * @implNote Check if passed dto contains an unsupported locale
      * @param localeList: list of supported locales
-     * @param abstractLocalizedItemDtos: list of localization items in dto
+     * @param localizedItemDtos: list of localization items in dto
      * @return true if an invalid locale is detected
      */
     public static boolean checkForDtoInvalidLocale(List<Locale> localeList,
-                                                    List<AbstractLocalizedItemDto> abstractLocalizedItemDtos)
+                                                    List<LocalizedItemDto> localizedItemDtos)
     {
         boolean invalidLanguage = false;
         boolean localeFound = false;
-        for (AbstractLocalizedItemDto aliDto : abstractLocalizedItemDtos) {
+        for (LocalizedItemDto aliDto : localizedItemDtos) {
             for (Locale l : localeList) {
                 if (l.getCountryCode().equals(aliDto.getCountry()) &&
                         l.getLanguageCode().equals(aliDto.getLocale())) {
@@ -103,9 +103,9 @@ public class UtilsDto {
     public static boolean checkForInvalidDtoTextualLocalization(List<LocalizedTextualItem> localizedTextualItemList,
                                                           List<LocalizedTextualItemDto> localizedTextualItemDtoList)
     {
-        List<AbstractLocalizedItem> abstractLocalizedItemList = new ArrayList<>(localizedTextualItemList);
-        List<AbstractLocalizedItemDto> abstractLocalizedItemDtoList = new ArrayList<>(localizedTextualItemDtoList);
-        return checkForInvalidDtoLocalization(abstractLocalizedItemList, abstractLocalizedItemDtoList);
+        List<LocalizedItem> localizedItemList = new ArrayList<>(localizedTextualItemList);
+        List<LocalizedItemDto> localizedItemDtoList = new ArrayList<>(localizedTextualItemDtoList);
+        return checkForInvalidDtoLocalization(localizedItemList, localizedItemDtoList);
     }
 
     /**
@@ -117,25 +117,25 @@ public class UtilsDto {
     public static boolean checkForInvalidDtoCurrencyLocalization(List<LocalizedCurrencyItem> localizedCurrencyItemList,
                                                            List<LocalizedCurrencyItemDto> localizedTextualItemDtoList)
     {
-        List<AbstractLocalizedItem> abstractLocalizedItemList = new ArrayList<>(localizedCurrencyItemList);
-        List<AbstractLocalizedItemDto> abstractLocalizedItemDtoList = new ArrayList<>(localizedTextualItemDtoList);
-        return checkForInvalidDtoLocalization(abstractLocalizedItemList, abstractLocalizedItemDtoList);
+        List<LocalizedItem> localizedItemList = new ArrayList<>(localizedCurrencyItemList);
+        List<LocalizedItemDto> localizedItemDtoList = new ArrayList<>(localizedTextualItemDtoList);
+        return checkForInvalidDtoLocalization(localizedItemList, localizedItemDtoList);
     }
 
     /**
      * @implNote Check if passed dto contains the same localization id of the persisted
      *              product
-     * @param abstractLocalizedItemList: list of product localized items
-     * @param abstractLocalizedItemDtoList: list of dto localized items
+     * @param localizedItemList: list of product localized items
+     * @param localizedItemDtoList: list of dto localized items
      * @return true if an invalid localization is detected
      */
-    public static boolean checkForInvalidDtoLocalization(List<AbstractLocalizedItem> abstractLocalizedItemList,
-                                                   List<AbstractLocalizedItemDto> abstractLocalizedItemDtoList)
+    public static boolean checkForInvalidDtoLocalization(List<LocalizedItem> localizedItemList,
+                                                   List<LocalizedItemDto> localizedItemDtoList)
     {
         boolean invalidLocalization = false;
         boolean localizationFound = false;
-        for (AbstractLocalizedItemDto aliDto : abstractLocalizedItemDtoList) {
-            for (AbstractLocalizedItem ali : abstractLocalizedItemList) {
+        for (LocalizedItemDto aliDto : localizedItemDtoList) {
+            for (LocalizedItem ali : localizedItemList) {
                 if (ali.getId().equals(aliDto.getId())) {
                     localizationFound = true;
                     break;

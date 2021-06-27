@@ -40,7 +40,7 @@ public class LocalizedTextualItemDaoTest extends JpaTest {
         localizedTextualItem.setLocale(locale);
         localizedTextualItem.setTranslatableItem(product);
 
-        product.setAbstractLocalizedItemList(Arrays.asList(localizedTextualItem));
+        product.setLocalizedItemList(Arrays.asList(localizedTextualItem));
 
         entityManager.persist(locale);
         entityManager.persist(localizedField);

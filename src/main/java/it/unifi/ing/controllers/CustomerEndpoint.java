@@ -86,12 +86,12 @@ public class CustomerEndpoint {
                     .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
-                            p.getAbstractLocalizedItemList(), locale, false);
+                            p.getLocalizedItemList(), locale, false);
 
             // Build localized currency dto list
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
-                            p.getAbstractLocalizedItemList(), false);
+                            p.getLocalizedItemList(), false);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -150,12 +150,12 @@ public class CustomerEndpoint {
                 .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                         localizedFieldHandler.getProductDescriptionField(),
                         localizedFieldHandler.getProductCategoryField(),
-                        product.getAbstractLocalizedItemList(), locale, false);
+                        product.getLocalizedItemList(), locale, false);
 
         // Build localized currency dto list
         List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                 .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
-                        product.getAbstractLocalizedItemList(), false);
+                        product.getLocalizedItemList(), false);
 
         // Create product dto
         ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
@@ -216,12 +216,12 @@ public class CustomerEndpoint {
                     .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
-                            product.getAbstractLocalizedItemList(), locale, false);
+                            product.getLocalizedItemList(), locale, false);
 
             // Build localized currency dto list
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
-                            product.getAbstractLocalizedItemList(), false);
+                            product.getLocalizedItemList(), false);
 
             //totalCost += localizedCurrencyItemDto.getPrice();
             totalCost += 0; // @TODO: fixme
@@ -452,12 +452,12 @@ public class CustomerEndpoint {
                     .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
-                            product.getAbstractLocalizedItemList(), locale, false);
+                            product.getLocalizedItemList(), locale, false);
 
             // Build localized currency dto list
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
-                            product.getAbstractLocalizedItemList(), false);
+                            product.getLocalizedItemList(), false);
 
             // Build product dto
             ProductDto productDto = DtoFactory.buildProductDto(product.getId(),

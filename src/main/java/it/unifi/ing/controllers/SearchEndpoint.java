@@ -138,12 +138,12 @@ public class SearchEndpoint {
             List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
                     .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                             localizedFieldHandler.getProductDescriptionField(), localizedFieldHandler.getProductCategoryField(),
-                            p.getAbstractLocalizedItemList(), userLocale, isAdmin);
+                            p.getLocalizedItemList(), userLocale, isAdmin);
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(userLocale, localizedFieldHandler.getProductPriceField(),
-                            p.getAbstractLocalizedItemList(), isAdmin);
+                            p.getLocalizedItemList(), isAdmin);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -219,12 +219,12 @@ public class SearchEndpoint {
             List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
                     .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
                             localizedFieldHandler.getProductDescriptionField(), localizedFieldHandler.getProductCategoryField(),
-                            p.getAbstractLocalizedItemList(), userLocale, isAdmin);
+                            p.getLocalizedItemList(), userLocale, isAdmin);
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(userLocale, localizedFieldHandler.getProductPriceField(),
-                            p.getAbstractLocalizedItemList(), isAdmin);
+                            p.getLocalizedItemList(), isAdmin);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),

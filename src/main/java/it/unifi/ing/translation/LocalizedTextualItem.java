@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "localized_textual_items")
-public class LocalizedTextualItem extends AbstractLocalizedItem {
+public class LocalizedTextualItem extends LocalizedItem {
 
     @Column(name = "text", columnDefinition="varchar(4000)")
     private String text;

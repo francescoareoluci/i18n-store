@@ -72,23 +72,8 @@ public class SearchEngine {
         javax.persistence.Query persistenceQuery =
                 fullTextEntityManager.createFullTextQuery(query, Product.class);
 
-        /*
-        List<Product> localizedTextualItemList = persistenceQuery.getResultList();
-
-        // Create Product List
-        Set<Product> productList = new HashSet<>();
-        for (LocalizedTextualItem lti : localizedTextualItemList) {
-            TranslatableItem ti = lti.getTranslatableItem();
-            if (ti instanceof Product) {
-                productList.add((Product) ti);
-            }
-        }
-         */
-
-        List<Product> retrievedProducts = persistenceQuery.getResultList();
-
         // Search
-        return retrievedProducts;
+        return persistenceQuery.getResultList();
     }
 
     public List<Product> searchSimilarProducts(int entityId)
@@ -123,7 +108,7 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("abstractLocalizedItemList.text")
+                .onFields("localizedItemList.text")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -139,7 +124,7 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("abstractLocalizedItemList.text")
+                .onFields("localizedItemList.text")
                 .withAndAsDefaultOperator()
                 .matching(matchQuery)
                 .createQuery();
@@ -162,7 +147,7 @@ public class SearchEngine {
                 .fuzzy()
                 .withEditDistanceUpTo(editDistance)
                 .withPrefixLength(prefixLength)
-                .onFields("abstractLocalizedItemList.text")
+                .onFields("localizedItemList.text")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -185,7 +170,7 @@ public class SearchEngine {
         return qb
                 .phrase()
                     .withSlop(slop)
-                .onField("abstractLocalizedItemList.text")
+                .onField("localizedItemList.text")
                 .sentence(matchQuery)
                 .createQuery();
     }
@@ -203,7 +188,7 @@ public class SearchEngine {
                 .moreLikeThis()
                 .excludeEntityUsedForComparison()
                 .favorSignificantTermsWithFactor(2f)
-                .comparingField("abstractLocalizedItemList.text")
+                .comparingField("localizedItemList.text")
                 .toEntityWithId(objectId)
                 .createQuery();
     }

@@ -1,13 +1,12 @@
 package it.unifi.ing.translation;
 
 import it.unifi.ing.model.Currency;
-import it.unifi.ing.model.Product;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "localized_currency_items")
-public class LocalizedCurrencyItem extends AbstractLocalizedItem {
+public class LocalizedCurrencyItem extends LocalizedItem {
 
     @ManyToOne
     @JoinColumn(name = "currency_sid")

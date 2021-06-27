@@ -1,12 +1,12 @@
 package it.unifi.ing.dto;
 
-public abstract class AbstractLocalizedItemDto extends BaseDto {
+public abstract class LocalizedItemDto extends BaseDto {
 
     private String fieldType;
     private String locale;
     private String country;
 
-    public AbstractLocalizedItemDto() {}
+    public LocalizedItemDto() {}
 
     public String getFieldType() { return this.fieldType; }
     public String getLocale() { return this.locale; }

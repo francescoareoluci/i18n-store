@@ -1,6 +1,6 @@
 package it.unifi.ing.dto;
 
-public class LocalizedCurrencyItemDto extends AbstractLocalizedItemDto {
+public class LocalizedCurrencyItemDto extends LocalizedItemDto {
 
     private String currency;
     private float price;

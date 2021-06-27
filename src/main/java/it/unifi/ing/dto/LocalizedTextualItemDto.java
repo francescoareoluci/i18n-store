@@ -1,6 +1,6 @@
 package it.unifi.ing.dto;
 
-public class LocalizedTextualItemDto extends AbstractLocalizedItemDto {
+public class LocalizedTextualItemDto extends LocalizedItemDto {
 
     private String text;
 

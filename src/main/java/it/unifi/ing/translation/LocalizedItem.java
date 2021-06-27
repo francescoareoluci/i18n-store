@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "localized_items")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractLocalizedItem extends BaseEntity {
+public abstract class LocalizedItem extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "locale_sid")
@@ -25,15 +25,15 @@ public abstract class AbstractLocalizedItem extends BaseEntity {
     @JoinColumn(name = "localized_field_sid")
     private LocalizedField localizedField;
 
-    public AbstractLocalizedItem() {}
-    public AbstractLocalizedItem(String uuid) { super(uuid); }
+    public LocalizedItem() {}
+    public LocalizedItem(String uuid) { super(uuid); }
 
     public Locale getLocale() { return this.locale; }
     public TranslatableItem getTranslatableItem() { return this.translatableItem; }
     public LocalizedField getLocalizedField() { return this.localizedField; }
 
     /**
-     * @implNote This is needed in order to search for Product.AbstractLocalizedItem.text.
+     * @implNote This is needed in order to search for Product.localizedItemList.text.
      *           This method will be overrided by LocalizedTextualItem only
       */
     @Field(termVector = TermVector.YES)

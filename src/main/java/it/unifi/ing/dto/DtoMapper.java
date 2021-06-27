@@ -41,11 +41,11 @@ public class DtoMapper {
     public static List<LocalizedCurrencyItemDto> convertLocalizedCurrencyListToDto(
                         Locale locale,
                         LocalizedField priceLocalizedField,
-                        List<AbstractLocalizedItem> abstractLocalizedItemList,
+                        List<LocalizedItem> localizedItemList,
                         boolean isAdmin)
     {
         List<LocalizedCurrencyItemDto> localizedCurrencyItemDtos = new ArrayList<>();
-        for (AbstractLocalizedItem ali : abstractLocalizedItemList) {
+        for (LocalizedItem ali : localizedItemList) {
             boolean found = false;
             if (isAdmin || ali.getLocale().getId().equals(locale.getId())) {
                 LocalizedCurrencyItemDto lciDto = new LocalizedCurrencyItemDto();
@@ -66,7 +66,7 @@ public class DtoMapper {
                         lciDto.setPrice(lci.getPrice());
                     }
                     else {
-                        logger.error("AbstractLocalizedItem [" + ali.getId() + "] is" +
+                        logger.error("LocalizedItem [" + ali.getId() + "] is" +
                                 "not an instance of LocalizedCurrencyItem");
                         return null;
                     }
@@ -83,12 +83,12 @@ public class DtoMapper {
             LocalizedField nameLocalizedField,
             LocalizedField descriptionLocalizedField,
             LocalizedField categoryLocalizedField,
-            List<AbstractLocalizedItem> abstractLocalizedItemList,
+            List<LocalizedItem> localizedItemList,
             Locale locale, boolean isAdmin)
     {
         List<LocalizedTextualItemDto> localizedTextualItemDtos = new ArrayList<>();
 
-        for (AbstractLocalizedItem ali : abstractLocalizedItemList) {
+        for (LocalizedItem ali : localizedItemList) {
             boolean found = false;
             if (isAdmin || ali.getLocale().getId().equals(locale.getId())) {
                 LocalizedTextualItemDto ltiDto = new LocalizedTextualItemDto();
@@ -114,7 +114,7 @@ public class DtoMapper {
                         ltiDto.setText(lti.getText());
                     }
                     else {
-                        logger.error("AbstractLocalizedItem [" + ali.getId() + "] is" +
+                        logger.error("LocalizedItem [" + ali.getId() + "] is" +
                                 "not an instance of LocalizedTextualItem");
                         return null;
                     }
@@ -215,11 +215,11 @@ public class DtoMapper {
             localizedCurrencyItemList.add(lci);
         }
 
-        List<AbstractLocalizedItem> abstractLocalizedItemList = new ArrayList<>();
-        abstractLocalizedItemList.addAll(localizedTextualItemList);
-        abstractLocalizedItemList.addAll(localizedCurrencyItemList);
+        List<LocalizedItem> localizedItemList = new ArrayList<>();
+        localizedItemList.addAll(localizedTextualItemList);
+        localizedItemList.addAll(localizedCurrencyItemList);
 
-        product.setAbstractLocalizedItemList(abstractLocalizedItemList);
+        product.setLocalizedItemList(localizedItemList);
 
         return product;
     }
@@ -242,10 +242,10 @@ public class DtoMapper {
                                   List<LocalizedField> localizedFieldList)
     {
         // Get product localized items
-        List<AbstractLocalizedItem> abstractLocalizedItemList = product.getAbstractLocalizedItemList();
+        List<LocalizedItem> localizedItemList = product.getLocalizedItemList();
         List<LocalizedCurrencyItem> localizedCurrencyItemList = new ArrayList<>();
         List<LocalizedTextualItem> localizedTextualItemList = new ArrayList<>();
-        for (AbstractLocalizedItem ali : abstractLocalizedItemList) {
+        for (LocalizedItem ali : localizedItemList) {
             if (ali instanceof LocalizedTextualItem) {
                 localizedTextualItemList.add((LocalizedTextualItem) ali);
             }
@@ -332,11 +332,11 @@ public class DtoMapper {
                 }
             }
         }
-        List<AbstractLocalizedItem> newAbstractLocalizedItemList = new ArrayList<>();
-        newAbstractLocalizedItemList.addAll(localizedTextualItemList);
-        newAbstractLocalizedItemList.addAll(localizedCurrencyItemList);
+        List<LocalizedItem> newLocalizedItemList = new ArrayList<>();
+        newLocalizedItemList.addAll(localizedTextualItemList);
+        newLocalizedItemList.addAll(localizedCurrencyItemList);
 
-        product.setAbstractLocalizedItemList(newAbstractLocalizedItemList);
+        product.setLocalizedItemList(newLocalizedItemList);
 
         return product;
     }
