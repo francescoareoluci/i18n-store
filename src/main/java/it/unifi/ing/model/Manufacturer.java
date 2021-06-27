@@ -1,5 +1,6 @@
 package it.unifi.ing.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -7,6 +8,7 @@ import javax.persistence.Table;
 @Table(name = "manufacturers")
 public class Manufacturer extends BaseEntity {
 
+    @Column(name = "name")
     private String name;
 
     public Manufacturer() {}

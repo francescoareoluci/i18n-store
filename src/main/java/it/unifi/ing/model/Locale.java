@@ -1,5 +1,6 @@
 package it.unifi.ing.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -7,7 +8,9 @@ import javax.persistence.Table;
 @Table(name = "locales")
 public class Locale extends BaseEntity {
 
+    @Column(name = "country_code")
     private String countryCode;
+    @Column(name = "language_code")
     private String languageCode;
 
     public Locale() {}

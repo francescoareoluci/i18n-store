@@ -6,13 +6,13 @@ import javax.persistence.Column;
 @MappedSuperclass
 public abstract class AbstractUser extends BaseEntity {
 
-    @Column
+    @Column(name = "first_name")
     private String firstName;
-    @Column
+    @Column(name = "last_name")
     private String lastName;
-    @Column
+    @Column(name = "mail")
     private String mail;
-    @Column
+    @Column(name = "password")
     private String password;
 
     protected AbstractUser() {}

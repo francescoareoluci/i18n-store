@@ -4,7 +4,7 @@
     xsi:schemaLocation="
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <!--
+
     <persistence-unit name="production">
         <jta-data-source>java:/jdbc/i18nstore</jta-data-source>
 
@@ -35,8 +35,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB103Dialect"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-            <property name="hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
 
             <property name="hibernate.search.default.directory_provider"
                       value="filesystem"/>
@@ -45,8 +44,8 @@
 
         </properties>
     </persistence-unit>
-    -->
 
+    <!--
     <persistence-unit name="development">
         <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
 
@@ -84,5 +83,5 @@
 
         </properties>
     </persistence-unit>
-
+    -->
 </persistence>
