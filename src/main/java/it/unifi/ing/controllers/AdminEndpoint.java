@@ -205,9 +205,24 @@ public class AdminEndpoint {
         // Retrieve dto manufacturer
         Manufacturer manufacturer = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
         // Check dto fields
-        if (checkInvalidProductDtoFields(productDto, localeList, currencyList, manufacturer)) {
+        if (checkInvalidProductDtoFields(productDto, localeList, currencyList)) {
             logger.error("Sent product contains invalid fields");
             return Response.status(404).build();
+        }
+        // Check for manufacturers in dto
+        if (manufacturer == null) {
+            if (productDto.getManufacturer().isEmpty()) {
+                logger.error("Manufacturer can not be empty");
+                return Response.status(404).build();
+            }
+            // Create new one
+            logger.info("The following non-existing manufacturer will be created: " +
+                    productDto.getManufacturer());
+            manufacturer = ModelFactory.manufacturer();
+            manufacturer.setName(productDto.getManufacturer());
+
+            manufacturerDao.addEntity(manufacturer);
+            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
         }
 
         // Get translation fields for product
@@ -306,9 +321,24 @@ public class AdminEndpoint {
         // Retrieve dto manufacturer
         Manufacturer manufacturer = manufacturerDao.getManufacturerByName(productDto.getManufacturer());
         // Check dto fields
-        if (checkInvalidProductDtoFields(productDto, localeList, currencyList, manufacturer)) {
+        if (checkInvalidProductDtoFields(productDto, localeList, currencyList)) {
             logger.error("Sent product contains invalid fields");
             return Response.status(404).build();
+        }
+        // Check for manufacturers in dto
+        if (manufacturer == null) {
+            if (productDto.getManufacturer().isEmpty()) {
+                logger.error("Manufacturer can not be empty");
+                return Response.status(404).build();
+            }
+            // Create new one
+            logger.info("The following non-existing manufacturer will be created: " +
+                    productDto.getManufacturer());
+            manufacturer = ModelFactory.manufacturer();
+            manufacturer.setName(productDto.getManufacturer());
+
+            manufacturerDao.addEntity(manufacturer);
+            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
         }
 
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
@@ -509,7 +539,7 @@ public class AdminEndpoint {
     }
 
     private boolean checkInvalidProductDtoFields(ProductDto productDto, List<Locale> localeList,
-                                          List<Currency> currencyList, Manufacturer manufacturer)
+                                          List<Currency> currencyList)
     {
         // Check for product localizations
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
@@ -540,22 +570,6 @@ public class AdminEndpoint {
         // Check for invalid product locales in currency localization
         if (UtilsDto.checkForDtoInvalidCurrencyLocale(localeList, localizedCurrencyItemDtoList)) {
             logger.error("Sent product contains an invalid locale");
-            return true;
-        }
-
-        // Check for manufacturers in dto
-        if (manufacturer == null) {
-            // Create new one
-            logger.info("The following non-existing manufacturer will be created: " +
-                    productDto.getManufacturer());
-            manufacturer = ModelFactory.manufacturer();
-            manufacturer.setName(productDto.getManufacturer());
-
-            manufacturerDao.addEntity(manufacturer);
-            logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
-        }
-        else if (manufacturer.getName().isEmpty()) {
-            logger.error("Sent product manufacturer is empty");
             return true;
         }
 
