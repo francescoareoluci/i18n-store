@@ -50,8 +50,8 @@ public class UtilsDto {
         boolean localeFound = false;
         for (LocalizedItemDto aliDto : localizedItemDtos) {
             for (Locale l : localeList) {
-                if (l.getCountryCode().equals(aliDto.getCountry()) &&
-                        l.getLanguageCode().equals(aliDto.getLocale())) {
+                if (l.getCountryCode().equals(aliDto.getCountryCode()) &&
+                        l.getLanguageCode().equals(aliDto.getLanguageCode())) {
                     localeFound = true;
                     break;
                 }

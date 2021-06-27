@@ -1,5 +1,8 @@
 package it.unifi.ing.dto;
 
+import it.unifi.ing.translation.TranslatableField;
+
+import java.util.Iterator;
 import java.util.List;
 
 public class DtoFactory {
@@ -35,6 +38,26 @@ public class DtoFactory {
         ProductDto productDto = new ProductDto();
         productDto.setId(id);
         productDto.setManufacturer(manufacturer);
+        productDto.setLocalizedTextualItemList(localizedTextualItemDtos);
+        productDto.setLocalizedCurrencyItem(localizedCurrencyItemDtos);
+
+        return productDto;
+    }
+
+    public static ProductDto buildShortProductDto(Long id, String manufacturer,
+                                                  List<LocalizedTextualItemDto> localizedTextualItemDtos,
+                                                  List<LocalizedCurrencyItemDto> localizedCurrencyItemDtos)
+    {
+        ProductDto productDto = new ProductDto();
+        productDto.setId(id);
+        productDto.setManufacturer(manufacturer);
+        for (Iterator<LocalizedTextualItemDto> it = localizedTextualItemDtos.listIterator(); it.hasNext(); ) {
+            LocalizedTextualItemDto ltiDto = it.next();
+            if (ltiDto.getFieldType().equals(TranslatableField.productDescription) ||
+                    ltiDto.getFieldType().equals(TranslatableField.productCategory)) {
+                it.remove();
+            }
+        }
         productDto.setLocalizedTextualItemList(localizedTextualItemDtos);
         productDto.setLocalizedCurrencyItem(localizedCurrencyItemDtos);
 
@@ -87,8 +110,8 @@ public class DtoFactory {
         localizedCurrencyItemDto.setId(id);
         localizedCurrencyItemDto.setCurrency(currency);
         localizedCurrencyItemDto.setPrice(price);
-        localizedCurrencyItemDto.setCountry(country);
-        localizedCurrencyItemDto.setLocale(locale);
+        localizedCurrencyItemDto.setCountryCode(country);
+        localizedCurrencyItemDto.setLanguageCode(locale);
 
         return localizedCurrencyItemDto;
     }
@@ -101,8 +124,8 @@ public class DtoFactory {
         localizedTextualItemDto.setId(id);
         localizedTextualItemDto.setFieldType(type);
         localizedTextualItemDto.setText(text);
-        localizedTextualItemDto.setLocale(locale);
-        localizedTextualItemDto.setCountry(country);
+        localizedTextualItemDto.setLanguageCode(locale);
+        localizedTextualItemDto.setCountryCode(country);
 
         return localizedTextualItemDto;
     }

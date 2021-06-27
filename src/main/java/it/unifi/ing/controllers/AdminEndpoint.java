@@ -111,7 +111,7 @@ public class AdminEndpoint {
                             p.getLocalizedItemList(), true);
 
             // Create product dto
-            ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
+            ProductDto productDto = DtoFactory.buildShortProductDto(p.getId(), p.getProdManufacturer().getName(),
                     localizedTextualItemDtos, localizedCurrencyItemDtoList);
             productDtoList.add(productDto);
         }

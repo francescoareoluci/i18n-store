@@ -58,8 +58,8 @@ public class DtoMapper {
 
                 if (found) {
                     lciDto.setId(ali.getId());
-                    lciDto.setLocale(ali.getLocale().getLanguageCode());
-                    lciDto.setCountry(ali.getLocale().getCountryCode());
+                    lciDto.setLanguageCode(ali.getLocale().getLanguageCode());
+                    lciDto.setCountryCode(ali.getLocale().getCountryCode());
                     if (ali instanceof LocalizedCurrencyItem) {
                         LocalizedCurrencyItem lci = (LocalizedCurrencyItem) ali;
                         lciDto.setCurrency(lci.getCurrency().getCurrency());
@@ -107,8 +107,8 @@ public class DtoMapper {
 
                 if (found) {
                     ltiDto.setId(ali.getId());
-                    ltiDto.setLocale(ali.getLocale().getLanguageCode());
-                    ltiDto.setCountry(ali.getLocale().getCountryCode());
+                    ltiDto.setLanguageCode(ali.getLocale().getLanguageCode());
+                    ltiDto.setCountryCode(ali.getLocale().getCountryCode());
                     if (ali instanceof LocalizedTextualItem) {
                         LocalizedTextualItem lti = (LocalizedTextualItem) ali;
                         ltiDto.setText(lti.getText());
@@ -157,8 +157,8 @@ public class DtoMapper {
             lti.setText(ltiDto.getText());
 
             for (Locale l : localeList) {
-                if (ltiDto.getLocale().equals(l.getLanguageCode()) &&
-                        ltiDto.getCountry().equals(l.getCountryCode())) {
+                if (ltiDto.getLanguageCode().equals(l.getLanguageCode()) &&
+                        ltiDto.getCountryCode().equals(l.getCountryCode())) {
                     lti.setLocale(l);
                     break;
                 }
@@ -192,8 +192,8 @@ public class DtoMapper {
             lci.setPrice(lciDto.getPrice());
             lci.setTranslatableItem(product);
             for (Locale l : localeList) {
-                if (lciDto.getLocale().equals(l.getLanguageCode()) &&
-                        lciDto.getCountry().equals(l.getCountryCode())) {
+                if (lciDto.getLanguageCode().equals(l.getLanguageCode()) &&
+                        lciDto.getCountryCode().equals(l.getCountryCode())) {
                     lci.setLocale(l);
                     break;
                 }
@@ -265,8 +265,8 @@ public class DtoMapper {
                     lti.setTranslatableItem(product);
                     // Set locale
                     for (Locale l : localeList) {
-                        if (ltiDto.getLocale().equals(l.getLanguageCode()) &&
-                                ltiDto.getCountry().equals(l.getCountryCode())) {
+                        if (ltiDto.getLanguageCode().equals(l.getLanguageCode()) &&
+                                ltiDto.getCountryCode().equals(l.getCountryCode())) {
                             lti.setLocale(l);
                             break;
                         }
@@ -299,8 +299,8 @@ public class DtoMapper {
                     lci.setTranslatableItem(product);
                     // Set locale
                     for (Locale l : localeList) {
-                        if (lciDto.getLocale().equals(l.getLanguageCode()) &&
-                                lciDto.getCountry().equals(l.getCountryCode())) {
+                        if (lciDto.getLanguageCode().equals(l.getLanguageCode()) &&
+                                lciDto.getCountryCode().equals(l.getCountryCode())) {
                             lci.setLocale(l);
                             break;
                         }

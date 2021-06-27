@@ -94,7 +94,7 @@ public class CustomerEndpoint {
                             p.getLocalizedItemList(), false);
 
             // Create product dto
-            ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
+            ProductDto productDto = DtoFactory.buildShortProductDto(p.getId(), p.getProdManufacturer().getName(),
                     localizedTextualItemDtos, localizedCurrencyItemDtoList);
             productDtoList.add(productDto);
         }
@@ -223,11 +223,15 @@ public class CustomerEndpoint {
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
                             product.getLocalizedItemList(), false);
 
-            //totalCost += localizedCurrencyItemDto.getPrice();
-            totalCost += 0; // @TODO: fixme
+            for (LocalizedCurrencyItemDto ltiDto : localizedCurrencyItemDtoList) {
+                if (ltiDto.getLanguageCode().equals(locale.getLanguageCode()) &&
+                        ltiDto.getCountryCode().equals(locale.getCountryCode())) {
+                    totalCost += ltiDto.getPrice();
+                }
+            }
 
             // Build product dto
-            ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
+            ProductDto productDto = DtoFactory.buildShortProductDto(product.getId(),
                     product.getProdManufacturer().getName(), localizedTextualItemDtos, localizedCurrencyItemDtoList);
 
             cartProducts.add(productDto);
@@ -460,7 +464,7 @@ public class CustomerEndpoint {
                             product.getLocalizedItemList(), false);
 
             // Build product dto
-            ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
+            ProductDto productDto = DtoFactory.buildShortProductDto(product.getId(),
                     product.getProdManufacturer().getName(), localizedTextualItemDtos, localizedCurrencyItemDtoList);
 
             purchasedProducts.add(productDto);

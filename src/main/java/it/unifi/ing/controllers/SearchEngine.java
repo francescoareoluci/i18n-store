@@ -1,8 +1,6 @@
 package it.unifi.ing.controllers;
 
 import it.unifi.ing.model.Product;
-import it.unifi.ing.model.TranslatableItem;
-import it.unifi.ing.translation.LocalizedTextualItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -11,9 +9,7 @@ import org.apache.lucene.search.Query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SearchEngine {
 

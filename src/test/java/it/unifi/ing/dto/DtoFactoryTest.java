@@ -60,8 +60,8 @@ public class DtoFactoryTest {
         assertEquals(1L, localizedCurrencyItemDto.getId(), 0);
         assertEquals("$", localizedCurrencyItemDto.getCurrency());
         assertEquals(12f, localizedCurrencyItemDto.getPrice(), 0);
-        assertEquals("it", localizedCurrencyItemDto.getLocale());
-        assertEquals("IT", localizedCurrencyItemDto.getCountry());
+        assertEquals("it", localizedCurrencyItemDto.getLanguageCode());
+        assertEquals("IT", localizedCurrencyItemDto.getCountryCode());
     }
 
     @Test
@@ -73,8 +73,8 @@ public class DtoFactoryTest {
         assertEquals(1L, localizedTextualItemDto.getId(), 0);
         assertEquals("test", localizedTextualItemDto.getText());
         assertEquals(TranslatableField.productName, localizedTextualItemDto.getFieldType());
-        assertEquals("it", localizedTextualItemDto.getLocale());
-        assertEquals("IT", localizedTextualItemDto.getCountry());
+        assertEquals("it", localizedTextualItemDto.getLanguageCode());
+        assertEquals("IT", localizedTextualItemDto.getCountryCode());
     }
 
     @Test
