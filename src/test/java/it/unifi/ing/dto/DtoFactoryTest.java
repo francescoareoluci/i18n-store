@@ -1,7 +1,6 @@
 package it.unifi.ing.dto;
 
-import it.unifi.ing.translation.LocalizedTextualItem;
-import it.unifi.ing.translation.TranslatableType;
+import it.unifi.ing.translation.TranslatableField;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -69,11 +68,11 @@ public class DtoFactoryTest {
     public void testBuildLocalizedTextualItemDto()
     {
         LocalizedTextualItemDto localizedTextualItemDto = DtoFactory.buildLocalizedTextualItemDto(
-                1L, "test", TranslatableType.productName, "it", "IT");
+                1L, "test", TranslatableField.productName, "it", "IT");
 
         assertEquals(1L, localizedTextualItemDto.getId(), 0);
         assertEquals("test", localizedTextualItemDto.getText());
-        assertEquals(TranslatableType.productName, localizedTextualItemDto.getFieldType());
+        assertEquals(TranslatableField.productName, localizedTextualItemDto.getFieldType());
         assertEquals("it", localizedTextualItemDto.getLocale());
         assertEquals("IT", localizedTextualItemDto.getCountry());
     }

@@ -25,10 +25,8 @@ public class AdminEndpoint {
 
     private static final Logger logger = LogManager.getLogger(AdminEndpoint.class);
 
-    private LocalizedField nameLocalizedField;
-    private LocalizedField descriptionLocalizedField;
-    private LocalizedField categoryLocalizedField;
-
+    @Inject
+    private LocalizedFieldHandler localizedFieldHandler;
     @Inject
     private AdminDao adminDao;
     @Inject
@@ -92,7 +90,7 @@ public class AdminEndpoint {
 
         // Get translation fields for product
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
+        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
             return Response.status(404).build();
         }
@@ -102,14 +100,15 @@ public class AdminEndpoint {
         for (Product p : productList) {
             // Build localized textual item dto list
             List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
-                    .convertProductLocalizedItemListToDto(nameLocalizedField,
-                            descriptionLocalizedField, categoryLocalizedField,
-                            p.getLocalizedTextualItemList(), null, true);
+                    .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
+                            localizedFieldHandler.getProductDescriptionField(),
+                            localizedFieldHandler.getProductCategoryField(),
+                            p.getAbstractLocalizedItemList(), null, true);
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
-                    .convertLocalizedCurrencyListToDto(null,
-                            p.getLocalizedCurrencyItemList(), true);
+                    .convertLocalizedCurrencyListToDto(null, localizedFieldHandler.getProductPriceField(),
+                            p.getAbstractLocalizedItemList(), true);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -138,21 +137,22 @@ public class AdminEndpoint {
 
         // Get translation fields for product
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
+        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
             return Response.status(404).build();
         }
 
         // Build localized textual item dto list
         List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
-                .convertProductLocalizedItemListToDto(nameLocalizedField,
-                        descriptionLocalizedField, categoryLocalizedField,
-                        product.getLocalizedTextualItemList(), null, true);
+                .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
+                        localizedFieldHandler.getProductDescriptionField(),
+                        localizedFieldHandler.getProductCategoryField(),
+                        product.getAbstractLocalizedItemList(), null, true);
 
         // Build localized currency dto
         List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
-                .convertLocalizedCurrencyListToDto(null,
-                        product.getLocalizedCurrencyItemList(), true);
+                .convertLocalizedCurrencyListToDto(null, localizedFieldHandler.getProductPriceField(),
+                        product.getAbstractLocalizedItemList(), true);
 
         // Create product dto
         ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
@@ -212,14 +212,14 @@ public class AdminEndpoint {
 
         // Get translation fields for product
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
+        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
             return Response.status(404).build();
         }
 
         // Create product
         Product product = DtoMapper.buildProduct(admin, manufacturer, localeList, currencyList, productDto,
-                nameLocalizedField, descriptionLocalizedField, categoryLocalizedField);
+                localizedFieldHandler.getProductLocalizedFieldList());
         if (product == null) {
             logger.error("Unable to build requested product");
             return Response.status(404).build();
@@ -269,24 +269,33 @@ public class AdminEndpoint {
             return Response.status(404).build();
         }
 
+        // Get admin entity
+        Admin admin = adminDao.getAdminByUsername(username);
+        if (admin == null) {
+            logger.error("Unable to retrieve user " + username);
+            return Response.status(404).build();
+        }
+
+        List<AbstractLocalizedItem> abstractLocalizedItemList = product.getAbstractLocalizedItemList();
+        List<LocalizedTextualItem> localizedTextualItemList = new ArrayList<>();
+        List<LocalizedCurrencyItem> localizedCurrencyItemList = new ArrayList<>();
+        for (AbstractLocalizedItem ali : abstractLocalizedItemList) {
+            if (ali instanceof LocalizedTextualItem) {
+                localizedTextualItemList.add((LocalizedTextualItem) ali);
+            }
+            else if (ali instanceof LocalizedCurrencyItem) {
+                localizedCurrencyItemList.add((LocalizedCurrencyItem) ali);
+            }
+        }
         // Check for valid textual product localizations
-        List<LocalizedTextualItem> localizedTextualItemList = product.getLocalizedTextualItemList();
         if (localizedTextualItemList.isEmpty()) {
             logger.error("Empty textual localization list for product with id: " + productDto.getId());
             return Response.status(404).build();
         }
 
         // Check for valid product currencies
-        List<LocalizedCurrencyItem> localizedCurrencyItemList = product.getLocalizedCurrencyItemList();
         if (localizedCurrencyItemList.isEmpty()) {
             logger.error("Empty currency localization list for product with id: " + productDto.getId());
-            return Response.status(404).build();
-        }
-
-        // Get admin entity
-        Admin admin = adminDao.getAdminByUsername(username);
-        if (admin == null) {
-            logger.error("Unable to retrieve user " + username);
             return Response.status(404).build();
         }
 
@@ -319,15 +328,15 @@ public class AdminEndpoint {
 
         // Get translation fields for product
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
+        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
             return Response.status(404).build();
         }
 
         // Edit product
         product = DtoMapper.updateProduct(product, localizedCurrencyItemDtoList, localizedTextualItemDtoList,
-                localeList, currencyList, manufacturer, admin, nameLocalizedField,
-                descriptionLocalizedField, categoryLocalizedField);
+                localeList, currencyList, manufacturer, admin,
+                localizedFieldHandler.getProductLocalizedFieldList());
 
         if (product == null) {
             logger.error("Error editing product");
@@ -553,33 +562,4 @@ public class AdminEndpoint {
         return false;
     }
 
-    private boolean getLocalizedFields(List<LocalizedField> localizedFieldList)
-    {
-        boolean foundName = false;
-        boolean foundDescr = false;
-        boolean foundCat = false;
-        for (LocalizedField lf : localizedFieldList) {
-            switch (lf.getType()) {
-                case TranslatableType.productName:
-                    nameLocalizedField = lf;
-                    foundName = true;
-                    break;
-                case TranslatableType.productDescription:
-                    descriptionLocalizedField = lf;
-                    foundDescr = true;
-                    break;
-                case TranslatableType.productCategory:
-                    categoryLocalizedField = lf;
-                    foundCat = true;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (!foundName || !foundDescr || !foundCat) {
-            return false;
-        }
-        return true;
-    }
 }

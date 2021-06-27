@@ -1,6 +1,6 @@
 package it.unifi.ing.model;
 
-import it.unifi.ing.translation.LocalizedTextualItem;
+import it.unifi.ing.translation.AbstractLocalizedItem;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;
@@ -12,19 +12,19 @@ import java.util.List;
 public abstract class TranslatableItem extends BaseEntity
 {
     @IndexedEmbedded
-    @OneToMany(mappedBy = "translatableItem", cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<LocalizedTextualItem> localizedTextualItemList;
+    @OneToMany(mappedBy = "translatableItem", cascade = CascadeType.ALL)
+    private List<AbstractLocalizedItem> abstractLocalizedItemList;
 
     public TranslatableItem() {}
     public TranslatableItem(String uuid) { super(uuid); }
 
-    public List<LocalizedTextualItem> getLocalizedTextualItemList()
+    public List<AbstractLocalizedItem> getAbstractLocalizedItemList()
     {
-        return this.localizedTextualItemList;
+        return this.abstractLocalizedItemList;
     }
 
-    public void setLocalizedTextualItemList(List<LocalizedTextualItem> localizedTextualItemList)
+    public void setAbstractLocalizedItemList(List<AbstractLocalizedItem> abstractLocalizedItemList)
     {
-        this.localizedTextualItemList = localizedTextualItemList;
+        this.abstractLocalizedItemList = abstractLocalizedItemList;
     }
 }

@@ -36,9 +36,9 @@ public class LocalizedCurrencyItemDaoTest extends JpaTest {
         localizedCurrencyItem.setPrice(12.5f);
         localizedCurrencyItem.setCurrency(currency);
         localizedCurrencyItem.setLocale(locale);
-        localizedCurrencyItem.setProduct(product);
+        localizedCurrencyItem.setTranslatableItem(product);
 
-        product.setLocalizedCurrencyItemList(Arrays.asList(localizedCurrencyItem));
+        product.setAbstractLocalizedItemList(Arrays.asList(localizedCurrencyItem));
 
         entityManager.persist(locale);
         entityManager.persist(currency);
@@ -106,7 +106,7 @@ public class LocalizedCurrencyItemDaoTest extends JpaTest {
         assertEquals(localizedCurrencyItem.getUuid(), retrievedResult.getUuid());
         assertEquals(localizedCurrencyItem.getPrice(), retrievedResult.getPrice(), 0);
         assertEquals(localizedCurrencyItem.getCurrency(), retrievedResult.getCurrency());
-        assertEquals(localizedCurrencyItem.getProduct(), retrievedResult.getProduct());
+        assertEquals(localizedCurrencyItem.getTranslatableItem(), retrievedResult.getTranslatableItem());
         assertEquals(localizedCurrencyItem.getLocale(), retrievedResult.getLocale());
     }
 

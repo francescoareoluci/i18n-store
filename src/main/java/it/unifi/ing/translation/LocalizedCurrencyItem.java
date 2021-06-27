@@ -10,10 +10,6 @@ import javax.persistence.*;
 public class LocalizedCurrencyItem extends AbstractLocalizedItem {
 
     @ManyToOne
-    @JoinColumn(name = "product_sid")
-    private Product product;
-
-    @ManyToOne
     @JoinColumn(name = "currency_sid")
     private Currency currency;
 
@@ -23,11 +19,9 @@ public class LocalizedCurrencyItem extends AbstractLocalizedItem {
     public LocalizedCurrencyItem() {}
     public LocalizedCurrencyItem(String uuid) { super(uuid); }
 
-    public Product getProduct() { return this.product; }
     public Currency getCurrency() { return this.currency; }
     public float getPrice() { return this.price; }
 
-    public void setProduct(Product product) { this.product = product; }
     public void setCurrency(Currency currency) { this.currency = currency; }
     public void setPrice(float price) { this.price = price; }
 }

@@ -28,7 +28,7 @@ public class LocalizedCurrencyItemDao extends BaseDao<LocalizedCurrencyItem> {
     public List<LocalizedCurrencyItem> getLocalizedCurrencyItemByProductId(Long productId)
     {
         return entityManager
-                .createQuery("SELECT l FROM LocalizedCurrencyItem l WHERE l.product.id = :id",
+                .createQuery("SELECT l FROM LocalizedCurrencyItem l WHERE l.translatableItem.id = :id",
                         LocalizedCurrencyItem.class)
                 .setParameter("id", productId)
                 .getResultList();
@@ -47,7 +47,7 @@ public class LocalizedCurrencyItemDao extends BaseDao<LocalizedCurrencyItem> {
     {
         return entityManager
                 .createQuery("SELECT l FROM LocalizedCurrencyItem l WHERE l.locale.id = :localeId " +
-                        "AND l.product.id = :productId", LocalizedCurrencyItem.class)
+                        "AND l.translatableItem.id = :productId", LocalizedCurrencyItem.class)
                 .setParameter("localeId", localeId)
                 .setParameter("productId", productId)
                 .getResultList();
@@ -58,7 +58,7 @@ public class LocalizedCurrencyItemDao extends BaseDao<LocalizedCurrencyItem> {
     {
         return entityManager
                 .createQuery("SELECT l FROM LocalizedCurrencyItem l WHERE l.locale.id = :localeId " +
-                        "AND l.product.id = :productId AND l.currency.id = :currencyId",
+                        "AND l.translatableItem.id = :productId AND l.currency.id = :currencyId",
                         LocalizedCurrencyItem.class)
                 .setParameter("localeId", localeId)
                 .setParameter("productId", productId)

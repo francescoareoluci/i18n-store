@@ -1,6 +1,8 @@
 package it.unifi.ing.controllers;
 
 import it.unifi.ing.model.Product;
+import it.unifi.ing.model.TranslatableItem;
+import it.unifi.ing.translation.LocalizedTextualItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -9,7 +11,9 @@ import org.apache.lucene.search.Query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SearchEngine {
 
@@ -68,8 +72,23 @@ public class SearchEngine {
         javax.persistence.Query persistenceQuery =
                 fullTextEntityManager.createFullTextQuery(query, Product.class);
 
+        /*
+        List<Product> localizedTextualItemList = persistenceQuery.getResultList();
+
+        // Create Product List
+        Set<Product> productList = new HashSet<>();
+        for (LocalizedTextualItem lti : localizedTextualItemList) {
+            TranslatableItem ti = lti.getTranslatableItem();
+            if (ti instanceof Product) {
+                productList.add((Product) ti);
+            }
+        }
+         */
+
+        List<Product> retrievedProducts = persistenceQuery.getResultList();
+
         // Search
-        return persistenceQuery.getResultList();
+        return retrievedProducts;
     }
 
     public List<Product> searchSimilarProducts(int entityId)
@@ -104,7 +123,7 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("localizedTextualItemList.text")
+                .onFields("abstractLocalizedItemList.text")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -120,7 +139,7 @@ public class SearchEngine {
     {
         return qb
                 .simpleQueryString()
-                .onFields("localizedTextualItemList.text")
+                .onFields("abstractLocalizedItemList.text")
                 .withAndAsDefaultOperator()
                 .matching(matchQuery)
                 .createQuery();
@@ -143,7 +162,7 @@ public class SearchEngine {
                 .fuzzy()
                 .withEditDistanceUpTo(editDistance)
                 .withPrefixLength(prefixLength)
-                .onFields("localizedTextualItemList.text")
+                .onFields("abstractLocalizedItemList.text")
                 .matching(matchQuery)
                 .createQuery();
     }
@@ -166,7 +185,7 @@ public class SearchEngine {
         return qb
                 .phrase()
                     .withSlop(slop)
-                .onField("localizedTextualItemList.text")
+                .onField("abstractLocalizedItemList.text")
                 .sentence(matchQuery)
                 .createQuery();
     }
@@ -184,7 +203,7 @@ public class SearchEngine {
                 .moreLikeThis()
                 .excludeEntityUsedForComparison()
                 .favorSignificantTermsWithFactor(2f)
-                .comparingField("localizedTextualItemList.text")
+                .comparingField("abstractLocalizedItemList.text")
                 .toEntityWithId(objectId)
                 .createQuery();
     }

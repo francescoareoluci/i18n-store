@@ -23,17 +23,18 @@ public class Product extends TranslatableItem {
     private List<LocalizedTextualItem> localizedTextualItemList;
     */
 
+    /*
     @IndexedEmbedded
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<LocalizedCurrencyItem> localizedCurrencyItemList;
-
+     */
     public Product() {}
     public Product(String uuid) { super(uuid); }
 
     public Manufacturer getProdManufacturer() { return this.prodManufacturer; }
     public Admin getProdAdministrator() { return this.prodAdministrator; }
     //public List<LocalizedTextualItem> getLocalizedTextualItemList() { return this.localizedTextualItemList; }
-    public List<LocalizedCurrencyItem> getLocalizedCurrencyItemList() { return this.localizedCurrencyItemList; }
+    //public List<LocalizedCurrencyItem> getLocalizedCurrencyItemList() { return this.localizedCurrencyItemList; }
 
     public void setProdManufacturer(Manufacturer prodManufacturer)
     {
@@ -48,11 +49,10 @@ public class Product extends TranslatableItem {
     {
         this.localizedTextualItemList = localizedTextualItemList;
     }
-    */
 
     public void setLocalizedCurrencyItemList(List<LocalizedCurrencyItem> localizedCurrencyItemList)
     {
         this.localizedCurrencyItemList = localizedCurrencyItemList;
     }
-
+    */
 }

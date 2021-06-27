@@ -2,10 +2,7 @@ package it.unifi.ing.beans.builders;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.model.*;
-import it.unifi.ing.translation.LocalizedCurrencyItem;
-import it.unifi.ing.translation.LocalizedField;
-import it.unifi.ing.translation.LocalizedTextualItem;
-import it.unifi.ing.translation.TranslatableType;
+import it.unifi.ing.translation.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -74,9 +71,10 @@ public class StartupBean {
 
         Product prod1 = buildProduct(user1, manufacturer2);
 
-        LocalizedField lf1 = buildLocalizedField(TranslatableType.productName);
-        LocalizedField lf2 = buildLocalizedField(TranslatableType.productDescription);
-        LocalizedField lf3 = buildLocalizedField(TranslatableType.productCategory);
+        LocalizedField lf1 = buildLocalizedField(TranslatableField.productName);
+        LocalizedField lf2 = buildLocalizedField(TranslatableField.productDescription);
+        LocalizedField lf3 = buildLocalizedField(TranslatableField.productCategory);
+        LocalizedField lf4 = buildLocalizedField(TranslatableField.productPrice);
 
         List<LocalizedTextualItem> prod1TextualItems = new ArrayList<>();
         prod1TextualItems.add(buildLocalizedTextualItem("Sony Alpha a7II", prod1, locale2, lf1));
@@ -90,11 +88,19 @@ public class StartupBean {
         prod1TextualItems.add(buildLocalizedTextualItem("fotocamera", prod1, locale1, lf3));
 
         List<LocalizedCurrencyItem> prod1CurrencyItems = new ArrayList<>();
-        prod1CurrencyItems.add(buildLocalizedCurrencyItem(currency1, (float)1499.00, prod1, locale1));
-        prod1CurrencyItems.add(buildLocalizedCurrencyItem(currency2, (float)1598.00, prod1, locale2));
+        prod1CurrencyItems.add(buildLocalizedCurrencyItem(currency1, (float)1499.00, prod1, locale1, lf4));
+        prod1CurrencyItems.add(buildLocalizedCurrencyItem(currency2, (float)1598.00, prod1, locale2, lf4));
 
-        prod1.setLocalizedTextualItemList(prod1TextualItems);
-        prod1.setLocalizedCurrencyItemList(prod1CurrencyItems);
+        List<AbstractLocalizedItem> abstractLocalizedItemList = new ArrayList<>();
+        for (LocalizedTextualItem lti : prod1TextualItems) {
+            abstractLocalizedItemList.add(lti);
+        }
+        for (LocalizedCurrencyItem lci : prod1CurrencyItems) {
+            abstractLocalizedItemList.add(lci);
+        }
+
+        prod1.setAbstractLocalizedItemList(abstractLocalizedItemList);
+        //prod1.setLocalizedCurrencyItemList(prod1CurrencyItems);
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
 
@@ -125,6 +131,7 @@ public class StartupBean {
         localizedFieldDao.addEntity(lf1);
         localizedFieldDao.addEntity(lf2);
         localizedFieldDao.addEntity(lf3);
+        localizedFieldDao.addEntity(lf4);
         productDao.addEntity(prod1);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
@@ -243,26 +250,28 @@ public class StartupBean {
         return c;
     }
 
-    private LocalizedCurrencyItem buildLocalizedCurrencyItem(Currency c,
-                                                             float price,
-                                                             Product product,
-                                                             Locale locale)
-    {
-        LocalizedCurrencyItem localizedCurrencyItem = ModelFactory.localizedCurrencyItem();
-        localizedCurrencyItem.setCurrency(c);
-        localizedCurrencyItem.setPrice(price);
-        localizedCurrencyItem.setProduct(product);
-        localizedCurrencyItem.setLocale(locale);
-
-        return localizedCurrencyItem;
-    }
-
     private LocalizedField buildLocalizedField(String type)
     {
         LocalizedField localizedField = ModelFactory.localizedField();
         localizedField.setType(type);
 
         return localizedField;
+    }
+
+    private LocalizedCurrencyItem buildLocalizedCurrencyItem(Currency c,
+                                                             float price,
+                                                             TranslatableItem translatableItem,
+                                                             Locale locale,
+                                                             LocalizedField localizedField)
+    {
+        LocalizedCurrencyItem localizedCurrencyItem = ModelFactory.localizedCurrencyItem();
+        localizedCurrencyItem.setCurrency(c);
+        localizedCurrencyItem.setPrice(price);
+        localizedCurrencyItem.setTranslatableItem(translatableItem);
+        localizedCurrencyItem.setLocale(locale);
+        localizedCurrencyItem.setLocalizedField(localizedField);
+
+        return localizedCurrencyItem;
     }
 
     private LocalizedTextualItem buildLocalizedTextualItem(String text,

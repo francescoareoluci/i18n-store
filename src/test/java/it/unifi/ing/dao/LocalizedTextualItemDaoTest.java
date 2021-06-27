@@ -3,7 +3,7 @@ package it.unifi.ing.dao;
 import it.unifi.ing.model.*;
 import it.unifi.ing.translation.LocalizedField;
 import it.unifi.ing.translation.LocalizedTextualItem;
-import it.unifi.ing.translation.TranslatableType;
+import it.unifi.ing.translation.TranslatableField;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
@@ -30,7 +30,7 @@ public class LocalizedTextualItemDaoTest extends JpaTest {
         locale.setCountryCode("IT");
 
         localizedField = ModelFactory.localizedField();
-        localizedField.setType(TranslatableType.productName);
+        localizedField.setType(TranslatableField.productName);
 
         product = ModelFactory.product();
 
@@ -40,7 +40,7 @@ public class LocalizedTextualItemDaoTest extends JpaTest {
         localizedTextualItem.setLocale(locale);
         localizedTextualItem.setTranslatableItem(product);
 
-        product.setLocalizedTextualItemList(Arrays.asList(localizedTextualItem));
+        product.setAbstractLocalizedItemList(Arrays.asList(localizedTextualItem));
 
         entityManager.persist(locale);
         entityManager.persist(localizedField);

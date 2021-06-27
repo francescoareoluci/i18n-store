@@ -19,9 +19,11 @@
         <class>it.unifi.ing.model.PurchasedProduct</class>
         <class>it.unifi.ing.model.Product</class>
         <class>it.unifi.ing.model.Manufacturer</class>
+        <class>it.unifi.ing.translation.AbstractLocalizedItem</class>
         <class>it.unifi.ing.translation.LocalizedCurrencyItem</class>
         <class>it.unifi.ing.translation.LocalizedField</class>
         <class>it.unifi.ing.translation.LocalizedCurrencyItem</class>
+        <class>it.unifi.ing.model.TranslatableItem</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
@@ -59,6 +61,7 @@
         <class>it.unifi.ing.model.PurchasedProduct</class>
         <class>it.unifi.ing.model.Product</class>
         <class>it.unifi.ing.model.Manufacturer</class>
+        <class>it.unifi.ing.translation.AbstractLocalizedItem</class>
         <class>it.unifi.ing.translation.LocalizedCurrencyItem</class>
         <class>it.unifi.ing.translation.LocalizedField</class>
         <class>it.unifi.ing.translation.LocalizedTextualItem</class>

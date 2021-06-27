@@ -11,7 +11,7 @@ import it.unifi.ing.model.Product;
 import it.unifi.ing.security.JWTUtil;
 import it.unifi.ing.security.UserRole;
 import it.unifi.ing.translation.LocalizedField;
-import it.unifi.ing.translation.TranslatableType;
+import it.unifi.ing.translation.LocalizedFieldHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,9 +31,8 @@ public class SearchEndpoint {
     private static final Logger logger = LogManager.getLogger(SearchEndpoint.class);
     private static final String querySeparator = "\\+";
 
-    private LocalizedField nameLocalizedField;
-    private LocalizedField descriptionLocalizedField;
-    private LocalizedField categoryLocalizedField;
+    @Inject
+    private LocalizedFieldHandler localizedFieldHandler;
 
     @Inject
     private SearchEngine searchEngine;
@@ -123,7 +122,7 @@ public class SearchEndpoint {
 
         // Get translation fields
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
+        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
             return Response.status(404).build();
         }
@@ -137,14 +136,14 @@ public class SearchEndpoint {
         for (Product p : productList) {
             // Build localized textual item dto list
             List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
-                    .convertProductLocalizedItemListToDto(nameLocalizedField,
-                            descriptionLocalizedField, categoryLocalizedField,
-                            p.getLocalizedTextualItemList(), userLocale, isAdmin);
+                    .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
+                            localizedFieldHandler.getProductDescriptionField(), localizedFieldHandler.getProductCategoryField(),
+                            p.getAbstractLocalizedItemList(), userLocale, isAdmin);
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
-                    .convertLocalizedCurrencyListToDto(userLocale,
-                            p.getLocalizedCurrencyItemList(), isAdmin);
+                    .convertLocalizedCurrencyListToDto(userLocale, localizedFieldHandler.getProductPriceField(),
+                            p.getAbstractLocalizedItemList(), isAdmin);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -203,7 +202,7 @@ public class SearchEndpoint {
 
         // Get translation fields
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!getLocalizedFields(localizedFieldList)) {
+        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
             return Response.status(404).build();
         }
@@ -218,14 +217,14 @@ public class SearchEndpoint {
         for (Product p : productList) {
             // Build localized textual item dto list
             List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
-                    .convertProductLocalizedItemListToDto(nameLocalizedField,
-                            descriptionLocalizedField, categoryLocalizedField,
-                            p.getLocalizedTextualItemList(), userLocale, isAdmin);
+                    .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
+                            localizedFieldHandler.getProductDescriptionField(), localizedFieldHandler.getProductCategoryField(),
+                            p.getAbstractLocalizedItemList(), userLocale, isAdmin);
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
-                    .convertLocalizedCurrencyListToDto(userLocale,
-                            p.getLocalizedCurrencyItemList(), isAdmin);
+                    .convertLocalizedCurrencyListToDto(userLocale, localizedFieldHandler.getProductPriceField(),
+                            p.getAbstractLocalizedItemList(), isAdmin);
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -273,35 +272,6 @@ public class SearchEndpoint {
 
         // Extract the token from the HTTP Authorization header
         return authorizationHeader.substring("Bearer".length()).trim();
-    }
-
-    private boolean getLocalizedFields(List<LocalizedField> localizedFieldList)
-    {
-        boolean foundName = false;
-        boolean foundDescr = false;
-        boolean foundCat = false;
-        for (LocalizedField lf : localizedFieldList) {
-            switch (lf.getType()) {
-                case TranslatableType.productName:
-                    nameLocalizedField = lf;
-                    foundName = true;
-                    break;
-                case TranslatableType.productDescription:
-                    descriptionLocalizedField = lf;
-                    foundDescr = true;
-                    break;
-                case TranslatableType.productCategory:
-                    categoryLocalizedField = lf;
-                    foundCat = true;
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (!foundName || !foundDescr || !foundCat) {
-            return false;
-        }
-        return true;
     }
 
 }
