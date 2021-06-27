@@ -12,25 +12,6 @@ public class DtoMapper {
 
     private static final Logger logger = LogManager.getLogger(DtoMapper.class);
 
-    public static LocaleDto convertLocaleToDto(Locale locale)
-    {
-        return DtoFactory.buildLocaleDto(locale.getId(),
-                locale.getLanguageCode(), locale.getCountryCode());
-    }
-
-    public static Locale convertDtoToLocale(LocaleDto localeDto)
-    {
-        Locale locale = ModelFactory.locale();
-        locale.setLanguageCode(localeDto.getLanguageCode());
-        locale.setCountryCode(localeDto.getCountryCode());
-        return locale;
-    }
-
-    public static ManufacturerDto convertManufacturerToDto(Manufacturer manufacturer)
-    {
-        return DtoFactory.buildManufacturerDto(manufacturer.getId(), manufacturer.getName());
-    }
-
     public static Manufacturer convertDtoToManufacturer(ManufacturerDto manufacturerDto)
     {
         Manufacturer manufacturer = ModelFactory.manufacturer();
@@ -134,6 +115,7 @@ public class DtoMapper {
      * @param localeList: supported locale list
      * @param currencyList: supported currency list
      * @param productDto: passed product dto
+     * @param localizedFieldList: list of localized fields for product
      * @return product instance or null if an error occurs
      */
     public static Product buildProduct(Admin admin,
@@ -233,6 +215,7 @@ public class DtoMapper {
      * @param currencyList: supported currencies
      * @param manufacturer: product manufacturer
      * @param admin: administrator
+     * @param localizedFieldList: list of localized fields for product
      * @return update product or null if an error occurs
      */
     public static Product updateProduct(Product product, List<LocalizedCurrencyItemDto> localizedCurrencyItemDtos,

@@ -106,6 +106,36 @@ public class DtoFactoryTest {
     }
 
     @Test
+    public void testBuildShortProductDto()
+    {
+        List<LocalizedTextualItemDto> localizedTextualItemDtoList = new ArrayList<>();
+        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = new ArrayList<>();
+
+        localizedTextualItemDtoList.add(DtoFactory.buildLocalizedTextualItemDto(4L, "a",
+                TranslatableField.productName, "en", "US"));
+        localizedTextualItemDtoList.add(DtoFactory.buildLocalizedTextualItemDto(5L, "b",
+                TranslatableField.productCategory, "en", "US"));
+        localizedTextualItemDtoList.add(DtoFactory.buildLocalizedTextualItemDto(7L, "desc",
+                TranslatableField.productDescription, "en", "US"));
+        localizedCurrencyItemDtoList.add(DtoFactory.buildLocalizedCurrencyItemDto(6L, "$", 20.0f,
+                "en", "US"));
+
+        ProductDto productDto = DtoFactory.buildShortProductDto(6L, "man",
+                localizedTextualItemDtoList, localizedCurrencyItemDtoList);
+
+        assertEquals(productDto.getId(), 6L, 0);
+        assertEquals(productDto.getManufacturer(), "man");
+        for (int i = 0; i < productDto.getLocalizedTextualItemList().size(); i++) {
+            assertEquals(productDto.getLocalizedTextualItemList().get(i).getFieldType(),
+                    TranslatableField.productName);
+        }
+        for (int i = 0; i < localizedCurrencyItemDtoList.size(); i++) {
+            assertEquals(productDto.getLocalizedCurrencyItem().get(i).getId(),
+                    localizedCurrencyItemDtoList.get(i).getId());
+        }
+    }
+
+    @Test
     public void testBuildShoppingListDto()
     {
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = new ArrayList<>();
