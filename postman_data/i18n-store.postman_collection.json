@@ -315,7 +315,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/2",
+					"raw": "{{localBasedUrl}}/api/admin/products/7",
 					"host": [
 						"{{localBasedUrl}}"
 					],
@@ -323,7 +323,7 @@
 						"api",
 						"admin",
 						"products",
-						"2"
+						"7"
 					]
 				}
 			},
@@ -357,7 +357,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n        \"id\": 1,\r\n        \"manufacturer\": \"LG\",\r\n        \"localizedInfo\": [\r\n            {\r\n                \"id\": 1,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"REAL 4K NANOCELL DISPLAY: Bring your favorite shows to life with vivid NanoCell. See natural, lifelike picture with Nano Color enhanced by a billion rich colors. - QUAD CORE PROCESSOR 4K: Our Quad Core Processor 4K gives you a smooth, crisp viewing experience with enhanced contrast, color and black\",\r\n                \"category\": \"electronic\",\r\n                \"currency\": \"$\",\r\n                \"price\": \"499.99\",\r\n                \"locale\": \"en\",\r\n                \"country\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"REAL 4K E PURE COLORS: Vivi un'esperienza di visione più brillante e definita grazie al Real 4K e ai colori puri NanoCell; con circa 8 milioni di pixel, le immagini sono visibilmente più nitide e particolareggiate rispetto a un TV HD qualsiasi. - PROCESSORE QUAD CORE 4K: Elimina il rumore delle immagini creando colori più vivaci e maggior contrasto; le immagini a bassa risoluzione vengono ottimizzate e riprodotte con una qualità simile al 4K\",\r\n                \"category\": \"elettronica\",\r\n                \"currency\": \"€\",\r\n                \"price\": \"499.99\",\r\n                \"locale\": \"it\",\r\n                \"country\": \"IT\"\r\n            }\r\n        ]\r\n}",
+					"raw": "{\r\n        \"id\": 1,\r\n        \"manufacturer\": \"LG\",\r\n        \"localizedTextualItemList\": [\r\n            {\r\n                \"id\": 1,\r\n                \"fieldType\": \"product_name\",\r\n                \"text\": \"LG NanoCell 43NANO756PA\",\r\n                \"languageCode\": \"en\",\r\n                \"countryCode\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"fieldType\": \"product_description\",\r\n                \"text\": \"REAL 4K NANOCELL DISPLAY: Bring your favorite shows to life with vivid NanoCell. See natural, lifelike picture with Nano Color enhanced by a billion rich colors. - QUAD CORE PROCESSOR 4K: Our Quad Core Processor 4K gives you a smooth, crisp viewing experience with enhanced contrast, color and black\",\r\n                \"languageCode\": \"en\",\r\n                \"countryCode\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 3,\r\n                \"fieldType\": \"product_category\",\r\n                \"text\": \"electronic\",\r\n                \"languageCode\": \"en\",\r\n                \"countryCode\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 4,\r\n                \"fieldType\": \"product_name\",\r\n                \"text\": \"LG NanoCell 43NANO756PA\",\r\n                \"languageCode\": \"it\",\r\n                \"countryCode\": \"IT\"\r\n            },\r\n            {\r\n                \"id\": 5,\r\n                \"fieldType\": \"product_description\",\r\n                \"text\": \"REAL 4K E PURE COLORS: Vivi un'esperienza di visione più brillante e definita grazie al Real 4K e ai colori puri NanoCell; con circa 8 milioni di pixel, le immagini sono visibilmente più nitide e particolareggiate rispetto a un TV HD qualsiasi. - PROCESSORE QUAD CORE 4K: Elimina il rumore delle immagini creando colori più vivaci e maggior contrasto; le immagini a bassa risoluzione vengono ottimizzate e riprodotte con una qualità simile al 4K\",\r\n                \"languageCode\": \"it\",\r\n                \"countryCode\": \"IT\"\r\n            },\r\n            {\r\n                \"id\": 6,\r\n                \"fieldType\": \"product_category\",\r\n                \"text\": \"elettronica\",\r\n                \"languageCode\": \"it\",\r\n                \"countryCode\": \"IT\"\r\n            }\r\n        ],\r\n        \"localizedCurrencyItem\": [\r\n            {\r\n                \"id\": 1,\r\n                \"fieldType\": \"product_price\",\r\n                \"currency\": \"€\",\r\n                \"price\": 499.99,\r\n                \"languageCode\": \"it\",\r\n                \"countryCode\": \"IT\"\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"fieldType\": \"product_price\",\r\n                \"currency\": \"$\",\r\n                \"price\": 499.99,\r\n                \"languageCode\": \"en\",\r\n                \"countryCode\": \"US\"\r\n            }\r\n        ]\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -407,7 +407,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n        \"id\": 10,\r\n        \"manufacturer\": \"LG\",\r\n        \"localizedInfo\": [\r\n            {\r\n                \"id\": 19,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"Edited\",\r\n                \"category\": \"electronic\",\r\n                \"currency\": \"$\",\r\n                \"price\": 499.99,\r\n                \"locale\": \"en\",\r\n                \"country\": \"US\"\r\n            },\r\n            {\r\n                \"id\": 20,\r\n                \"name\": \"LG NanoCell 43NANO756PA\",\r\n                \"description\": \"Modificata\",\r\n                \"category\": \"elettronica\",\r\n                \"currency\": \"€\",\r\n                \"price\": 499.99,\r\n                \"locale\": \"it\",\r\n                \"country\": \"IT\"\r\n            }\r\n        ]\r\n}",
+					"raw": "{\r\n    \"id\": 7,\r\n    \"manufacturer\": \"LG\",\r\n    \"localizedTextualItemList\": [\r\n        {\r\n            \"id\": 49,\r\n            \"fieldType\": \"product_name\",\r\n            \"languageCode\": \"en\",\r\n            \"countryCode\": \"US\",\r\n            \"text\": \"LG NanoCell 43NANO756PA\"\r\n        },\r\n        {\r\n            \"id\": 50,\r\n            \"fieldType\": \"product_description\",\r\n            \"languageCode\": \"en\",\r\n            \"countryCode\": \"US\",\r\n            \"text\": \"MODIFIED: REAL 4K NANOCELL DISPLAY: Bring your favorite shows to life with vivid NanoCell. See natural, lifelike picture with Nano Color enhanced by a billion rich colors. - QUAD CORE PROCESSOR 4K: Our Quad Core Processor 4K gives you a smooth, crisp viewing experience with enhanced contrast, color and black\"\r\n        },\r\n        {\r\n            \"id\": 51,\r\n            \"fieldType\": \"product_category\",\r\n            \"languageCode\": \"en\",\r\n            \"countryCode\": \"US\",\r\n            \"text\": \"electronic\"\r\n        },\r\n        {\r\n            \"id\": 52,\r\n            \"fieldType\": \"product_name\",\r\n            \"languageCode\": \"it\",\r\n            \"countryCode\": \"IT\",\r\n            \"text\": \"LG NanoCell 43NANO756PA\"\r\n        },\r\n        {\r\n            \"id\": 53,\r\n            \"fieldType\": \"product_description\",\r\n            \"languageCode\": \"it\",\r\n            \"countryCode\": \"IT\",\r\n            \"text\": \"MODIFICATO: REAL 4K E PURE COLORS: Vivi un'esperienza di visione più brillante e definita grazie al Real 4K e ai colori puri NanoCell; con circa 8 milioni di pixel, le immagini sono visibilmente più nitide e particolareggiate rispetto a un TV HD qualsiasi. - PROCESSORE QUAD CORE 4K: Elimina il rumore delle immagini creando colori più vivaci e maggior contrasto; le immagini a bassa risoluzione vengono ottimizzate e riprodotte con una qualità simile al 4K\"\r\n        },\r\n        {\r\n            \"id\": 54,\r\n            \"fieldType\": \"product_category\",\r\n            \"languageCode\": \"it\",\r\n            \"countryCode\": \"IT\",\r\n            \"text\": \"elettronica\"\r\n        }\r\n    ],\r\n    \"localizedCurrencyItem\": [\r\n        {\r\n            \"id\": 55,\r\n            \"fieldType\": \"product_price\",\r\n            \"languageCode\": \"it\",\r\n            \"countryCode\": \"IT\",\r\n            \"currency\": \"€\",\r\n            \"price\": 499.99\r\n        },\r\n        {\r\n            \"id\": 56,\r\n            \"fieldType\": \"product_price\",\r\n            \"languageCode\": \"en\",\r\n            \"countryCode\": \"US\",\r\n            \"currency\": \"$\",\r\n            \"price\": 499.99\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -456,7 +456,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/remove/1",
+					"raw": "{{localBasedUrl}}/api/admin/products/remove/7",
 					"host": [
 						"{{localBasedUrl}}"
 					],
@@ -465,7 +465,7 @@
 						"admin",
 						"products",
 						"remove",
-						"1"
+						"7"
 					]
 				}
 			},
