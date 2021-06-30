@@ -58,7 +58,7 @@ public class SearchEndpoint {
 
         if (userQuery == null || userQuery.isEmpty()) {
             logger.debug("User has requested an empty query");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         SearchEngine.SearchType searchType;
@@ -124,7 +124,7 @@ public class SearchEndpoint {
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Retrieve matching entities (fuzzy match by default)
@@ -151,7 +151,7 @@ public class SearchEndpoint {
             productDtoList.add(productDto);
         }
 
-        return Response.status(200).entity(productDtoList).build();
+        return Response.status(HttpResponse.ok).entity(productDtoList).build();
     }
 
     @GET
@@ -197,14 +197,14 @@ public class SearchEndpoint {
         Product product = productDao.getEntityById((long) productId);
         if (product == null) {
             logger.info("Unable to find requested product: " + productId);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get translation fields
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         logger.info("User has requested a search of products similar to: " + productId);
@@ -232,7 +232,7 @@ public class SearchEndpoint {
             productDtoList.add(productDto);
         }
 
-        return Response.status(200).entity(productDtoList).build();
+        return Response.status(HttpResponse.ok).entity(productDtoList).build();
     }
 
 

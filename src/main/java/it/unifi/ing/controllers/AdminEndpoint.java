@@ -74,7 +74,7 @@ public class AdminEndpoint {
             userDtoList.add(userDto);
         }
 
-        return Response.status(200).entity(userDtoList).build();
+        return Response.status(HttpResponse.ok).entity(userDtoList).build();
     }
 
     @GET
@@ -92,7 +92,7 @@ public class AdminEndpoint {
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get all products
@@ -104,11 +104,19 @@ public class AdminEndpoint {
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
                             p.getLocalizedItemList(), null, true);
+            if (localizedTextualItemDtos == null) {
+                logger.error("Unable to build localized textual item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Build localized currency dto
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(null, localizedFieldHandler.getProductPriceField(),
                             p.getLocalizedItemList(), true);
+            if (localizedCurrencyItemDtoList == null) {
+                logger.error("Unable to build localized currency item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildShortProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -116,7 +124,7 @@ public class AdminEndpoint {
             productDtoList.add(productDto);
         }
 
-        return Response.status(200).entity(productDtoList).build();
+        return Response.status(HttpResponse.ok).entity(productDtoList).build();
     }
 
     @GET
@@ -132,14 +140,14 @@ public class AdminEndpoint {
         Product product = productDao.getEntityById(productId);
         if (product == null) {
             logger.warn("Unable to find product with id: " + productId);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get translation fields for product
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Build localized textual item dto list
@@ -159,7 +167,7 @@ public class AdminEndpoint {
                 product.getProdManufacturer().getName(), localizedTextualItemDtos,
                 localizedCurrencyItemDtoList);
 
-        return Response.status(200).entity(productDto).build();
+        return Response.status(HttpResponse.ok).entity(productDto).build();
     }
 
     @POST
@@ -176,26 +184,26 @@ public class AdminEndpoint {
         String token = JWTUtil.extractBearerHeader(headers);
         if (token.isEmpty()) {
             logger.error("Empty bearer header");
-            return Response.status(401).build();
+            return Response.status(HttpResponse.unauthorized).build();
         }
         String username = JWTUtil.getUsernameFromToken(token);
         if (username == null) {
             logger.error("Cannot get username from token");
-            return Response.status(401).build();
+            return Response.status(HttpResponse.unauthorized).build();
         }
 
         // Get admin entity
         Admin admin = adminDao.getAdminByUsername(username);
         if (admin == null) {
             logger.error("Unable to retrieve user " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Check for product localizations
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
         if (localizedTextualItemDtoList.isEmpty()) {
             logger.error("Sent product does not contain any localization info");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         // Retrieve available locales
@@ -207,13 +215,13 @@ public class AdminEndpoint {
         // Check dto fields
         if (checkInvalidProductDtoFields(productDto, localeList, currencyList)) {
             logger.error("Sent product contains invalid fields");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
         // Check for manufacturers in dto
         if (manufacturer == null) {
             if (productDto.getManufacturer().isEmpty()) {
                 logger.error("Manufacturer can not be empty");
-                return Response.status(404).build();
+                return Response.status(HttpResponse.badRequest).build();
             }
             // Create new one
             logger.info("The following non-existing manufacturer will be created: " +
@@ -229,7 +237,7 @@ public class AdminEndpoint {
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Create product
@@ -237,14 +245,14 @@ public class AdminEndpoint {
                 localizedFieldHandler.getProductLocalizedFieldList());
         if (product == null) {
             logger.error("Unable to build requested product");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         productDao.addEntity(product);
 
         logger.info("Persisted a new product with id: " + product.getId());
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     /**
@@ -269,26 +277,26 @@ public class AdminEndpoint {
         String token = JWTUtil.extractBearerHeader(headers);
         if (token.isEmpty()) {
             logger.error("Empty bearer header");
-            return Response.status(401).build();
+            return Response.status(HttpResponse.unauthorized).build();
         }
         String username = JWTUtil.getUsernameFromToken(token);
         if (username == null) {
             logger.error("Cannot get username from token");
-            return Response.status(401).build();
+            return Response.status(HttpResponse.unauthorized).build();
         }
 
         // Check for valid product
         Product product = productDao.getEntityById(productDto.getId());
         if (product == null) {
             logger.error("Unable to retrieve product with id: " + productDto.getId());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get admin entity
         Admin admin = adminDao.getAdminByUsername(username);
         if (admin == null) {
             logger.error("Unable to retrieve user " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         List<LocalizedItem> localizedItemList = product.getLocalizedItemList();
@@ -305,13 +313,13 @@ public class AdminEndpoint {
         // Check for valid textual product localizations
         if (localizedTextualItemList.isEmpty()) {
             logger.error("Empty textual localization list for product with id: " + productDto.getId());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         // Check for valid product currencies
         if (localizedCurrencyItemList.isEmpty()) {
             logger.error("Empty currency localization list for product with id: " + productDto.getId());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         // Retrieve available locales
@@ -323,13 +331,13 @@ public class AdminEndpoint {
         // Check dto fields
         if (checkInvalidProductDtoFields(productDto, localeList, currencyList)) {
             logger.error("Sent product contains invalid fields");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
         // Check for manufacturers in dto
         if (manufacturer == null) {
             if (productDto.getManufacturer().isEmpty()) {
                 logger.error("Manufacturer can not be empty");
-                return Response.status(404).build();
+                return Response.status(HttpResponse.badRequest).build();
             }
             // Create new one
             logger.info("The following non-existing manufacturer will be created: " +
@@ -347,20 +355,20 @@ public class AdminEndpoint {
         // Check that the sent textual localizations have the same id of the persisted one
         if (UtilsDto.checkForInvalidDtoTextualLocalization(localizedTextualItemList, localizedTextualItemDtoList)) {
             logger.error("Sent product contains an invalid textual localization identifier");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         // Check that the sent currency localizations have the same id of the persisted one
         if (UtilsDto.checkForInvalidDtoCurrencyLocalization(localizedCurrencyItemList, localizedCurrencyItemDtoList)) {
             logger.error("Sent product contains an invalid currency localization identifier");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         // Get translation fields for product
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Edit product
@@ -370,14 +378,14 @@ public class AdminEndpoint {
 
         if (product == null) {
             logger.error("Error editing product");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.badRequest).build();
         }
 
         productDao.updateEntity(product);
 
         logger.info("Edited product with id: " + product.getId());
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @DELETE
@@ -391,7 +399,7 @@ public class AdminEndpoint {
         Product product = productDao.getEntityById(productId);
         if (product == null) {
             logger.error("Invalid product identifier");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Remove cart products references
@@ -414,7 +422,7 @@ public class AdminEndpoint {
 
         logger.info("Removed product with id: " + product.getId());
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @GET
@@ -434,7 +442,7 @@ public class AdminEndpoint {
             localeDtoList.add(localeDto);
         }
 
-        return Response.status(200).entity(localeDtoList).build();
+        return Response.status(HttpResponse.ok).entity(localeDtoList).build();
     }
 
     @POST
@@ -455,7 +463,7 @@ public class AdminEndpoint {
 
         logger.info("Persisted a new locale with id: " + locale.getId());
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @GET
@@ -474,7 +482,7 @@ public class AdminEndpoint {
             manufacturerDtoList.add(manufacturerDto);
         }
 
-        return Response.status(200).entity(manufacturerDtoList).build();
+        return Response.status(HttpResponse.ok).entity(manufacturerDtoList).build();
     }
 
     @POST
@@ -495,7 +503,7 @@ public class AdminEndpoint {
 
         logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @GET
@@ -515,7 +523,7 @@ public class AdminEndpoint {
             currencyDtoList.add(currencyDto);
         }
 
-        return Response.status(200).entity(currencyDtoList).build();
+        return Response.status(HttpResponse.ok).entity(currencyDtoList).build();
     }
 
     @POST
@@ -535,7 +543,7 @@ public class AdminEndpoint {
 
         logger.info("Persisted a new currency with id: " + currency.getId());
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     private boolean checkInvalidProductDtoFields(ProductDto productDto, List<Locale> localeList,

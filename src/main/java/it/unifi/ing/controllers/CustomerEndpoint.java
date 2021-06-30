@@ -52,7 +52,7 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         List<ProductDto> productDtoList = new ArrayList<>();
 
@@ -60,13 +60,13 @@ public class CustomerEndpoint {
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user locale
         Locale locale = customer.getUserLocale();
         if (locale == null) {
             logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         logger.info("Customer " + customer.getMail() + " has requested the product list. Language: " +
@@ -75,7 +75,7 @@ public class CustomerEndpoint {
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get all products
@@ -87,11 +87,19 @@ public class CustomerEndpoint {
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
                             p.getLocalizedItemList(), locale, false);
+            if (localizedTextualItemDtos == null) {
+                logger.error("Unable to build localized textual item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Build localized currency dto list
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
                             p.getLocalizedItemList(), false);
+            if (localizedCurrencyItemDtoList == null) {
+                logger.error("Unable to build localized currency item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Create product dto
             ProductDto productDto = DtoFactory.buildShortProductDto(p.getId(), p.getProdManufacturer().getName(),
@@ -99,7 +107,7 @@ public class CustomerEndpoint {
             productDtoList.add(productDto);
         }
 
-        return Response.status(200).entity(productDtoList).build();
+        return Response.status(HttpResponse.ok).entity(productDtoList).build();
     }
 
     @GET
@@ -114,25 +122,25 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         // Get user
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user locale
         Locale locale = customer.getUserLocale();
         if (locale == null) {
             logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get all localized products by product id
         Product product = productDao.getEntityById(productId);
         if (product == null) {
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         logger.info("Customer " + customer.getMail() + " has requested the product id: " +
@@ -142,7 +150,7 @@ public class CustomerEndpoint {
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Build localized textual item dto list
@@ -162,7 +170,7 @@ public class CustomerEndpoint {
                 product.getProdManufacturer().getName(), localizedTextualItemDtos,
                 localizedCurrencyItemDtoList);
 
-        return Response.status(200).entity(productDto).build();
+        return Response.status(HttpResponse.ok).entity(productDto).build();
     }
 
     @GET
@@ -176,33 +184,33 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         List<ProductDto> cartProducts = new ArrayList<>();
 
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user locale
         Locale locale = customer.getUserLocale();
         if (locale == null) {
             logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
             logger.error("Unable to retrieve shopping cart for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get localized fields of interest for products (name, description, category)
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get products
@@ -217,11 +225,19 @@ public class CustomerEndpoint {
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
                             product.getLocalizedItemList(), locale, false);
+            if (localizedTextualItemDtos == null) {
+                logger.error("Unable to build localized textual item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Build localized currency dto list
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
                             product.getLocalizedItemList(), false);
+            if (localizedCurrencyItemDtoList == null) {
+                logger.error("Unable to build localized currency item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             for (LocalizedCurrencyItemDto ltiDto : localizedCurrencyItemDtoList) {
                 if (ltiDto.getLanguageCode().equals(locale.getLanguageCode()) &&
@@ -240,7 +256,7 @@ public class CustomerEndpoint {
         ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(shoppingCart.getId(),
                 cartProducts, totalCost);
 
-        return Response.status(200).entity(shoppingCartDto).build();
+        return Response.status(HttpResponse.ok).entity(shoppingCartDto).build();
     }
 
     @POST
@@ -254,19 +270,19 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
             logger.error("Unable to retrieve shopping cart for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get products
@@ -274,7 +290,7 @@ public class CustomerEndpoint {
         Product newProduct = productDao.getEntityById(productId);
         if (newProduct == null) {
             logger.error("Unable to retrieve product id: " + productId);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         CartProduct newCartProduct = ModelFactory.cartProduct();
         newCartProduct.setProduct(newProduct);
@@ -287,7 +303,7 @@ public class CustomerEndpoint {
 
         logger.info("User " + username + " has added to its cart the product id: " + productId);
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @POST
@@ -301,19 +317,19 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
             logger.error("Unable to retrieve shopping cart for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get products
@@ -331,7 +347,7 @@ public class CustomerEndpoint {
         if (!productFound) {
             logger.warn("User " + username + " has requested to remove non-existent" +
                     "product [" + productId + "] from its cart");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         cartProductList.remove(removeIdx);
@@ -342,7 +358,7 @@ public class CustomerEndpoint {
 
         logger.info("User " + username + " has removed from its cart the product id: " + productId);
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @POST
@@ -355,24 +371,24 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user shopping cart
         ShoppingCart shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
             logger.error("Unable to retrieve shopping cart for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user shopping list
         ShoppingList shoppingList = customer.getShoppingList();
         if (shoppingList == null) {
             logger.error("Unable to retrieve shopping list for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get already purchased products
@@ -382,7 +398,7 @@ public class CustomerEndpoint {
         List<CartProduct> cartProductList = shoppingCart.getCartProductList();
         if (cartProductList.size() == 0) {
             logger.info("User " + username + " has requested checkout with empty shopping cart");
-            return Response.status(200).build();
+            return Response.status(HttpResponse.ok).build();
         }
 
         for (CartProduct pc : cartProductList) {
@@ -403,7 +419,7 @@ public class CustomerEndpoint {
 
         logger.info("User " + username + " has performed products checkout");
 
-        return Response.status(200).build();
+        return Response.status(HttpResponse.ok).build();
     }
 
     @GET
@@ -417,33 +433,33 @@ public class CustomerEndpoint {
 
         // Get username from token
         String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(401).build(); }
+        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         List<ProductDto> purchasedProducts = new ArrayList<>();
 
         Customer customer = customerDao.getCustomerByUsername(username);
         if (customer == null) {
             logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user locale
         Locale locale = customer.getUserLocale();
         if (locale == null) {
             logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
         // Get user shopping list
         ShoppingList shoppingList = customer.getShoppingList();
         if (shoppingList == null) {
             logger.error("Unable to retrieve shopping list for user " + customer.getMail());
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get localized fields of interest for products (name, description, category)
         List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
         if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
             logger.error("Requested translation for a non configured field");
-            return Response.status(404).build();
+            return Response.status(HttpResponse.notFound).build();
         }
 
         // Get products
@@ -457,11 +473,19 @@ public class CustomerEndpoint {
                             localizedFieldHandler.getProductDescriptionField(),
                             localizedFieldHandler.getProductCategoryField(),
                             product.getLocalizedItemList(), locale, false);
+            if (localizedTextualItemDtos == null) {
+                logger.error("Unable to build localized textual item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Build localized currency dto list
             List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
                     .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
                             product.getLocalizedItemList(), false);
+            if (localizedCurrencyItemDtoList == null) {
+                logger.error("Unable to build localized currency item dto list");
+                return Response.status(HttpResponse.internalServerError).build();
+            }
 
             // Build product dto
             ProductDto productDto = DtoFactory.buildShortProductDto(product.getId(),
@@ -472,7 +496,7 @@ public class CustomerEndpoint {
 
         ShoppingListDto shoppingListDto = DtoFactory.buildShoppingListDto(shoppingList.getId(), purchasedProducts);
 
-        return Response.status(200).entity(shoppingListDto).build();
+        return Response.status(HttpResponse.ok).entity(shoppingListDto).build();
     }
 
     private String getUsernameFromToken(HttpHeaders headers)
