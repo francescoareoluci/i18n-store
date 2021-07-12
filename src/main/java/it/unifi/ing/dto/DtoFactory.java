@@ -74,12 +74,14 @@ public class DtoFactory {
         return localeDto;
     }
 
-    public static ShoppingCartDto buildShoppingCartDto(Long id, List<ProductDto> productDtoList, float totalCost)
+    public static ShoppingCartDto buildShoppingCartDto(Long id, List<ProductDto> productDtoList, float totalCost,
+                                                       String costCurrency)
     {
         ShoppingCartDto shoppingCartDto = new ShoppingCartDto();
         shoppingCartDto.setId(id);
         shoppingCartDto.setCartProducts(productDtoList);
         shoppingCartDto.setTotalCost(totalCost);
+        shoppingCartDto.setCostCurrency(costCurrency);
 
         return shoppingCartDto;
     }

@@ -350,7 +350,7 @@ public class AdminEndpoint {
         }
 
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
-        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
+        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItemList();
 
         // Check that the sent textual localizations have the same id of the persisted one
         if (UtilsDto.checkForInvalidDtoTextualLocalization(localizedTextualItemList, localizedTextualItemDtoList)) {
@@ -563,7 +563,7 @@ public class AdminEndpoint {
         }
 
         // Check for product localizations
-        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
+        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItemList();
         if (localizedCurrencyItemDtoList.isEmpty()) {
             logger.error("Sent product does not contain any currency localization info");
             return true;

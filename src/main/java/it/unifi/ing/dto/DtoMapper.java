@@ -126,7 +126,7 @@ public class DtoMapper {
                                        List<LocalizedField> localizedFieldList)
     {
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
-        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItem();
+        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = productDto.getLocalizedCurrencyItemList();
 
         Product product = ModelFactory.product();
         product.setProdManufacturer(manufacturer);

@@ -15,7 +15,7 @@ public class ProductDto extends BaseDto {
     {
         return this.localizedTextualItemList;
     }
-    public List<LocalizedCurrencyItemDto> getLocalizedCurrencyItem()
+    public List<LocalizedCurrencyItemDto> getLocalizedCurrencyItemList()
     {
         return this.localizedCurrencyItemList;
     }

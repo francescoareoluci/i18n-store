@@ -51,7 +51,7 @@ public class JWTUtil {
         Date expirationDate = new Date(expMs);
         builder.setExpiration(expirationDate);
 
-        //Builds the JWT and serializes it to a compact, URL-safe string
+        // Builds the JWT and serializes it to a compact, URL-safe string
         return builder.compact();
     }
 

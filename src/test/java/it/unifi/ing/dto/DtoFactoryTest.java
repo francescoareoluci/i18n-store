@@ -100,7 +100,7 @@ public class DtoFactoryTest {
                     localizedTextualItemDtoList.get(i).getId());
         }
         for (int i = 0; i < localizedCurrencyItemDtoList.size(); i++) {
-            assertEquals(productDto.getLocalizedCurrencyItem().get(i).getId(),
+            assertEquals(productDto.getLocalizedCurrencyItemList().get(i).getId(),
                     localizedCurrencyItemDtoList.get(i).getId());
         }
     }
@@ -130,7 +130,7 @@ public class DtoFactoryTest {
                     TranslatableField.productName);
         }
         for (int i = 0; i < localizedCurrencyItemDtoList.size(); i++) {
-            assertEquals(productDto.getLocalizedCurrencyItem().get(i).getId(),
+            assertEquals(productDto.getLocalizedCurrencyItemList().get(i).getId(),
                     localizedCurrencyItemDtoList.get(i).getId());
         }
     }
@@ -179,14 +179,18 @@ public class DtoFactoryTest {
                 localizedTextualItemDtoList, localizedCurrencyItemDtoList);
 
         float totalCost = 0;
+        String costCurrency = "";
         for (LocalizedCurrencyItemDto l : localizedCurrencyItemDtoList) {
             totalCost += l.getPrice();
         }
 
+        costCurrency = localizedCurrencyItemDtoList.get(0).getCurrency();
+
         List<ProductDto> productDtoList = new ArrayList<>();
         productDtoList.add(productDto);
 
-        ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(10L, productDtoList, totalCost);
+        ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(10L, productDtoList, totalCost,
+                                                                            costCurrency);
 
         assertEquals(shoppingCartDto.getId(), 10L, 0);
         for (int i = 0; i < productDtoList.size(); i++) {

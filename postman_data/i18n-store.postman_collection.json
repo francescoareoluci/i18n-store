@@ -210,17 +210,6 @@
 		},
 		{
 			"name": "AdminShowUsers",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -315,7 +304,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/7",
+					"raw": "{{localBasedUrl}}/api/admin/products/1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
@@ -323,7 +312,7 @@
 						"api",
 						"admin",
 						"products",
-						"7"
+						"1"
 					]
 				}
 			},

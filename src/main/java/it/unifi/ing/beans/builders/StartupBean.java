@@ -135,8 +135,8 @@ public class StartupBean {
                 "4 x 1 porte gigabit ethernet: connetti computer, console, lettori streaming e" +
                 "ogni altro dispositivo wired.", prod3, locale1, lf2));
         prod3LocalizedItems.add(buildLocalizedTextualItem("elettronica", prod3, locale1, lf3));
-        prod3LocalizedItems.add(buildLocalizedCurrencyItem(currency1, 149.99f, prod4, locale1, lf4));
-        prod3LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 149.99f, prod4, locale2, lf4));
+        prod3LocalizedItems.add(buildLocalizedCurrencyItem(currency1, 149.99f, prod3, locale1, lf4));
+        prod3LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 149.99f, prod3, locale2, lf4));
 
         List<LocalizedItem> prod4LocalizedItems = new ArrayList<>();
         prod4LocalizedItems.add(buildLocalizedTextualItem("Blue Yeti USB Mic", prod4, locale2, lf1));

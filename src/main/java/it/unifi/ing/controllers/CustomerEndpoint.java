@@ -216,6 +216,7 @@ public class CustomerEndpoint {
         // Get products
         List<CartProduct> cartProductList = shoppingCart.getCartProductList();
         float totalCost = 0;
+        String costCurrency = "";
         for (CartProduct p : cartProductList) {
             Product product = p.getProduct();
 
@@ -239,6 +240,12 @@ public class CustomerEndpoint {
                 return Response.status(HttpResponse.internalServerError).build();
             }
 
+            if (!localizedCurrencyItemDtoList.isEmpty()) {
+                // Here we assume that all the items in this list have
+                // the same currency. Takes the first one
+                costCurrency = localizedCurrencyItemDtoList.get(0).getCurrency();
+            }
+
             for (LocalizedCurrencyItemDto ltiDto : localizedCurrencyItemDtoList) {
                 if (ltiDto.getLanguageCode().equals(locale.getLanguageCode()) &&
                         ltiDto.getCountryCode().equals(locale.getCountryCode())) {
@@ -254,7 +261,7 @@ public class CustomerEndpoint {
         }
 
         ShoppingCartDto shoppingCartDto = DtoFactory.buildShoppingCartDto(shoppingCart.getId(),
-                cartProducts, totalCost);
+                cartProducts, totalCost, costCurrency);
 
         return Response.status(HttpResponse.ok).entity(shoppingCartDto).build();
     }
