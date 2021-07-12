@@ -8,6 +8,7 @@ import it.unifi.ing.model.ModelFactory;
 import it.unifi.ing.security.*;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -35,6 +36,7 @@ public class AuthEndpoint {
     @GET
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     public Response login(@Context HttpHeaders headers)
     {
         logger.debug("Login requested");
@@ -71,7 +73,7 @@ public class AuthEndpoint {
             logger.info("User " + username + " is a valid customer. Sending JWT with id: " + jwtId);
 
             String token = JWTUtil.createJWT(jwtId, "i18n-store", username,
-                    String.valueOf(UserRole.CUSTOMER));
+                    String.valueOf(UserRole.CUSTOMER), loggedCustomer.getUserLocale().getLanguageCode());
             return Response.ok().entity(token).build();
         }
 
@@ -85,7 +87,7 @@ public class AuthEndpoint {
             logger.info("User " + username + " is a valid administrator. Sending JWT with id: " + jwtId);
 
             String token = JWTUtil.createJWT(jwtId, "i18n-store", username,
-                    String.valueOf(UserRole.ADMIN));
+                    String.valueOf(UserRole.ADMIN), "en");
             return Response.ok().entity(token).build();
         }
 

@@ -188,7 +188,7 @@ public class StartupBean {
         prod5LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 651.94f, prod5, locale2, lf4));
 
         List<LocalizedItem> prod6LocalizedItems = new ArrayList<>();
-        prod6LocalizedItems.add(buildLocalizedTextualItem("Bose QuietComfort 35 II", prod5, locale2, lf1));
+        prod6LocalizedItems.add(buildLocalizedTextualItem("Bose QuietComfort 35 II", prod6, locale2, lf1));
         prod6LocalizedItems.add(buildLocalizedTextualItem("What happens " +
                 "when you clear away the noisy distractions of the world? Concentration " +
                 "goes to the next level. You get deeper into your music, your work, " +
