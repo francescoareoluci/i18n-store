@@ -10,3 +10,5 @@ The project is based on the following technologies:
 * Hibernate-Search
 * JWT
 * JUnit
+
+A demo frontend application is available here: https://github.com/francescoareoluci/i18n-store-frontend
