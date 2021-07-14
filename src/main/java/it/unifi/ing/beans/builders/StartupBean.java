@@ -79,6 +79,9 @@ public class StartupBean {
         Product prod4 = buildProduct(user2, manufacturer4);
         Product prod5 = buildProduct(user2, manufacturer2);
         Product prod6 = buildProduct(user1, manufacturer5);
+        Product prod7 = buildProduct(user2, manufacturer6);
+        Product prod8 = buildProduct(user1, manufacturer7);
+        Product prod9 = buildProduct(user1, manufacturer8);
 
         LocalizedField lf1 = buildLocalizedField(TranslatableField.productName);
         LocalizedField lf2 = buildLocalizedField(TranslatableField.productDescription);
@@ -212,55 +215,74 @@ public class StartupBean {
         prod6LocalizedItems.add(buildLocalizedCurrencyItem(currency1, 299.99f, prod6, locale1, lf4));
         prod6LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 299.99f, prod6, locale2, lf4));
 
-
-
-        /*
-        LocalizedProduct lc13 = buildLocalizedProduct("Sennheiser HD 599 SE", "The Sennheiser " +
-                "HD 599 Special Edition pushes performance barriers. It’s a premium headphone" +
+        List<LocalizedItem> prod7LocalizedItems = new ArrayList<>();
+        prod7LocalizedItems.add(buildLocalizedTextualItem("Sennheiser HD 599 SE", prod7, locale2, lf1));
+        prod7LocalizedItems.add(buildLocalizedTextualItem("HD 599 Special Edition " +
+                "pushes performance barriers. It’s a premium headphone" +
                 " for those seeking timeless design and build quality along with exceptional sound. " +
                 "Powered by Sennheiser proprietary transducer technology and featuring the 'Ergonomic " +
                 "Acoustic Refinement' (E.A.R) design, the HD 599 Special Edition represents a step into the " +
                 "world of audiophile sound reproduction. This open back, around ear headphone delivers a " +
                 "natural tonal balance featuring exceptional detail and definition with " +
-                "outstanding spatial performance.", "audio", locale2, prod7, currency1, (float)199.99);
-        LocalizedProduct lc14 = buildLocalizedProduct("Sennheiser HD 599 SE", "La best in class, " +
-                        "rimasterizzata: Sennheiser HD 599 Special Edition infrange le barriere delle prestazioni. " +
-                        "È una cuffia premium per coloro che ricercano un suono sofisticato, " +
-                        "design e qualità costruttiva. Con la potenza dei trasduttori di tecnologia " +
-                        "Sennheiser e con design “Ergonomic Acoustic Refinement” (E.A.R), la HD 599 Special " +
-                        "Edition rappresenta il primo approccio nel mondo della riproduzione da audiofili. " +
-                        "Questa cuffia aperta circumaurale garantisce un bilanciamento naturale dei toni, un " +
-                        "dettaglio eccezionale ed una performance spaziale senza precedenti.", "audio", locale1, prod7,
-                currency2, (float)199.99);
-        LocalizedProduct lc15 = buildLocalizedProduct("Tommy Hilfiger Men's Core Logo T-Shirt",
-                "The Core Logo T-Shirt from Tommy Hilfiger comes in Jet Black colour, featuring a crew " +
-                        "neck and short sleeves. Being 100% Organic - excluding trims, this t-shirt for men sports " +
-                        "large embroidered logo on front and small logo on left sleeve. - " +
-                        "100% Cotton - Machine Wash",
-                "fashion", locale2, prod8, currency1, (float)34.99);
-        LocalizedProduct lc16 = buildLocalizedProduct("Tommy Hilfiger Core Tommy Logo Tee Maglietta Uomo",
-                "La t-shirt Core Logo di Tommy Hilfiger è disponibile in colore Jet Black, " +
-                        "con girocollo e maniche corte. Essendo 100% organica - escluse le finiture, " +
-                        "questa t-shirt da uomo sfoggia un grande logo ricamato sul davanti e un " +
-                        "piccolo logo sulla manica sinistra. - 100% Cotone - Lavabile " +
-                        "in lavatrice", "moda", locale1, prod8, currency2, (float)29.99);
-        LocalizedProduct lc17 = buildLocalizedProduct("Lacoste Men's Short Sleeve",
-                "Symbol of relaxed elegance since 1933, the Lacoste brand, backed by its " +
-                        "authentic roots in sports, offers a unique and original universe " +
-                        "through the medium of a large range of products for men, women and children. " +
-                        "In the 114 countries where the brand is present with a selective " +
-                        "distribution network, every second two Lacoste products are sold: " +
-                        "apparel including the famous l.12.12 polo, leather goods, " +
-                        "fragrances, footwear, eyewear, watches.", "fashion", locale2, prod9,
-                currency1, (float)49.99);
-        LocalizedProduct lc18 = buildLocalizedProduct("Lacoste Polo T-Shirt Uomo", "Simbolo di " +
-                        "eleganza dal 1933, il marchio Lacoste, forte delle sue autentiche radici nello sport, offre" +
-                        "un universo unico e originale attraverso un'ampia gamma di prodotti per uomo, donna e bambino. " +
-                        "Nei 114 paesi in cui il marchio è presente con una rete di distribuzione selettiva, " +
-                        "ogni secondo vengono venduti due prodotti Lacoste: abbigliamento tra cui la famosa polo l.12.12, " +
-                        "pelletteria, profumi, calzature, occhiali, orologi.","moda", locale1, prod9,
-                currency2, (float)49.99);
-    */
+                "outstanding spatial performance.", prod7, locale2, lf2));
+        prod7LocalizedItems.add(buildLocalizedTextualItem("audio", prod7, locale2, lf3));
+        prod7LocalizedItems.add(buildLocalizedTextualItem("Sennheiser HD 599 SE", prod7, locale1, lf1));
+        prod7LocalizedItems.add(buildLocalizedTextualItem( "La best in class, " +
+                "rimasterizzata: Sennheiser HD 599 Special Edition infrange le barriere delle prestazioni. " +
+                "È una cuffia premium per coloro che ricercano un suono sofisticato, " +
+                "design e qualità costruttiva. Con la potenza dei trasduttori di tecnologia " +
+                "Sennheiser e con design “Ergonomic Acoustic Refinement” (E.A.R), la HD 599 Special " +
+                "Edition rappresenta il primo approccio nel mondo della riproduzione da audiofili. " +
+                "Questa cuffia aperta circumaurale garantisce un bilanciamento naturale dei toni, un " +
+                "dettaglio eccezionale ed una performance spaziale senza precedenti.", prod7, locale1, lf2));
+        prod7LocalizedItems.add(buildLocalizedTextualItem("audio", prod7, locale1, lf3));
+        prod7LocalizedItems.add(buildLocalizedCurrencyItem(currency1, 199.99f, prod7, locale1, lf4));
+        prod7LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 199.99f, prod7, locale2, lf4));
+
+        List<LocalizedItem> prod8LocalizedItems = new ArrayList<>();
+        prod8LocalizedItems.add(buildLocalizedTextualItem("Tommy Hilfiger Men's Core Logo T-Shirt",
+                prod8, locale2, lf1));
+        prod8LocalizedItems.add(buildLocalizedTextualItem("The Core Logo T-Shirt from Tommy Hilfiger comes in " +
+                "Jet Black colour, featuring a crew " +
+                "neck and short sleeves. Being 100% Organic - excluding trims, this t-shirt for men sports " +
+                "large embroidered logo on front and small logo on left sleeve. - " +
+                "100% Cotton - Machine Wash", prod8, locale2, lf2));
+        prod8LocalizedItems.add(buildLocalizedTextualItem("fashion", prod8, locale2, lf3));
+        prod8LocalizedItems.add(buildLocalizedTextualItem("Tommy Hilfiger Core Tommy Logo Tee Maglietta Uomo",
+                prod8, locale1, lf1));
+        prod8LocalizedItems.add(buildLocalizedTextualItem( "La t-shirt Core Logo di Tommy Hilfiger è " +
+                "disponibile in colore Jet Black, " +
+                "con girocollo e maniche corte. Essendo 100% organica - escluse le finiture, " +
+                "questa t-shirt da uomo sfoggia un grande logo ricamato sul davanti e un " +
+                "piccolo logo sulla manica sinistra. - 100% Cotone - Lavabile " +
+                "in lavatrice", prod8, locale1, lf2));
+        prod8LocalizedItems.add(buildLocalizedTextualItem("moda", prod8, locale1, lf3));
+        prod8LocalizedItems.add(buildLocalizedCurrencyItem(currency1, 29.99f, prod8, locale1, lf4));
+        prod8LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 34.99f, prod8, locale2, lf4));
+
+        List<LocalizedItem> prod9LocalizedItems = new ArrayList<>();
+        prod9LocalizedItems.add(buildLocalizedTextualItem("Lacoste Men's Short Sleeve",
+                prod9, locale2, lf1));
+        prod9LocalizedItems.add(buildLocalizedTextualItem("Symbol of relaxed elegance since 1933, the " +
+                "Lacoste brand, backed by its " +
+                "authentic roots in sports, offers a unique and original universe " +
+                "through the medium of a large range of products for men, women and children. " +
+                "In the 114 countries where the brand is present with a selective " +
+                "distribution network, every second two Lacoste products are sold: " +
+                "apparel including the famous l.12.12 polo, leather goods, " +
+                "fragrances, footwear, eyewear, watches.", prod9, locale2, lf2));
+        prod9LocalizedItems.add(buildLocalizedTextualItem("fashion", prod9, locale2, lf3));
+        prod9LocalizedItems.add(buildLocalizedTextualItem("Lacoste Polo T-Shirt Uomo",
+                prod9, locale1, lf1));
+        prod9LocalizedItems.add(buildLocalizedTextualItem(  "Simbolo di " +
+                "eleganza dal 1933, il marchio Lacoste, forte delle sue autentiche radici nello sport, offre" +
+                "un universo unico e originale attraverso un'ampia gamma di prodotti per uomo, donna e bambino. " +
+                "Nei 114 paesi in cui il marchio è presente con una rete di distribuzione selettiva, " +
+                "ogni secondo vengono venduti due prodotti Lacoste: abbigliamento tra cui la famosa polo l.12.12, " +
+                "pelletteria, profumi, calzature, occhiali, orologi.", prod9, locale1, lf2));
+        prod9LocalizedItems.add(buildLocalizedTextualItem("moda", prod9, locale1, lf3));
+        prod9LocalizedItems.add(buildLocalizedCurrencyItem(currency1, 49.99f, prod9, locale1, lf4));
+        prod9LocalizedItems.add(buildLocalizedCurrencyItem(currency2, 49.99f, prod9, locale2, lf4));
 
         prod1.setLocalizedItemList(prod1LocalizedItems);
         prod2.setLocalizedItemList(prod2LocalizedItems);
@@ -268,6 +290,9 @@ public class StartupBean {
         prod4.setLocalizedItemList(prod4LocalizedItems);
         prod5.setLocalizedItemList(prod5LocalizedItems);
         prod6.setLocalizedItemList(prod6LocalizedItems);
+        prod7.setLocalizedItemList(prod7LocalizedItems);
+        prod8.setLocalizedItemList(prod8LocalizedItems);
+        prod9.setLocalizedItemList(prod9LocalizedItems);
 
         PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
 
@@ -305,6 +330,9 @@ public class StartupBean {
         productDao.addEntity(prod4);
         productDao.addEntity(prod5);
         productDao.addEntity(prod6);
+        productDao.addEntity(prod7);
+        productDao.addEntity(prod8);
+        productDao.addEntity(prod9);
         shoppingCartDao.addEntity(sc1);
         shoppingCartDao.addEntity(sc2);
         shoppingListDao.addEntity(sl1);
