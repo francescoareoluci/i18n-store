@@ -72,7 +72,7 @@ public class AuthEndpoint {
             String jwtId = UUID.randomUUID().toString();
             logger.info("User " + username + " is a valid customer. Sending JWT with id: " + jwtId);
 
-            String token = JWTUtil.createJWT(jwtId, "i18n-store", username,
+            String token = JWTUtil.createJWT(jwtId, "i18n-store", username, loggedCustomer.getId(),
                     String.valueOf(UserRole.CUSTOMER), loggedCustomer.getUserLocale().getLanguageCode());
             return Response.ok().entity(token).build();
         }
@@ -86,7 +86,7 @@ public class AuthEndpoint {
             String jwtId = UUID.randomUUID().toString();
             logger.info("User " + username + " is a valid administrator. Sending JWT with id: " + jwtId);
 
-            String token = JWTUtil.createJWT(jwtId, "i18n-store", username,
+            String token = JWTUtil.createJWT(jwtId, "i18n-store", username, loggedAdmin.getId(),
                     String.valueOf(UserRole.ADMIN), "en");
             return Response.ok().entity(token).build();
         }

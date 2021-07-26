@@ -10,7 +10,7 @@ public class JWTUtilTest {
     @Test
     public void testGetUsernameFromToken()
     {
-        String token = JWTUtil.createJWT("1", "i18n-store", "m.r@example.com", "ADMIN", "en");
+        String token = JWTUtil.createJWT("1", "i18n-store", "m.r@example.com", 123L,"ADMIN", "en");
 
         assertEquals("m.r@example.com", JWTUtil.getUsernameFromToken(token));
     }
@@ -18,7 +18,7 @@ public class JWTUtilTest {
     @Test
     public void testGetRoleFromToken()
     {
-        String token = JWTUtil.createJWT("1", "i18n-store", "m.r@example.com", "ADMIN", "en");
+        String token = JWTUtil.createJWT("1", "i18n-store", "m.r@example.com", 123L,"ADMIN", "en");
 
         assertEquals("ADMIN", JWTUtil.getUserRoleFromToken(token));
     }
@@ -26,7 +26,7 @@ public class JWTUtilTest {
     @Test
     public void testExtractClaimsFromToken()
     {
-        String token = JWTUtil.createJWT("1", "i18n-store", "m.r@example.com", "ADMIN", "en");
+        String token = JWTUtil.createJWT("1", "i18n-store", "m.r@example.com", 123L,"ADMIN", "en");
         Claims claims = JWTUtil.extractClaimsFromToken(token);
 
         assertEquals("ADMIN", claims.get("userRole"));

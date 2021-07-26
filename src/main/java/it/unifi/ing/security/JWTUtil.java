@@ -22,7 +22,8 @@ public class JWTUtil {
     private static final String key = "i18n-store-private-key";
     private static final long ttlMs = 600 * 1000;
 
-    public static String createJWT(String id, String issuer, String subject, String role, String language) {
+    public static String createJWT(String id, String issuer, String subject,
+                                   Long userId, String role, String language) {
 
         // Signature algorithm (HMAC + SHA256)
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -41,6 +42,7 @@ public class JWTUtil {
         claimList.put("issuer", issuer);
         claimList.put("userRole", role);
         claimList.put("lang", language);
+        claimList.put("userId", String.valueOf(userId));
 
         // Set JWT claims
         JwtBuilder builder = Jwts.builder().setId(id)

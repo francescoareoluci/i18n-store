@@ -42,145 +42,14 @@ public class CustomerEndpoint {
     public CustomerEndpoint() {}
 
     @GET
-    @Path("/products")
+    @Path("{userId}/shopping-cart")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getProducts(@Context HttpHeaders headers)
+    public Response getUserCart(@Context HttpHeaders headers,
+                                @PathParam("userId") Long userId)
     {
-        logger.debug("Requested /products endpoint");
-
-        // Get username from token
-        String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
-
-        List<ProductDto> productDtoList = new ArrayList<>();
-
-        // Get user
-        Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
-            logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(HttpResponse.notFound).build();
-        }
-        // Get user locale
-        Locale locale = customer.getUserLocale();
-        if (locale == null) {
-            logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(HttpResponse.notFound).build();
-        }
-
-        logger.info("Customer " + customer.getMail() + " has requested the product list. Language: " +
-                locale.getLanguageCode());
-
-        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
-            logger.error("Requested translation for a non configured field");
-            return Response.status(HttpResponse.notFound).build();
-        }
-
-        // Get all products
-        List<Product> productList = productDao.getProductList();
-        for (Product p : productList) {
-            // Build localized textual item dto list
-            List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
-                    .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
-                            localizedFieldHandler.getProductDescriptionField(),
-                            localizedFieldHandler.getProductCategoryField(),
-                            p.getLocalizedItemList(), locale, false);
-            if (localizedTextualItemDtos == null) {
-                logger.error("Unable to build localized textual item dto list");
-                return Response.status(HttpResponse.internalServerError).build();
-            }
-
-            // Build localized currency dto list
-            List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
-                    .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
-                            p.getLocalizedItemList(), false);
-            if (localizedCurrencyItemDtoList == null) {
-                logger.error("Unable to build localized currency item dto list");
-                return Response.status(HttpResponse.internalServerError).build();
-            }
-
-            // Create product dto
-            ProductDto productDto = DtoFactory.buildShortProductDto(p.getId(), p.getProdManufacturer().getName(),
-                    localizedTextualItemDtos, localizedCurrencyItemDtoList);
-            productDtoList.add(productDto);
-        }
-
-        return Response.status(HttpResponse.ok).entity(productDtoList).build();
-    }
-
-    @GET
-    @Path("/products/{productId}")
-    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response getProductById(@Context HttpHeaders headers,
-                                @PathParam("productId") Long productId)
-    {
-        logger.debug("Requested /products/" + productId + " endpoint");
-
-        // Get username from token
-        String username = getUsernameFromToken(headers);
-        if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
-
-        // Get user
-        Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
-            logger.error("Unable to retrieve user by username: " + username);
-            return Response.status(HttpResponse.notFound).build();
-        }
-        // Get user locale
-        Locale locale = customer.getUserLocale();
-        if (locale == null) {
-            logger.error("Unable to retrieve locale for user " + customer.getMail());
-            return Response.status(HttpResponse.notFound).build();
-        }
-
-        // Get all localized products by product id
-        Product product = productDao.getEntityById(productId);
-        if (product == null) {
-            return Response.status(HttpResponse.notFound).build();
-        }
-
-        logger.info("Customer " + customer.getMail() + " has requested the product id: " +
-                productId + ". Language: " + locale.getLanguageCode());
-
-        // Get localized fields of interest for products (name, description, category)
-        List<LocalizedField> localizedFieldList = localizedFieldDao.getLocalizedFieldList();
-        if (!localizedFieldHandler.setProductLocalizedFields(localizedFieldList)) {
-            logger.error("Requested translation for a non configured field");
-            return Response.status(HttpResponse.notFound).build();
-        }
-
-        // Build localized textual item dto list
-        List<LocalizedTextualItemDto> localizedTextualItemDtos = DtoMapper
-                .convertProductLocalizedItemListToDto(localizedFieldHandler.getProductNameField(),
-                        localizedFieldHandler.getProductDescriptionField(),
-                        localizedFieldHandler.getProductCategoryField(),
-                        product.getLocalizedItemList(), locale, false);
-
-        // Build localized currency dto list
-        List<LocalizedCurrencyItemDto> localizedCurrencyItemDtoList = DtoMapper
-                .convertLocalizedCurrencyListToDto(locale, localizedFieldHandler.getProductPriceField(),
-                        product.getLocalizedItemList(), false);
-
-        // Create product dto
-        ProductDto productDto = DtoFactory.buildProductDto(product.getId(),
-                product.getProdManufacturer().getName(), localizedTextualItemDtos,
-                localizedCurrencyItemDtoList);
-
-        return Response.status(HttpResponse.ok).entity(productDto).build();
-    }
-
-    @GET
-    @Path("/shopping-cart")
-    @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response getUserCart(@Context HttpHeaders headers)
-    {
-        logger.debug("Requested /shopping-cart endpoint");
+        logger.debug("Requested GET " + userId + "/shopping-cart endpoint");
 
         // Get username from token
         String username = getUsernameFromToken(headers);
@@ -189,7 +58,7 @@ public class CustomerEndpoint {
         List<ProductDto> cartProducts = new ArrayList<>();
 
         Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
+        if (customer == null || !customer.getId().equals(userId)) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(HttpResponse.notFound).build();
         }
@@ -267,20 +136,21 @@ public class CustomerEndpoint {
     }
 
     @POST
-    @Path("/shopping-cart/add/{prodId}")
+    @Path("{userId}/shopping-cart/{prodId}")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Transactional
     public Response addProductToCart(@Context HttpHeaders headers,
-                                @PathParam("prodId") Long productId)
+                                     @PathParam("userId") Long userId,
+                                     @PathParam("prodId") Long productId)
     {
-        logger.debug("Requested /shopping-cart/add/" + productId +  " endpoint");
+        logger.debug("Requested POST + " + userId + "/shopping-cart/" + productId +  " endpoint");
 
         // Get username from token
         String username = getUsernameFromToken(headers);
         if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
+        if (customer == null || !customer.getId().equals(userId)) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(HttpResponse.notFound).build();
         }
@@ -313,21 +183,22 @@ public class CustomerEndpoint {
         return Response.status(HttpResponse.ok).build();
     }
 
-    @POST
-    @Path("/shopping-cart/remove/{prodId}")
+    @DELETE
+    @Path("{userId}/shopping-cart/{prodId}")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Transactional
     public Response removeProductFromCart(@Context HttpHeaders headers,
-                                @PathParam("prodId") Long productId)
+                                          @PathParam("userId") Long userId,
+                                          @PathParam("prodId") Long productId)
     {
-        logger.debug("Requested /shopping-cart/remove/" + productId + " endpoint");
+        logger.debug("Requested DELETE " + userId + "/shopping-cart/" + productId + " endpoint");
 
         // Get username from token
         String username = getUsernameFromToken(headers);
         if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
+        if (customer == null || !customer.getId().equals(userId)) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(HttpResponse.notFound).build();
         }
@@ -369,19 +240,20 @@ public class CustomerEndpoint {
     }
 
     @POST
-    @Path("/shopping-cart/checkout")
+    @Path("{userId}/shopping-cart/checkout")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Transactional
-    public Response purchaseCart(@Context HttpHeaders headers)
+    public Response purchaseCart(@Context HttpHeaders headers,
+                                 @PathParam("userId") Long userId)
     {
-        logger.debug("Requested /shopping-cart/checkout endpoint");
+        logger.debug("Requested POST " + userId + "/shopping-cart/checkout endpoint");
 
         // Get username from token
         String username = getUsernameFromToken(headers);
         if (username.isEmpty()) { return Response.status(HttpResponse.unauthorized).build(); }
 
         Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
+        if (customer == null || !customer.getId().equals(userId)) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(HttpResponse.notFound).build();
         }
@@ -430,13 +302,14 @@ public class CustomerEndpoint {
     }
 
     @GET
-    @Path("/shopping-list")
+    @Path("{userId}/shopping-list")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getUserShoppingList(@Context HttpHeaders headers)
+    public Response getUserShoppingList(@Context HttpHeaders headers,
+                                        @PathParam("userId") Long userId)
     {
-        logger.debug("Requested /shopping-list endpoint");
+        logger.debug("Requested GET " + userId + "/shopping-list endpoint");
 
         // Get username from token
         String username = getUsernameFromToken(headers);
@@ -445,7 +318,7 @@ public class CustomerEndpoint {
         List<ProductDto> purchasedProducts = new ArrayList<>();
 
         Customer customer = customerDao.getCustomerByUsername(username);
-        if (customer == null) {
+        if (customer == null || !customer.getId().equals(userId)) {
             logger.error("Unable to retrieve user by username: " + username);
             return Response.status(HttpResponse.notFound).build();
         }

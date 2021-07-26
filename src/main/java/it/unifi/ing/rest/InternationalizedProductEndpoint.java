@@ -3,31 +3,32 @@ package it.unifi.ing.rest;
 import it.unifi.ing.dao.*;
 import it.unifi.ing.dto.*;
 import it.unifi.ing.model.*;
-
-import it.unifi.ing.security.*;
+import it.unifi.ing.security.JWTTokenNeeded;
+import it.unifi.ing.security.JWTUtil;
+import it.unifi.ing.security.UserRole;
+import it.unifi.ing.translation.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unifi.ing.translation.*;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+@Path("/")
+public class InternationalizedProductEndpoint {
 
-@Path("/admin")
-public class AdminEndpoint {
-
-    private static final Logger logger = LogManager.getLogger(AdminEndpoint.class);
+    private static final Logger logger = LogManager.getLogger(InternationalizedProductEndpoint.class);
 
     @Inject
     private LocalizedFieldHandler localizedFieldHandler;
     @Inject
     private AdminDao adminDao;
-    @Inject
-    private CustomerDao customerDao;
     @Inject
     private ProductDao productDao;
     @Inject
@@ -43,45 +44,16 @@ public class AdminEndpoint {
     @Inject
     private LocalizedFieldDao localizedFieldDao;
 
-    public AdminEndpoint() {}
+    public InternationalizedProductEndpoint() {}
 
     @GET
-    @Path("/users")
-    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsers(@Context UriInfo uriInfo)
-    {
-        logger.debug("Requested /users endpoint");
-
-        List<UserDto> userDtoList = new ArrayList<>();
-
-        // Get all admins
-        List<Admin> users = adminDao.getAdminList();
-        for (Admin u : users) {
-            UserDto userDto = DtoFactory.buildUserDto(u.getId(), u.getFirstName(),
-                    u.getLastName(), u.getMail(), UserDto.UserRole.ADMIN);
-            userDtoList.add(userDto);
-        }
-
-        // Get all customers
-        List<Customer> customers = customerDao.getCustomerList();
-        for (Customer c : customers) {
-            UserDto userDto = DtoFactory.buildUserDto(c.getId(), c.getFirstName(),
-                    c.getLastName(), c.getMail(), UserDto.UserRole.CUSTOMER);
-            userDtoList.add(userDto);
-        }
-
-        return Response.status(HttpResponse.ok).entity(userDtoList).build();
-    }
-
-    @GET
-    @Path("/products")
+    @Path("/int-products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getProducts()
     {
-        logger.debug("Requested /products endpoint");
+        logger.debug("Requested GET /int-products endpoint");
 
         List<ProductDto> productDtoList = new ArrayList<>();
 
@@ -125,13 +97,13 @@ public class AdminEndpoint {
     }
 
     @GET
-    @Path("/products/{id}")
+    @Path("/int-products/{id}")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getProductById(@PathParam("id") Long productId)
     {
-        logger.debug("Requested /products/" + productId + " endpoint");
+        logger.debug("Requested GET /int-products/" + productId + " endpoint");
 
         // Get specific product
         Product product = productDao.getEntityById(productId);
@@ -168,14 +140,14 @@ public class AdminEndpoint {
     }
 
     @POST
-    @Path("/products/add")
+    @Path("/int-products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response addProduct(@Context HttpHeaders headers,
                                ProductDto productDto)
     {
-        logger.debug("Requested /products/add endpoint");
+        logger.debug("Requested POST /products endpoint");
 
         // Get username from token
         String token = JWTUtil.extractBearerHeader(headers);
@@ -261,14 +233,14 @@ public class AdminEndpoint {
      * @return response
      */
     @PUT
-    @Path("/products/edit")
+    @Path("/int-products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response editProduct(@Context HttpHeaders headers,
                                 ProductDto productDto)
     {
-        logger.debug("Requested /products/edit endpoint");
+        logger.debug("Requested PUT /int-products endpoint");
 
         // Get username from token
         String token = JWTUtil.extractBearerHeader(headers);
@@ -386,12 +358,12 @@ public class AdminEndpoint {
     }
 
     @DELETE
-    @Path("/products/remove/{id}")
+    @Path("/int-products/{id}")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Transactional
     public Response removeProduct(@PathParam("id") Long productId)
     {
-        logger.debug("Requested /products/remove/" + productId + " endpoint");
+        logger.debug("Requested DELETE /int-products/" + productId + " endpoint");
 
         Product product = productDao.getEntityById(productId);
         if (product == null) {
@@ -422,129 +394,8 @@ public class AdminEndpoint {
         return Response.status(HttpResponse.ok).build();
     }
 
-    @GET
-    @Path("/locales")
-    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getLocales()
-    {
-        logger.debug("Requested /locales endpoint");
-
-        List<LocaleDto> localeDtoList = new ArrayList<>();
-
-        // Get locales
-        List<Locale> localeList = localeDao.getLocaleList();
-        for (Locale l : localeList) {
-            LocaleDto localeDto = DtoFactory.buildLocaleDto(l.getId(), l.getLanguageCode(), l.getCountryCode());
-            localeDtoList.add(localeDto);
-        }
-
-        return Response.status(HttpResponse.ok).entity(localeDtoList).build();
-    }
-
-    @POST
-    @Path("/locales/add")
-    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response addLocale(LocaleDto localeDto)
-    {
-        logger.debug("Requested /locales/add endpoint");
-
-        Locale locale = ModelFactory.locale();
-        locale.setCountryCode(localeDto.getCountryCode());
-        locale.setLanguageCode(localeDto.getLanguageCode());
-
-        // Persist given locale
-        localeDao.addEntity(locale);
-
-        logger.info("Persisted a new locale with id: " + locale.getId());
-
-        return Response.status(HttpResponse.ok).build();
-    }
-
-    @GET
-    @Path("/manufacturers")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getManufacturerList()
-    {
-        logger.debug("Requested /manufacturers endpoint");
-
-        List<ManufacturerDto> manufacturerDtoList = new ArrayList<>();
-
-        // Get locales
-        List<Manufacturer> manufacturerList = manufacturerDao.getManufacturerList();
-        for (Manufacturer m : manufacturerList) {
-            ManufacturerDto manufacturerDto = DtoFactory.buildManufacturerDto(m.getId(), m.getName());
-            manufacturerDtoList.add(manufacturerDto);
-        }
-
-        return Response.status(HttpResponse.ok).entity(manufacturerDtoList).build();
-    }
-
-    @POST
-    @Path("/manufacturers/add")
-    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response addManufacturer(ManufacturerDto manufacturerDtoDto)
-    {
-        logger.debug("Requested /manufacturers/add endpoint");
-
-        Manufacturer manufacturer = ModelFactory.manufacturer();
-        manufacturer.setName(manufacturerDtoDto.getName());
-
-        // Persist given manufacturer
-        manufacturerDao.addEntity(manufacturer);
-
-        logger.info("Persisted a new manufacturer with id: " + manufacturer.getId());
-
-        return Response.status(HttpResponse.ok).build();
-    }
-
-    @GET
-    @Path("/currencies")
-    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurrencies()
-    {
-        logger.debug("Requested /currencies endpoint");
-
-        List<CurrencyDto> currencyDtoList = new ArrayList<>();
-
-        // Get locales
-        List<Currency> currencyList = currencyDao.getCurrencyList();
-        for (Currency c : currencyList) {
-            CurrencyDto currencyDto = DtoFactory.buildCurrencyDto(c.getId(), c.getCurrency());
-            currencyDtoList.add(currencyDto);
-        }
-
-        return Response.status(HttpResponse.ok).entity(currencyDtoList).build();
-    }
-
-    @POST
-    @Path("/currencies/add")
-    @JWTTokenNeeded(Permissions = UserRole.ADMIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response addCurrency(CurrencyDto currencyDto)
-    {
-        logger.debug("Requested /currencies/add endpoint");
-
-        Currency currency = ModelFactory.currency();
-        currency.setCurrency(currencyDto.getCurrency());
-
-        // Persist given currency
-        currencyDao.addEntity(currency);
-
-        logger.info("Persisted a new currency with id: " + currency.getId());
-
-        return Response.status(HttpResponse.ok).build();
-    }
-
     private boolean checkInvalidProductDtoFields(ProductDto productDto, List<Locale> localeList,
-                                          List<Currency> currencyList)
+                                                 List<Currency> currencyList)
     {
         // Check for product localizations
         List<LocalizedTextualItemDto> localizedTextualItemDtoList = productDto.getLocalizedTextualItemList();
@@ -580,5 +431,4 @@ public class AdminEndpoint {
 
         return false;
     }
-
 }
