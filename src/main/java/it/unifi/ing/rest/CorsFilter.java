@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.rest;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

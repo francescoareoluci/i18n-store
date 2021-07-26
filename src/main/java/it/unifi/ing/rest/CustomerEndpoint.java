@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.rest;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.dto.*;

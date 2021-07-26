@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.rest;
 
 public class HttpResponse {
 

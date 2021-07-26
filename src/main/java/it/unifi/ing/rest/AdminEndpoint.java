@@ -1,4 +1,4 @@
-package it.unifi.ing.controllers;
+package it.unifi.ing.rest;
 
 import it.unifi.ing.dao.*;
 import it.unifi.ing.dto.*;
@@ -9,10 +9,7 @@ import it.unifi.ing.security.*;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +49,7 @@ public class AdminEndpoint {
     @Path("/users")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsers()
+    public Response getUsers(@Context UriInfo uriInfo)
     {
         logger.debug("Requested /users endpoint");
 
