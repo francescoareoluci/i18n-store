@@ -16,7 +16,13 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"postman.setEnvironmentVariable(\"adminAuthToken\", responseBody);"
+							"// Set the auth token\r",
+							"postman.setEnvironmentVariable(\"adminAuthToken\", responseBody);\r",
+							"\r",
+							"// Get the user id\r",
+							"const payload = responseBody.split('.')[1];\r",
+							"const parsed = JSON.parse(atob(payload));\r",
+							"pm.environment.set('adminUserId', parsed.userId);"
 						],
 						"type": "text/javascript"
 					}
@@ -65,7 +71,12 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"postman.setEnvironmentVariable(\"customerAuthToken\", responseBody);"
+							"postman.setEnvironmentVariable(\"customerAuthToken\", responseBody);\r",
+							"\r",
+							"// Get the user id\r",
+							"const payload = responseBody.split('.')[1];\r",
+							"const parsed = JSON.parse(atob(payload));\r",
+							"pm.environment.set('customerUserId', parsed.userId);"
 						],
 						"type": "text/javascript"
 					}
@@ -123,7 +134,12 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"postman.setEnvironmentVariable(\"customerAuthToken\", responseBody);"
+							"postman.setEnvironmentVariable(\"customerAuthToken\", responseBody);\r",
+							"\r",
+							"// Get the user id\r",
+							"const payload = responseBody.split('.')[1];\r",
+							"const parsed = JSON.parse(atob(payload));\r",
+							"pm.environment.set('customerUserId', parsed.userId);"
 						],
 						"type": "text/javascript"
 					}
@@ -224,13 +240,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/users",
+					"raw": "{{localBasedUrl}}/api/users",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
 						"users"
 					]
 				}
@@ -264,14 +279,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products",
+					"raw": "{{localBasedUrl}}/api/int-products",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"products"
+						"int-products"
 					]
 				}
 			},
@@ -304,14 +318,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/1",
+					"raw": "{{localBasedUrl}}/api/int-products/1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"products",
+						"int-products",
 						"1"
 					]
 				}
@@ -354,15 +367,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/add",
+					"raw": "{{localBasedUrl}}/api/int-products",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"products",
-						"add"
+						"int-products"
 					]
 				}
 			},
@@ -404,15 +415,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/edit",
+					"raw": "{{localBasedUrl}}/api/int-products",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"products",
-						"edit"
+						"int-products"
 					]
 				}
 			},
@@ -445,16 +454,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/products/remove/7",
+					"raw": "{{localBasedUrl}}/api/int-products/10",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"products",
-						"remove",
-						"7"
+						"int-products",
+						"10"
 					]
 				}
 			},
@@ -487,13 +494,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/locales",
+					"raw": "{{localBasedUrl}}/api/locales",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
 						"locales"
 					]
 				}
@@ -536,15 +542,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/locales/add",
+					"raw": "{{localBasedUrl}}/api/locales",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"locales",
-						"add"
+						"locales"
 					]
 				}
 			},
@@ -577,13 +581,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/currencies",
+					"raw": "{{localBasedUrl}}/api/currencies",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
 						"currencies"
 					]
 				}
@@ -626,15 +629,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/currencies/add",
+					"raw": "{{localBasedUrl}}/api/currencies",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"currencies",
-						"add"
+						"currencies"
 					]
 				}
 			},
@@ -667,13 +668,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/manufacturers",
+					"raw": "{{localBasedUrl}}/api/manufacturers",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
 						"manufacturers"
 					]
 				}
@@ -716,15 +716,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{localBasedUrl}}/api/admin/manufacturers/add",
+					"raw": "{{localBasedUrl}}/api/manufacturers",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"admin",
-						"manufacturers",
-						"add"
+						"manufacturers"
 					]
 				}
 			},
@@ -746,13 +744,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/products",
+					"raw": "{{localBasedUrl}}/api/products",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"customer",
 						"products"
 					]
 				}
@@ -775,13 +772,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/products/1",
+					"raw": "{{localBasedUrl}}/api/products/1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"customer",
 						"products",
 						"1"
 					]
@@ -805,13 +801,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/",
+					"raw": "{{localBasedUrl}}/api/customer/{{customerUserId}}/shopping-cart/",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"customer",
+						"{{customerUserId}}",
 						"shopping-cart",
 						""
 					]
@@ -835,15 +832,15 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/add/1",
+					"raw": "{{localBasedUrl}}/api/customer/{{customerUserId}}/shopping-cart/1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"customer",
+						"{{customerUserId}}",
 						"shopping-cart",
-						"add",
 						"1"
 					]
 				}
@@ -863,18 +860,18 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/remove/1",
+					"raw": "{{localBasedUrl}}/api/customer/{{customerUserId}}/shopping-cart/1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"customer",
+						"{{customerUserId}}",
 						"shopping-cart",
-						"remove",
 						"1"
 					]
 				}
@@ -897,13 +894,14 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/shopping-cart/checkout/",
+					"raw": "{{localBasedUrl}}/api/customer/{{customerUserId}}/shopping-cart/checkout/",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"customer",
+						"{{customerUserId}}",
 						"shopping-cart",
 						"checkout",
 						""
@@ -928,13 +926,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/customer/shopping-list/",
+					"raw": "{{localBasedUrl}}/api/customer/{{customerUserId}}/shopping-list/",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"customer",
+						"{{customerUserId}}",
 						"shopping-list",
 						""
 					]
