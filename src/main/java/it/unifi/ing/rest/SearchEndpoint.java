@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/search")
+@Path("/")
 public class SearchEndpoint {
 
     private static final Logger logger = LogManager.getLogger(SearchEndpoint.class);
@@ -47,14 +47,14 @@ public class SearchEndpoint {
     private LocalizedFieldDao localizedFieldDao;
 
     @GET
-    @Path("/kw-products/{query}")
+    @Path("/kw-products")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response queryProducts(@Context HttpHeaders headers,
-                                  @PathParam("query") String userQuery,
+                                  @QueryParam("query") String userQuery,
                                   @QueryParam("type") String queryType)
     {
-        logger.debug("Requested /products/" + userQuery + " endpoint");
+        logger.debug("Requested /kw-products?query=" + userQuery + " endpoint");
 
         if (userQuery == null || userQuery.isEmpty()) {
             logger.debug("User has requested an empty query");
@@ -155,13 +155,18 @@ public class SearchEndpoint {
     }
 
     @GET
-    @Path("/similar-products/{id}")
+    @Path("/mlt-products")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getSimilarProducts(@Context HttpHeaders headers,
-                                       @PathParam("id") int productId)
+                                       @QueryParam("like") int productId)
     {
-        logger.debug("Requested /products/similar-to/" + productId + " endpoint");
+        logger.debug("Requested /mlt-products?like=" + productId + " endpoint");
+
+        if (productId < 0) {
+            logger.debug("User has requested an invalid prouct id");
+            return Response.status(HttpResponse.badRequest).build();
+        }
 
         // Get username and role from token
         List<String> tokenResult = getUsernameAndRoleFromToken(headers);

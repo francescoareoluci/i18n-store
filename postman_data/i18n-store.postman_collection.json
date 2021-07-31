@@ -957,15 +957,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M",
+					"raw": "{{localBasedUrl}}/api/kw-products?query=camera+12M",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"kw-products",
-						"camera+12M"
+						"kw-products"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "camera+12M"
+						}
 					]
 				}
 			},
@@ -987,15 +991,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M",
+					"raw": "{{localBasedUrl}}/api/kw-products?query=camera+12M",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"kw-products",
-						"camera+12M"
+						"kw-products"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "camera+12M"
+						}
 					]
 				}
 			},
@@ -1017,15 +1025,23 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M&type=STANDARD",
+					"raw": "{{localBasedUrl}}/api/kw-products?query=camera+12M&type=STANDARD",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"kw-products",
-						"camera+12M&type=STANDARD"
+						"kw-products"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "camera+12M"
+						},
+						{
+							"key": "type",
+							"value": "STANDARD"
+						}
 					]
 				}
 			},
@@ -1047,15 +1063,23 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M&type=STANDARD_AND",
+					"raw": "{{localBasedUrl}}/api/kw-products?query=camera+12M&type=STANDARD_AND",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"kw-products",
-						"camera+12M&type=STANDARD_AND"
+						"kw-products"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "camera+12M"
+						},
+						{
+							"key": "type",
+							"value": "STANDARD_AND"
+						}
 					]
 				}
 			},
@@ -1077,15 +1101,23 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M&type=PHRASE",
+					"raw": "{{localBasedUrl}}/api/kw-products?query=camera&type=PHRASE",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"kw-products",
-						"camera+12M&type=PHRASE"
+						"kw-products"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "camera"
+						},
+						{
+							"key": "type",
+							"value": "PHRASE"
+						}
 					]
 				}
 			},
@@ -1100,17 +1132,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/kw-products/t-shirt?type=FUZZY",
+					"raw": "{{localBasedUrl}}/api/kw-products?query=t-shirt&type=FUZZY",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"kw-products",
-						"t-shirt"
+						"kw-products"
 					],
 					"query": [
+						{
+							"key": "query",
+							"value": "t-shirt"
+						},
 						{
 							"key": "type",
 							"value": "FUZZY"
@@ -1129,15 +1163,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/similar-products/1",
+					"raw": "{{localBasedUrl}}/api/mlt-products?like=1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
-						"search",
-						"similar-products",
-						"1"
+						"mlt-products"
+					],
+					"query": [
+						{
+							"key": "like",
+							"value": "1"
+						}
 					]
 				}
 			},
