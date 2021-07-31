@@ -957,14 +957,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/camera+12M",
+					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
+						"kw-products",
 						"camera+12M"
 					]
 				}
@@ -987,14 +987,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/camera+12M",
+					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
+						"kw-products",
 						"camera+12M"
 					]
 				}
@@ -1017,14 +1017,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/camera+12M&type=STANDARD",
+					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M&type=STANDARD",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
+						"kw-products",
 						"camera+12M&type=STANDARD"
 					]
 				}
@@ -1047,14 +1047,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/camera+12M&type=STANDARD_AND",
+					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M&type=STANDARD_AND",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
+						"kw-products",
 						"camera+12M&type=STANDARD_AND"
 					]
 				}
@@ -1077,14 +1077,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/camera+12M&type=PHRASE",
+					"raw": "{{localBasedUrl}}/api/search/kw-products/camera+12M&type=PHRASE",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
+						"kw-products",
 						"camera+12M&type=PHRASE"
 					]
 				}
@@ -1100,14 +1100,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/t-shirt?type=FUZZY",
+					"raw": "{{localBasedUrl}}/api/search/kw-products/t-shirt?type=FUZZY",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
+						"kw-products",
 						"t-shirt"
 					],
 					"query": [
@@ -1129,16 +1129,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localBasedUrl}}/api/search/products/similar-to/8",
+					"raw": "{{localBasedUrl}}/api/search/similar-products/1",
 					"host": [
 						"{{localBasedUrl}}"
 					],
 					"path": [
 						"api",
 						"search",
-						"products",
-						"similar-to",
-						"8"
+						"similar-products",
+						"1"
 					]
 				}
 			},
