@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/")
+@Path("/currencies")
 public class CurrenciesEndpoint {
 
     private static final Logger logger = LogManager.getLogger(CurrenciesEndpoint.class);
@@ -29,7 +29,6 @@ public class CurrenciesEndpoint {
     public CurrenciesEndpoint() {}
 
     @GET
-    @Path("/currencies")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurrencies()
@@ -49,7 +48,6 @@ public class CurrenciesEndpoint {
     }
 
     @POST
-    @Path("/currencies")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional

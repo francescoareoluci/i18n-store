@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/")
+@Path("/int-products")
 public class InternationalizedProductEndpoint {
 
     private static final Logger logger = LogManager.getLogger(InternationalizedProductEndpoint.class);
@@ -47,7 +47,6 @@ public class InternationalizedProductEndpoint {
     public InternationalizedProductEndpoint() {}
 
     @GET
-    @Path("/int-products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
@@ -97,7 +96,7 @@ public class InternationalizedProductEndpoint {
     }
 
     @GET
-    @Path("/int-products/{id}")
+    @Path("/{id}")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
@@ -140,7 +139,6 @@ public class InternationalizedProductEndpoint {
     }
 
     @POST
-    @Path("/int-products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
@@ -233,7 +231,6 @@ public class InternationalizedProductEndpoint {
      * @return response
      */
     @PUT
-    @Path("/int-products")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
@@ -358,7 +355,7 @@ public class InternationalizedProductEndpoint {
     }
 
     @DELETE
-    @Path("/int-products/{id}")
+    @Path("/{id}")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Transactional
     public Response removeProduct(@PathParam("id") Long productId)

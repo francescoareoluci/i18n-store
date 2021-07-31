@@ -47,7 +47,7 @@ public class SearchEndpoint {
     private LocalizedFieldDao localizedFieldDao;
 
     @GET
-    @Path("/products/{query}")
+    @Path("/kw-products/{query}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response queryProducts(@Context HttpHeaders headers,
@@ -155,7 +155,7 @@ public class SearchEndpoint {
     }
 
     @GET
-    @Path("/products/similar-to/{id}")
+    @Path("/similar-products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getSimilarProducts(@Context HttpHeaders headers,

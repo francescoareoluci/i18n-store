@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/")
+@Path("/locales")
 public class LocaleEndpoint {
 
     private static final Logger logger = LogManager.getLogger(LocaleEndpoint.class);
@@ -29,7 +29,6 @@ public class LocaleEndpoint {
     public LocaleEndpoint() {}
 
     @GET
-    @Path("/locales")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocales()
@@ -49,7 +48,6 @@ public class LocaleEndpoint {
     }
 
     @POST
-    @Path("/locales")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional

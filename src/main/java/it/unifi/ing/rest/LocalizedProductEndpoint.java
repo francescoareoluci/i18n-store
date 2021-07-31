@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/")
+@Path("/products")
 public class LocalizedProductEndpoint {
 
     private static final Logger logger = LogManager.getLogger(CustomerEndpoint.class);
@@ -43,7 +43,6 @@ public class LocalizedProductEndpoint {
     public LocalizedProductEndpoint() {}
 
     @GET
-    @Path("/products")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
@@ -112,7 +111,7 @@ public class LocalizedProductEndpoint {
     }
 
     @GET
-    @Path("/products/{productId}")
+    @Path("/{productId}")
     @JWTTokenNeeded(Permissions = UserRole.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional

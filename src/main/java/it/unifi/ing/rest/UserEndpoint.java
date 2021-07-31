@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/")
+@Path("/users")
 public class UserEndpoint {
 
     private static final Logger logger = LogManager.getLogger(UserEndpoint.class);
@@ -33,7 +33,6 @@ public class UserEndpoint {
     public UserEndpoint() {}
 
     @GET
-    @Path("/users")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers()

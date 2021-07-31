@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/")
+@Path("/manufacturers")
 public class ManufacturerEndpoint {
 
     private static final Logger logger = LogManager.getLogger(ManufacturerEndpoint.class);
@@ -29,7 +29,6 @@ public class ManufacturerEndpoint {
     public ManufacturerEndpoint() {}
 
     @GET
-    @Path("/manufacturers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getManufacturerList()
     {
@@ -48,7 +47,6 @@ public class ManufacturerEndpoint {
     }
 
     @POST
-    @Path("/manufacturers")
     @JWTTokenNeeded(Permissions = UserRole.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

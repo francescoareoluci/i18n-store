@@ -14,6 +14,7 @@ import java.util.List;
 public class SearchEngine {
 
     private static final Logger logger = LogManager.getLogger(SearchEngine.class);
+    private static final int similarityMaxResults = 3;
     private static final int defaultEditDistance = 1;
     private static final int defaultPrefixLength = 2;
     private static final int defaultSlopFactor = 1;
@@ -88,6 +89,7 @@ public class SearchEngine {
         // Wrap Lucene query in a javax.persistence.Query
         javax.persistence.Query persistenceQuery =
                 fullTextEntityManager.createFullTextQuery(query, Product.class);
+        persistenceQuery.setMaxResults(similarityMaxResults);
 
         // Search
         return persistenceQuery.getResultList();
