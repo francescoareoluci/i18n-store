@@ -42,7 +42,7 @@ public class StartupBean {
     @Transactional
     public void init()
     {
-        Admin user1 = buildAdmin("Mario", "Rossi", "mario.rossi@example.com",
+        Admin user1 = buildAdmin("Mark", "Smith", "mark.smith@example.com",
                 "pass1");
         Admin user2 = buildAdmin("Carlo", "Bianchi", "carlo.bianchi@example.com",
                 "pass2");
@@ -294,9 +294,7 @@ public class StartupBean {
         prod8.setLocalizedItemList(prod8LocalizedItems);
         prod9.setLocalizedItemList(prod9LocalizedItems);
 
-        PurchasedProduct pp1 = buildPurchasedProduct(prod1, sl1);
-
-        sl1.setPurchasedProductList(Arrays.asList(pp1));
+        sl1.setPurchasedProductList(Arrays.asList());
         sl2.setPurchasedProductList(Arrays.asList());
 
         sc1.setCartProductList(Arrays.asList());
