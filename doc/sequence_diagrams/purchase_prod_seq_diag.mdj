@@ -264,7 +264,8 @@
 													"top": 47,
 													"width": 134.9345703125,
 													"height": 13,
-													"text": ":CustomerEndpoint"
+													"text": ":CustomerEndpoint",
+													"wordWrap": true
 												},
 												{
 													"_type": "LabelView",
@@ -290,8 +291,8 @@
 													"fillColor": "#ffffd8",
 													"font": "Arial;13;0",
 													"left": -64,
-													"height": 13,
-													"horizontalAlignment": 1
+													"horizontalAlignment": 1,
+													"wordWrap": true
 												}
 											],
 											"fillColor": "#ffffd8",
@@ -338,6 +339,7 @@
 									"nameCompartment": {
 										"$ref": "AAAAAAF6Lte+0f9Y7pQ="
 									},
+									"wordWrap": true,
 									"linePart": {
 										"$ref": "AAAAAAF6Lte+0f9dhiY="
 									}
@@ -460,12 +462,13 @@
 									"_parent": {
 										"$ref": "AAAAAAF5uL4X3JMxB+w="
 									},
-									"font": "Arial;13;0",
-									"left": 8,
-									"top": 136,
-									"width": 226.05517578125,
-									"height": 25,
-									"text": "/api/customer/shopping-cart/checkout"
+									"font": "Arial;10;0",
+									"left": 16,
+									"top": 128,
+									"width": 274.4814453125,
+									"height": 40,
+									"text": "/api/customer/{userId}/shopping-cart/checkout\n",
+									"wordWrap": false
 								},
 								{
 									"_type": "UMLSeqLifelineView",

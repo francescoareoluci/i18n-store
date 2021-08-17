@@ -460,12 +460,12 @@
 									"_parent": {
 										"$ref": "AAAAAAF5uL4X3JMxB+w="
 									},
-									"font": "Arial;13;0",
-									"left": 24,
-									"top": 136,
-									"width": 248.4814453125,
-									"height": 25,
-									"text": "/api/customer//shopping-cart/add/{id}"
+									"font": "Arial;10;0",
+									"left": 16,
+									"top": 128,
+									"width": 267.994140625,
+									"height": 38,
+									"text": "POST /api/customer/{userId}/shopping-cart/{prod}"
 								},
 								{
 									"_type": "UMLSeqLifelineView",
@@ -4391,7 +4391,8 @@
 					"_parent": {
 						"$ref": "AAAAAAF5uL4X3JMv8Es="
 					},
-					"name": "Role18"
+					"name": "Role18",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -4399,7 +4400,8 @@
 					"_parent": {
 						"$ref": "AAAAAAF5uL4X3JMv8Es="
 					},
-					"name": "Role19"
+					"name": "Role19",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -4407,7 +4409,8 @@
 					"_parent": {
 						"$ref": "AAAAAAF5uL4X3JMv8Es="
 					},
-					"name": "Role20"
+					"name": "Role20",
+					"type": ""
 				}
 			]
 		}

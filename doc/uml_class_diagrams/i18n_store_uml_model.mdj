@@ -14887,11 +14887,12 @@
 											"_parent": {
 												"$ref": "AAAAAAF6TatxrjTuGAA="
 											},
-											"visible": false,
 											"font": "Arial;13;0",
-											"left": 632,
-											"top": 40,
-											"height": 13
+											"left": 853,
+											"top": 117,
+											"width": 134.7607421875,
+											"height": 13,
+											"text": "«abstract»"
 										},
 										{
 											"_type": "LabelView",
@@ -14899,9 +14900,9 @@
 											"_parent": {
 												"$ref": "AAAAAAF6TatxrjTuGAA="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 853,
-											"top": 119,
+											"top": 132,
 											"width": 134.7607421875,
 											"height": 13,
 											"text": "TranslatableItem"
@@ -14938,7 +14939,7 @@
 									"left": 848,
 									"top": 112,
 									"width": 144.7607421875,
-									"height": 25,
+									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF6TatxrjTv8kM="
 									},
@@ -14963,7 +14964,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 848,
-									"top": 137,
+									"top": 150,
 									"width": 144.7607421875,
 									"height": 10
 								},
@@ -14988,7 +14989,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 853,
-											"top": 152,
+											"top": 165,
 											"width": 134.7607421875,
 											"height": 13,
 											"text": "+getLocalizedItemList()",
@@ -15005,7 +15006,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 853,
-											"top": 167,
+											"top": 180,
 											"width": 134.7607421875,
 											"height": 13,
 											"text": "+setLocalizedItemList()",
@@ -15014,7 +15015,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 848,
-									"top": 147,
+									"top": 160,
 									"width": 144.7607421875,
 									"height": 38
 								},
@@ -15059,7 +15060,7 @@
 							"left": 848,
 							"top": 112,
 							"width": 144.7607421875,
-							"height": 73,
+							"height": 86,
 							"nameCompartment": {
 								"$ref": "AAAAAAF6TatxrjTuGAA="
 							},
@@ -15157,7 +15158,7 @@
 							"tail": {
 								"$ref": "AAAAAAF5KIqL6lBiYXg="
 							},
-							"points": "803:272;912:272;912:184",
+							"points": "803:272;912:272;912:197",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF6TaxjBT9LFb0="
@@ -26461,6 +26462,7 @@
 								"$ref": "AAAAAAF5t09lPzV+PGE="
 							},
 							"name": "TranslatableItem",
+							"stereotype": "abstract",
 							"operations": [
 								{
 									"_type": "UMLOperation",
@@ -26478,7 +26480,8 @@
 									},
 									"name": "setLocalizedItemList"
 								}
-							]
+							],
+							"isAbstract": true
 						}
 					]
 				},
